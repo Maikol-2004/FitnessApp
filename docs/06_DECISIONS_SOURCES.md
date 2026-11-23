@@ -1,5 +1,7 @@
 # Decisiones, procedencia y fuentes
 
+> Actualización 2026-11-24: para H1/H2 prevalecen [07_H1_H2_DELIVERY.md](07_H1_H2_DELIVERY.md) y [08_MOTION.md](08_MOTION.md). Paleta principal y estructura ya aprobadas; tarjetas con foto completa, icono, título mayor y descripción. Movimiento H1 M01–M05 y H2 M06–M09 incluido en su cierre. Recursos nuevos reales en design/assets-manifest.json; los diez originales ausentes no se han recuperado. Reutilizar código H0 y versiones existentes. El resto del documento conserva requisitos generales o propuestas de fases futuras.
+
 ## Evidencia recuperada
 Conversación «Recopilación Apps Salud Fitness», id 6afc4290-3e98-83ed-8ec1-2b88253555b6. read_thread devolvió cinco turnos, sin más páginas y un único adjunto de texto. Se leyó el adjunto Texto pegado(3).txt: análisis histórico de H0 por Claude; no se considera prueba del entorno actual. No contiene imágenes. La carpeta actual no tenía archivos de proyecto antes de preparar esta entrega.
 
@@ -16,3 +18,4 @@ Especificación propuesta en este paquete: colores hex, espaciados, tipografía 
 - Lectura, paginación y permisos: https://developer.android.com/health-and-fitness/health-connect/read-data
 
 Las recomendaciones de arquitectura sustentan el flujo UI/repositorio y la ubicación de DataStore. La documentación Health Connect sustenta detección de proveedor, permisos por tipo y lectura acotada. No se fija aquí una matriz de versiones que no se ha compilado; Claude debe verificarla al implementar.
+

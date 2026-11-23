@@ -1,5 +1,7 @@
 # Arquitectura Android y contrato de datos
 
+> Actualización 2026-11-24: para H1/H2 prevalecen [07_H1_H2_DELIVERY.md](07_H1_H2_DELIVERY.md) y [08_MOTION.md](08_MOTION.md). Paleta principal y estructura ya aprobadas; tarjetas con foto completa, icono, título mayor y descripción. Movimiento H1 M01–M05 y H2 M06–M09 incluido en su cierre. Recursos nuevos reales en design/assets-manifest.json; los diez originales ausentes no se han recuperado. Reutilizar código H0 y versiones existentes. El resto del documento conserva requisitos generales o propuestas de fases futuras.
+
 ## Base y dependencias
 Kotlin y Compose con Material 3, MVVM y flujo unidireccional. UI emite acciones a ViewModel; ViewModel expone StateFlow<UiState>; repositorios coordinan DAO o proveedor; UI recoge con collectAsStateWithLifecycle. No acceder a DAO, Context de Activity ni Health Connect desde composables. Usar corrutinas estructuradas, inyectar reloj y dispatcher cuando la lógica lo requiera. Errores tipados en repositorio y mensajes recuperables en UI; CancellationException no se consume como error de negocio.
 
@@ -8,7 +10,7 @@ H0 comienza con un módulo Gradle :app y paquetes core/designsystem, core/naviga
 Antes de configurar: inspeccionar repositorio, SDK y JDK reales; verificar compatibilidad AGP/Gradle/Kotlin/JDK en documentación oficial. Fijar versiones estables compatibles en libs.versions.toml, Compose BOM y Wrapper; no usar versiones dinámicas ni copiar Java 25 del informe histórico como requisito. compileSdk y targetSdk se eligen conforme al entorno y requisitos vigentes de distribución; minSdk es 28. Documentar matriz y comandos. No mezclar configuración Kotlin antigua y soporte integrado de AGP sin verificar la versión.
 
 ## Persistencia y entidades propuestas
-IDs UUID como String, claves foráneas e índices para búsquedas por fecha, rutina y sesión. Campos createdAt/updatedAt como epoch millis UTC cuando correspondan. Instant y conversiones con desugaring compatible con API 28. Esquema Room exportado y versionado. No usar destructiveMigration en producción.
+IDs UUID como String, claves foráneas e índices para búsquedas por fecha, rutina y sesión. Campos createdAt/updatedAt como epoch millis UTC cuando correspondan. Usar java.time disponible con minSdk 28; H0 no necesita desugaring adicional. Revisar solo si se introduce una API que lo requiera. Esquema Room exportado y versionado. No usar destructiveMigration en producción.
 
 | Entidad | Campos relevantes y reglas |
 |---|---|
@@ -45,3 +47,4 @@ H7 exporta JSON versionado mediante Storage Access Framework con unidades, zona,
 
 ## Validación técnica
 Unitarias para cálculos, intervalos, conversión y lógica de sesión; pruebas DAO/transacción y migración con bases anteriores; ViewModel para loading/error/denegación; Compose para navegación y acciones principales. Health Connect detrás de fake para pruebas, además de dispositivo real compatible. API 28 y Android 14+ para compatibilidad. Comandos típicos una vez creado :app: .\gradlew.bat :app:assembleDebug :app:testDebugUnitTest :app:lintDebug; :app:connectedDebugAndroidTest necesita emulador/dispositivo. Registrar comandos reales y resultado; no afirmar éxito si faltó SDK o dispositivo.
+

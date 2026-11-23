@@ -1,5 +1,7 @@
 # Documento maestro de FitnessApp
 
+> Actualización 2026-11-24: para H1/H2 prevalecen [07_H1_H2_DELIVERY.md](07_H1_H2_DELIVERY.md) y [08_MOTION.md](08_MOTION.md). Paleta principal y estructura ya aprobadas; tarjetas con foto completa, icono, título mayor y descripción. Movimiento H1 M01–M05 y H2 M06–M09 incluido en su cierre. Recursos nuevos reales en design/assets-manifest.json; los diez originales ausentes no se han recuperado. Reutilizar código H0 y versiones existentes. El resto del documento conserva requisitos generales o propuestas de fases futuras.
+
 ## Propósito y decisiones firmes
 Aplicación Android personal para registrar entrenamiento y hábitos y consultar su evolución con datos locales. Nombre provisional FitnessApp; applicationId com.maikol.fitnessapp; minSdk 28. Kotlin, Jetpack Compose, Material 3, MVVM, StateFlow, Room y DataStore. Health Connect se integra en H3. Sin servidor de pago obligatorio ni cuenta obligatoria. Interfaz inicial en español, modo oscuro Titanium Champagne. Entrenamiento es el primer módulo completo.
 
@@ -37,3 +39,4 @@ Primera apertura → perfil opcional → Inicio vacío → Entrenar → crear ru
 Inicio → Salud → explicación de conexión → permisos seleccionados → lectura → métricas; denegación permite seguir usando el resto.
 Inicio → Nutrición/Hidratación/Sueño → añadir registro → confirmar → total actualizado → cerrar/reabrir → mismo dato.
 Perfil → datos → exportar con selector del sistema o borrar con confirmación explícita. Cancelar deja datos intactos.
+

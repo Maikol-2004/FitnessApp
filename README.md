@@ -1,26 +1,31 @@
-# FitnessApp — paquete de entrega a Claude Code
+# FitnessApp
 
-Preparado el 23 de noviembre de 2026. Paquete de especificación, no aplicación Android compilada.
+Aplicación Android local-first con Kotlin, Jetpack Compose, Material 3, Room y DataStore. Tema oscuro Titanium Champagne, applicationId com.maikol.fitnessapp y minSdk 28. Repositorio con base H0; este cambio entrega planificación y recursos de H1/H2, no su código.
 
-## Estado de la entrega
-Incluye producto, diseño, UX, arquitectura, modelo de datos, fases H0–H7, aceptación, instrucciones de agentes y manifiesto verificable. Imágenes originales incluidas: **0 de 10**. No se han recuperado archivos gráficos del historial accesible y no se han creado sustitutos presentados como originales.
+## Siguiente trabajo
+1. [Plan maestro H1 y H2](docs/07_H1_H2_DELIVERY.md): composición, funcionalidad, pasos y aceptación.
+2. [Movimiento e interacción](docs/08_MOTION.md): cargas, transiciones, relleno, serie, descanso y final.
+3. [Encargo para Claude](docs/CLAUDE_NEXT.md): sincronización segura y ejecución de H1 solamente cuando el usuario lo solicite.
+4. [Manifiesto de recursos](design/assets-manifest.json) y [colores exactos](design/titanium-champagne/colors.json).
 
-## Uso en el repositorio
-1. Descomprime el ZIP en una carpeta temporal y abre README.md.
-2. Abre tu repositorio FitnessApp. Comprueba su contenido antes de copiar: este paquete no inspeccionó ni modificó el repositorio remoto.
-3. Copia docs/, design/ y quality/ a la raíz. Si ya existen CLAUDE.md o AGENTS.md, integra las instrucciones tras comparar, sin sobrescribir reglas vigentes. Coloca los dos archivos en la raíz del repositorio.
-4. Pega en Claude Code el contenido de START_HERE.md. Autoriza H0 solamente; si ya existe, solicita primero su auditoría frente a los criterios.
-5. Revisa cada fase y sus capturas antes de autorizar la siguiente. No autorizas un push ni una publicación al entregar este paquete.
+## Referencias visuales
+- [Tarjetas con icono y descripción, aportadas por el usuario](design/references/cards-layout-user-approved.webp).
+- [Inicio, propuesta aprobada en colores y estructura](design/references/home-h1-approved.webp).
+- [Entrenamiento H2, propuesta nueva para guiar la implementación](design/references/training-h2-proposal.webp).
 
-## Orden de lectura
-- START_HERE.md: encargo inicial listo para usar.
-- docs/01_MASTER.md: documento maestro y alcance.
-- docs/02_DESIGN_UX.md: diseño y contratos de las diez pantallas.
-- docs/03_ARCHITECTURE.md: decisiones técnicas y persistencia.
-- docs/04_ROADMAP.md: fases, dependencias y entregables.
-- docs/05_ACCEPTANCE.md: escenarios verificables.
-- design/visual-manifest.json y design/VISUAL_MANIFEST.md: disponibilidad y rutas.
-- docs/06_DECISIONS_SOURCES.md: procedencia, supuestos y fuentes.
-- quality/VERIFICATION.md: comprobaciones de este paquete.
+Siete fotografías nuevas reutilizables en design/assets/photos/. Son archivos reales listados con dimensiones y hashes, no las diez imágenes originales que no se pudieron recuperar. Las tres referencias son documentación y no se empaquetan como pantallas de la aplicación.
 
-Los nombres, códigos de color exactos y detalles no presentes en la conversación se identifican como especificación propuesta. No se afirma fidelidad a píxeles de imágenes que no se han podido ver. No contiene contraseñas, claves, APK, Gradle Wrapper ni código Android.
+## Construcción y estado
+Usar el Wrapper y las versiones del proyecto. Preparación local y matriz en [TOOLCHAIN](docs/TOOLCHAIN.md). Resultados históricos y limitaciones H0 en [H0_REPORT](quality/H0_REPORT.md): API 28, móvil real y TalkBack manual pendientes hasta que se prueben. No reejecutados por este cambio documental.
+
+Comandos desde la raíz en Windows, con SDK/JDK configurados:
+```powershell
+.\gradlew.bat :app:assembleDebug
+.\gradlew.bat :app:testDebugUnitTest
+.\gradlew.bat :app:lintDebug
+.\gradlew.bat :app:connectedDebugAndroidTest
+```
+El último requiere dispositivo/emulador. local.properties y credenciales no se versionan.
+
+## Producto completo
+[Producto](docs/01_MASTER.md), [diseño y UX](docs/02_DESIGN_UX.md), [arquitectura](docs/03_ARCHITECTURE.md), [roadmap](docs/04_ROADMAP.md), [aceptación](docs/05_ACCEPTANCE.md) y [decisiones](docs/06_DECISIONS_SOURCES.md). Para H1/H2 prevalecen los documentos 07/08 actuales. Revisar una fase antes de autorizar la siguiente. START_HERE.md conserva el encargo histórico de H0, no es el encargo actual.

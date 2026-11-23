@@ -5,7 +5,7 @@
   "checkedAt": "2026-11-23",
   "includedOriginalImages": 0,
   "expectedOriginalImages": 10,
-  "note": "No image binaries or retrievable image URLs were exposed by the accessible thread. Planned paths are not existing files.",
+  "note": "Los diez originales siguen ausentes. Hay nuevas fotografías y referencias verificables en design/assets-manifest.json, con procedencia separada.",
   "screens": [
     {
       "id": "01",
@@ -107,5 +107,7 @@
       "sha256": null,
       "reason": "Original no accesible en historial ni adjuntos recuperados; no se ha generado sustituto."
     }
-  ]
+  ],
+  "scope": "Historical unavailable original ten screens only",
+  "currentAssetsManifest": "design/assets-manifest.json"
 }

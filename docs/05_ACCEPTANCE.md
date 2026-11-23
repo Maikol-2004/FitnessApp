@@ -1,5 +1,7 @@
 # Criterios de aceptación ejecutables
 
+> Actualización 2026-11-24: para H1/H2 prevalecen [07_H1_H2_DELIVERY.md](07_H1_H2_DELIVERY.md) y [08_MOTION.md](08_MOTION.md). Paleta principal y estructura ya aprobadas; tarjetas con foto completa, icono, título mayor y descripción. Movimiento H1 M01–M05 y H2 M06–M09 incluido en su cierre. Recursos nuevos reales en design/assets-manifest.json; los diez originales ausentes no se han recuperado. Reutilizar código H0 y versiones existentes. El resto del documento conserva requisitos generales o propuestas de fases futuras.
+
 Estos casos son requisitos; no se han ejecutado sobre una app en este paquete. En cada fase guardar resultado PASS/FAIL/NO EJECUTADO, dispositivo/API, versión de commit y evidencia. No confundir prueba documental con prueba de aplicación.
 
 | ID | Fase | Dado / Cuando | Resultado esperado |
@@ -36,3 +38,4 @@ Comparar capturas en mismo tamaño, densidad y escala de fuente. Validar jerarqu
 
 ## Rendimiento y entrega
 Medir con build adecuada y dispositivo documentado: apertura, scroll de Inicio y sesión; corregir ANR, crashes y bloqueos de escritura. No fijar cifras de rendimiento sin medir. Al menos un dispositivo/emulador API 28 y uno Android 14+; Health Connect real requiere entorno compatible. No pasar por completadas pruebas dependientes de hardware que no se usó.
+

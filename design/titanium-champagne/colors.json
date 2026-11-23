@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 2,
+  "theme": "Titanium Champagne",
+  "mode": "dark",
+  "approvedAt": "2026-11-24",
+  "colors": {
+    "background": "#121416",
+    "surface": "#1D2023",
+    "surfaceRaised": "#282C30",
+    "primary": "#D8C3A5",
+    "onPrimary": "#17191B",
+    "onSurface": "#F4F0EA",
+    "onSurfaceVariant": "#BCB7AE",
+    "outline": "#76736D",
+    "error": "#FFB4AB",
+    "success": "#A7C8B0"
+  },
+  "runtimeExistingSource": "app/src/main/java/com/maikol/fitnessapp/core/designsystem/theme/TitaniumChampagneTokens.kt",
+  "notes": "Reuse existing tokens. Primary five approved by user; auxiliary tokens retained from H0. No dynamic color."
+}

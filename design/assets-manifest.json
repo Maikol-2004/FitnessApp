@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 2,
+  "date": "2026-11-24",
+  "photos": [
+    {
+      "id": "h1_training",
+      "label": "Entrenamiento",
+      "path": "design/assets/photos/h1_training.webp",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 167354,
+      "sha256": "9ae744729bbdb2c71edeb4061d7776c8e742b1bd574b90d2f4295e71090fcf59",
+      "sourceSha256": "82580f10cdd560204d3b8eca240c741362b96d29a590446a5edbd1c487d5d4fc",
+      "provenance": "New image generated with built-in image generation; encoded as WebP for delivery without resizing or compositional edits.",
+      "use": "Full-bleed category background",
+      "runtimeTarget": "app/src/main/res/drawable-nodpi/h1_training.webp",
+      "availableNow": true
+    },
+    {
+      "id": "h1_health",
+      "label": "Salud",
+      "path": "design/assets/photos/h1_health.webp",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 128870,
+      "sha256": "dbb6e75a05124ff8870dbe254bc897b6d537e7cec5aec8def0a2c5cf6c56c539",
+      "sourceSha256": "7f7def6dd3e040b23438ba612a2067741ca50b081372bf7871cf461510549601",
+      "provenance": "New image generated with built-in image generation; encoded as WebP for delivery without resizing or compositional edits.",
+      "use": "Full-bleed category background",
+      "runtimeTarget": "app/src/main/res/drawable-nodpi/h1_health.webp",
+      "availableNow": true
+    },
+    {
+      "id": "h1_nutrition",
+      "label": "Nutrición",
+      "path": "design/assets/photos/h1_nutrition.webp",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 191766,
+      "sha256": "a70aeab73988717b76c4d7dc325379027e4f4806c197a3d7eedc55c6f4fc8c7b",
+      "sourceSha256": "c6e2775e2dd28a09126cad562a62166b7eda99dd28c7f5f64c6e09571f55b46c",
+      "provenance": "New image generated with built-in image generation; encoded as WebP for delivery without resizing or compositional edits.",
+      "use": "Full-bleed category background",
+      "runtimeTarget": "app/src/main/res/drawable-nodpi/h1_nutrition.webp",
+      "availableNow": true
+    },
+    {
+      "id": "h1_hydration",
+      "label": "Hidratación",
+      "path": "design/assets/photos/h1_hydration.webp",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 74286,
+      "sha256": "c53291d52e252c2156b3ade0704c21d2497cf1974ec37c45e37e43cbbd5d6201",
+      "sourceSha256": "fc7d39206b373d5952c3b4bcfbd4986dc9173aadc7e09b8b74769b288fd843e3",
+      "provenance": "New image generated with built-in image generation; encoded as WebP for delivery without resizing or compositional edits.",
+      "use": "Full-bleed category background",
+      "runtimeTarget": "app/src/main/res/drawable-nodpi/h1_hydration.webp",
+      "availableNow": true
+    },
+    {
+      "id": "h1_sleep",
+      "label": "Sueño",
+      "path": "design/assets/photos/h1_sleep.webp",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 84370,
+      "sha256": "1ed1bc136f6c68d2e8ac0a1023576e01ff637230fa4d5c28bfed32261311e3a3",
+      "sourceSha256": "2e0b19e487b2ae06d582e975a149eceaa6216128392bd947497ec349e871049f",
+      "provenance": "New image generated with built-in image generation; encoded as WebP for delivery without resizing or compositional edits.",
+      "use": "Full-bleed category background",
+      "runtimeTarget": "app/src/main/res/drawable-nodpi/h1_sleep.webp",
+      "availableNow": true
+    },
+    {
+      "id": "h1_progress",
+      "label": "Progreso",
+      "path": "design/assets/photos/h1_progress.webp",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 154280,
+      "sha256": "c587c7ad619169bb56b1be881343a3bde415e6b7b5b1effa9466b5230423f17d",
+      "sourceSha256": "515b097ed319311bb433f3fc441124dd01c432be0fcec0e2b9f9b2667af3ebc7",
+      "provenance": "New image generated with built-in image generation; encoded as WebP for delivery without resizing or compositional edits.",
+      "use": "Full-bleed category background",
+      "runtimeTarget": "app/src/main/res/drawable-nodpi/h1_progress.webp",
+      "availableNow": true
+    },
+    {
+      "id": "training_gym_hero",
+      "label": "Entrenamiento hero y próximo entrenamiento",
+      "path": "design/assets/photos/training_gym_hero.webp",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 82036,
+      "sha256": "9d53c9efc82733ccf1aac827f3e16b179cd2dbb53c632d29f7c39895f31c0358",
+      "sourceSha256": "e31c1f0b816db7d578429dc4a18843e190e5198385969468799e8f9c5e3b7989",
+      "provenance": "New image generated with built-in image generation; encoded as WebP for delivery without resizing or compositional edits.",
+      "use": "Home upcoming workout, routine list/detail hero",
+      "runtimeTarget": "app/src/main/res/drawable-nodpi/training_gym_hero.webp",
+      "availableNow": true
+    }
+  ],
+  "references": [
+    {
+      "id": "home-h1-approved",
+      "path": "design/references/home-h1-approved.webp",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 132222,
+      "sha256": "9e759b7fae98aea327da730dea59a8352254bfa84f25b8a54ac1f8d4ed292e82",
+      "provenance": "Generated home board approved in palette/structure; newer user card screenshot overrides card anatomy.",
+      "use": "Documentation only; not runtime screenshot UI",
+      "availableNow": true
+    },
+    {
+      "id": "cards-layout-user-approved",
+      "path": "design/references/cards-layout-user-approved.webp",
+      "width": 366,
+      "height": 609,
+      "bytes": 48158,
+      "sha256": "e54ac6aca55ff0a015af1c185a2e7d4a7ac0fb04ca3ea7e57b3f8a27229a8bc3",
+      "provenance": "User-provided screenshot reference; do not extract or redistribute its depicted component photographs as new app assets.",
+      "use": "Documentation only; not runtime screenshot UI",
+      "availableNow": true
+    },
+    {
+      "id": "training-h2-proposal",
+      "path": "design/references/training-h2-proposal.webp",
+      "width": 1752,
+      "height": 897,
+      "bytes": 161248,
+      "sha256": "93e77ed753d010852eeaea5dbaced87c6c7c9896ad3158d32a3163f78ae0432f",
+      "provenance": "New H2 proposal, not individually user-approved. Composition guide only. Mock exercise thumbnail photos are not supplied as runtime assets; use the seven listed photographs.",
+      "use": "Documentation only; not runtime screenshot UI",
+      "availableNow": true
+    }
+  ],
+  "historicalOriginalScreensRecovered": 0,
+  "note": "Seven new generated photographs plus three genuine reference files. No original ten-screen pack recovered. Exact colors are in titanium-champagne/colors.json."
+}

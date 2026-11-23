@@ -13,27 +13,19 @@ Evidencia: Captura base y previews; salida de build/test/lint disponible y lista
 
 Fuera de fase: cualquier función de fases posteriores. Corregir regresiones de lo ya entregado antes de avanzar.
 
-## H1 Inicio reconocible
-Dependencia: H0 aprobada.
+## H1 Inicio y navegación terminados
+Dependencia: conservar base H0 existente y autorización de ejecución H1.
 
-Alcance: Cabecera, resumen vacío o real, cuadrícula de seis tarjetas, próximo entrenamiento y cinco destinos. Las secciones pendientes muestran un estado explicativo honesto hasta su fase. Fallback documentado para fotografías ausentes.
+Pasos internos sin aprobaciones repetidas: A Inicio fotográfico y captura temprana; B navegación y Perfil con nombre/unidades/reducir animaciones; C movimiento M01–M05, estados, adaptación y verificación. Descripciones y títulos mayores obligatorios, imágenes locales completas y colores exactos. Sin métricas inventadas. Los destinos futuros muestran estados honestos, no funciones fingidas.
 
-Puerta de aceptación: Todas las tarjetas navegan y Atrás funciona; dos columnas normales; fuente ampliada sin cortes; no números de demo en release.
+Puerta de salida: H1-01 a H1-10 de 07_H1_H2_DELIVERY.md y evidencia de 08_MOTION.md. No dejar animaciones propias H1 como trabajo futuro. Entregar informe corto/capturas y detenerse antes de H2.
 
-Evidencia: Capturas de Inicio normal, vacío y texto grande; mapa de navegación.
+## H2 Entrenamiento utilizable y persistido
+Dependencia: H1 revisada y autorización H2.
 
-Fuera de fase: cualquier función de fases posteriores. Corregir regresiones de lo ya entregado antes de avanzar.
+Pasos internos: A lista/editor; B detalle e Inicio conectado a rutina elegida; C sesión/series/descanso/pausa/recuperación; D finalizar/resumen/historial; E migración, consistencia y cierre. Movimiento M06–M09 parte del resultado. Los datos de entrenamiento son locales y reales, sin servidor. Mantener tema y navegación H1.
 
-## H2 Entrenamiento completo
-Dependencia: H1 aprobada.
-
-Alcance: CRUD de rutinas/ejercicios/series, orden, detalle, sesión activa, descanso, pausa, historial y resumen final.
-
-Puerta de aceptación: Flujo crear → entrenar → finalizar persiste; recuperación tras muerte de proceso; doble toque no duplica sesión; editar rutina conserva histórico.
-
-Evidencia: Pruebas de sesión/DAO y capturas de las cuatro vistas del módulo.
-
-Fuera de fase: cualquier función de fases posteriores. Corregir regresiones de lo ya entregado antes de avanzar.
+Puerta de salida: H2-01 a H2-14 de 07_H1_H2_DELIVERY.md. No pérdida al cerrar proceso, doble toque idempotente, migración no destructiva, resumen tras éxito persistido y evidencia visual. PR avanzado queda H6 salvo implementación opcional completa, sin botón ficticio. No iniciar H3.
 
 ## H3 Salud y proveedor
 Dependencia: H2 aprobada.
@@ -71,7 +63,7 @@ Fuera de fase: cualquier función de fases posteriores. Corregir regresiones de 
 ## H6 Progreso y perfil
 Dependencia: H5 aprobada.
 
-Alcance: Peso, volumen, PR, filtros, gráficos accesibles; nombre, unidades y metas; estructura de temas sin siete paletas inventadas.
+Alcance: Peso, tendencias avanzadas, PR, filtros y gráficos accesibles; ampliar metas y preferencias, conservando nombre/unidades ya cerrados en H1; estructura de temas sin siete paletas inventadas.
 
 Puerta de aceptación: Totales coherentes con sesiones; conversión sin alterar almacenamiento; TalkBack accede a valores; preferencias sobreviven reinicio.
 
@@ -89,3 +81,4 @@ Puerta de aceptación: No pérdida tras actualización; exportación válida; ca
 Evidencia: Informe final con resultados reales, limitaciones, APK debug si se ha construido y matriz de pruebas.
 
 Fuera de fase: cualquier función de fases posteriores. Corregir regresiones de lo ya entregado antes de avanzar.
+

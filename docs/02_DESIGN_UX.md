@@ -1,5 +1,7 @@
 # Sistema de diseño y contratos UX
 
+> Actualización 2026-11-24: para H1/H2 prevalecen [07_H1_H2_DELIVERY.md](07_H1_H2_DELIVERY.md) y [08_MOTION.md](08_MOTION.md). Paleta principal y estructura ya aprobadas; tarjetas con foto completa, icono, título mayor y descripción. Movimiento H1 M01–M05 y H2 M06–M09 incluido en su cierre. Recursos nuevos reales en design/assets-manifest.json; los diez originales ausentes no se han recuperado. Reutilizar código H0 y versiones existentes. El resto del documento conserva requisitos generales o propuestas de fases futuras.
+
 ## Autoridad visual
 Dirección aprobada: premium oscuro, elegante, deportivo, sin neón; grafito, champán, blanco roto, fotografía sobria integrada y gráficos limpios. Las medidas y hex siguientes son una propuesta implementable, no valores extraídos de imágenes. Si aparecen originales, comparar y resolver diferencias con el usuario antes de cambiar estructura aprobada.
 
@@ -24,7 +26,7 @@ Espaciado 4, 8, 12, 16, 24, 32 dp; margen horizontal 16 dp; separación de tarje
 
 ## Componentes
 FitnessScaffold con barra inferior; MetricCard con valor/unidad/fuente/fecha; CategoryPhotoCard con título y subtítulo sobre degradado; PrimaryButton; EmptyState con CTA; ErrorState con reintento; PermissionCard; ChartCard con tabla alternativa; SetRow con campos y estado; DateSelector; RecordListItem con acciones accesibles. Estados pressed, focused, disabled, loading, empty y error forman parte del contrato.
-Fotografías: pesas, reloj, comida, agua, dormitorio y progreso. No hay seis fotos sueltas disponibles tampoco. H1 debe usar un fallback honesto de superficie e icono lineal decorativo; anotar la desviación visual. No extraer fotos de supuestas pantallas ausentes ni introducir imágenes remotas sin procedencia/licencia. Las referencias futuras irán en design/reference/; los assets reales de la aplicación se gestionan aparte en recursos Android.
+Fotografías: pesas, reloj, comida, agua, dormitorio y progreso. Hay fotografías nuevas reales en design/assets/photos/; H1 debe usarlas. Fallback solo para error inesperado de recurso, que se corrige antes del cierre. No extraer fotos de supuestas pantallas ausentes ni introducir imágenes remotas sin procedencia/licencia. Las referencias actuales están en design/references/; los assets reales de la aplicación se gestionan aparte en recursos Android.
 
 ## Navegación
 Cinco destinos raíz exactos: Inicio, Entrenar, Progreso, Salud, Perfil. Nutrición, Hidratación y Sueño se abren desde las tarjetas de Inicio y vuelven al origen con Atrás. Rutina y sesión se anidan en Entrenar. Restaurar estado de cada raíz; no duplicar destinos al tocar pestaña seleccionada. Pasar IDs, nunca entidades serializadas. Sesión activa ofrece acceso de continuación desde Inicio/Entrenar. Atrás durante sesión no descarta datos; finalizar y descartar son acciones diferentes.
@@ -125,3 +127,4 @@ Contenido: Nombre, unidades, metas, Titanium Champagne, estado de integración y
 Interacción: Guardar preferencias inmediatamente, mostrar otras paletas como futuras sin selector activo; exportar/borrar en H7.
 
 Estados: carga, vacío, error y éxito según origen de datos; texto ampliado, TalkBack y vuelta con Atrás verificables. Referencia gráfica original: no disponible.
+
