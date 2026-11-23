@@ -3,7 +3,6 @@ package com.maikol.fitnessapp
 import android.content.Context
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.preferencesDataStoreFile
-import com.maikol.fitnessapp.core.database.AppMetadataRepository
 import com.maikol.fitnessapp.core.database.FitnessDatabase
 import com.maikol.fitnessapp.core.preferences.UserPreferencesRepository
 
@@ -11,7 +10,8 @@ import com.maikol.fitnessapp.core.preferences.UserPreferencesRepository
 class AppContainer(context: Context) {
     private val appContext = context.applicationContext
 
-    private val database: FitnessDatabase by lazy {
+    /** Base Room v1 de H0. H1 no tiene datos relacionales; H2 añade sus entidades con migración 1→2. */
+    val database: FitnessDatabase by lazy {
         FitnessDatabase.build(appContext, nowMillis = System::currentTimeMillis)
     }
 
@@ -21,9 +21,5 @@ class AppContainer(context: Context) {
                 appContext.preferencesDataStoreFile(UserPreferencesRepository.FILE_NAME)
             },
         )
-    }
-
-    val appMetadataRepository: AppMetadataRepository by lazy {
-        AppMetadataRepository(database.appMetadataDao())
     }
 }

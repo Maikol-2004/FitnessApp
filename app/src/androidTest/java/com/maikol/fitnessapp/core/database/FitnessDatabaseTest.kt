@@ -27,8 +27,8 @@ class FitnessDatabaseTest {
 
     @Test
     fun onCreate_seedsCreationTimestamp() = runTest {
-        val repo = AppMetadataRepository(db.appMetadataDao())
-        assertEquals(1_700_000_000_000L, repo.databaseCreatedAtMillis.first())
+        val value = db.appMetadataDao().observeValue(FitnessDatabase.KEY_CREATED_AT).first()
+        assertEquals("1700000000000", value)
     }
 
     @Test

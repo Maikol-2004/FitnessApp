@@ -2,24 +2,76 @@
 <resources>
     <string name="app_name">FitnessApp</string>
 
-    <string name="foundation_title">FitnessApp</string>
-    <string name="foundation_subtitle">Base técnica H0 · Titanium Champagne</string>
-    <string name="foundation_units_title">Unidades</string>
-    <string name="foundation_units_body">Preferencia guardada en este dispositivo. Se conserva al cerrar y reabrir la app.</string>
-    <string name="foundation_units_metric">kg · km</string>
-    <string name="foundation_units_imperial">lb · mi</string>
-    <string name="foundation_units_save_error">No se pudo guardar la preferencia. Inténtalo de nuevo.</string>
-    <string name="foundation_storage_title">Almacenamiento local</string>
-    <string name="foundation_storage_checking">Comprobando base de datos…</string>
-    <string name="foundation_storage_ready">Base de datos local lista (esquema v1)</string>
-    <string name="foundation_storage_error">No se pudo abrir la base de datos local</string>
-    <string name="foundation_next_title">Próxima fase</string>
-    <string name="foundation_next_body">Inicio y la navegación Inicio, Entrenar, Progreso, Salud y Perfil se construyen en H1.</string>
     <string name="loading">Cargando</string>
+    <string name="loading_data">Cargando tus datos</string>
+    <string name="loading_slow">Está tardando más de lo habitual</string>
+    <string name="back">Volver</string>
+    <string name="open_action">Abrir</string>
 
+    <!-- Destinos raíz -->
     <string name="destination_home">Inicio</string>
     <string name="destination_training">Entrenar</string>
     <string name="destination_progress">Progreso</string>
     <string name="destination_health">Salud</string>
     <string name="destination_profile">Perfil</string>
+
+    <!-- Inicio -->
+    <string name="home_greeting">Hola</string>
+    <string name="home_greeting_named">Hola, %1$s</string>
+    <string name="home_subtitle">Tu resumen de hoy</string>
+    <string name="home_avatar_description">Abrir Perfil</string>
+    <string name="home_activity_title">Actividad de hoy</string>
+    <string name="home_activity_no_data">Sin datos</string>
+    <string name="home_activity_empty_body">Tu actividad aparecerá aquí.</string>
+    <string name="home_activity_cta">Ver salud</string>
+    <string name="home_activity_steps">pasos</string>
+    <string name="home_activity_distance">%1$s km</string>
+    <string name="home_activity_kcal">%1$s kcal activas</string>
+    <string name="home_activity_minutes">%1$s min</string>
+    <string name="home_activity_ring_empty_description">Pasos de hoy: sin datos</string>
+    <string name="home_next_title">Tu próximo entrenamiento</string>
+    <string name="home_next_empty_body">Crea tu primera rutina en Entrenar</string>
+    <string name="home_next_cta">Ver entrenamiento</string>
+
+    <!-- Categorías -->
+    <string name="category_training">Entrenamiento</string>
+    <string name="category_training_desc">Planifica rutinas y sigue tus sesiones.</string>
+    <string name="category_health">Salud</string>
+    <string name="category_health_desc">Consulta tu actividad y datos de salud.</string>
+    <string name="category_nutrition">Nutrición</string>
+    <string name="category_nutrition_desc">Registra comidas, calorías y macros.</string>
+    <string name="category_hydration">Hidratación</string>
+    <string name="category_hydration_desc">Registra agua y sigue tu objetivo diario.</string>
+    <string name="category_sleep">Sueño</string>
+    <string name="category_sleep_desc">Consulta tu descanso y su evolución.</string>
+    <string name="category_progress">Progreso</string>
+    <string name="category_progress_desc">Sigue tus marcas, peso y evolución.</string>
+
+    <!-- Secciones aún no disponibles -->
+    <string name="upcoming_label">Próximamente</string>
+    <string name="upcoming_back_home">Volver a Inicio</string>
+    <string name="upcoming_training_body">Aquí crearás tus rutinas con ejercicios, series, repeticiones, carga y descanso, las iniciarás como sesión y consultarás tu historial.</string>
+    <string name="upcoming_progress_body">Aquí verás tu volumen semanal, tus marcas personales por ejercicio y la evolución de tu peso, con gráficos y su tabla equivalente.</string>
+    <string name="upcoming_health_body">Podrás conectar Health Connect de forma opcional para ver pasos, distancia, minutos de actividad, calorías activas, frecuencia cardíaca y sueño, con su fuente y hora de actualización. No se pedirá ningún permiso hasta que decidas conectar.</string>
+    <string name="upcoming_nutrition_body">Podrás registrar tus comidas y alimentos favoritos, con calorías y macros por 100 g o por ración, y fijar tus metas diarias.</string>
+    <string name="upcoming_hydration_body">Podrás registrar el agua que bebes con accesos rápidos, fijar tu objetivo diario y activar recordatorios opcionales.</string>
+    <string name="upcoming_sleep_body">Podrás registrar tus horas de descanso manualmente o importarlas si tu fuente de salud las aporta, y ver su evolución semanal.</string>
+
+    <!-- Perfil -->
+    <string name="profile_title">Perfil</string>
+    <string name="profile_name_title">Nombre</string>
+    <string name="profile_name_label">Tu nombre (opcional)</string>
+    <string name="profile_name_hint">Se usa en el saludo de Inicio. Si lo dejas vacío, verás «Hola».</string>
+    <string name="profile_name_save">Guardar</string>
+    <string name="profile_name_saved">Guardado</string>
+    <string name="profile_save_error">No se pudo guardar. Tus cambios siguen aquí; inténtalo de nuevo.</string>
+    <string name="profile_units_title">Unidades</string>
+    <string name="profile_units_body">Los registros se guardan siempre igual; esto solo cambia cómo se muestran.</string>
+    <string name="profile_units_metric">kg · km</string>
+    <string name="profile_units_imperial">lb · mi</string>
+    <string name="profile_motion_title">Reducir animaciones</string>
+    <string name="profile_motion_body">Quita desplazamientos y animaciones en bucle. La escala de animación de Android también se respeta.</string>
+    <string name="profile_theme_title">Apariencia</string>
+    <string name="profile_theme_current">Titanium Champagne</string>
+    <string name="profile_theme_body">Tema oscuro activo. Otras paletas llegarán más adelante.</string>
 </resources>
