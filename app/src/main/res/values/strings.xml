@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FitnessApp</string>
+
+    <string name="foundation_title">FitnessApp</string>
+    <string name="foundation_subtitle">Base técnica H0 · Titanium Champagne</string>
+    <string name="foundation_units_title">Unidades</string>
+    <string name="foundation_units_body">Preferencia guardada en este dispositivo. Se conserva al cerrar y reabrir la app.</string>
+    <string name="foundation_units_metric">kg · km</string>
+    <string name="foundation_units_imperial">lb · mi</string>
+    <string name="foundation_units_save_error">No se pudo guardar la preferencia. Inténtalo de nuevo.</string>
+    <string name="foundation_storage_title">Almacenamiento local</string>
+    <string name="foundation_storage_checking">Comprobando base de datos…</string>
+    <string name="foundation_storage_ready">Base de datos local lista (esquema v1)</string>
+    <string name="foundation_storage_error">No se pudo abrir la base de datos local</string>
+    <string name="foundation_next_title">Próxima fase</string>
+    <string name="foundation_next_body">Inicio y la navegación Inicio, Entrenar, Progreso, Salud y Perfil se construyen en H1.</string>
+    <string name="loading">Cargando</string>
+
+    <string name="destination_home">Inicio</string>
+    <string name="destination_training">Entrenar</string>
+    <string name="destination_progress">Progreso</string>
+    <string name="destination_health">Salud</string>
+    <string name="destination_profile">Perfil</string>
+</resources>

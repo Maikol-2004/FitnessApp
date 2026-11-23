@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Solo para ventana/icono antes de que Compose dibuje. Tokens reales en Kotlin. -->
+    <color name="tc_background">#FF121416</color>
+    <color name="tc_primary">#FFD8C3A5</color>
+</resources>

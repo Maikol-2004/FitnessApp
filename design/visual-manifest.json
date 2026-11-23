@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "project": "FitnessApp",
+  "theme": "Titanium Champagne",
+  "checkedAt": "2026-11-23",
+  "includedOriginalImages": 0,
+  "expectedOriginalImages": 10,
+  "note": "No image binaries or retrievable image URLs were exposed by the accessible thread. Planned paths are not existing files.",
+  "screens": [
+    {
+      "id": "01",
+      "screen": "Inicio",
+      "navigationRoute": "home",
+      "status": "unavailable",
+      "includedPath": null,
+      "plannedPath": "design/reference/01-home.png",
+      "sha256": null,
+      "reason": "Original no accesible en historial ni adjuntos recuperados; no se ha generado sustituto."
+    },
+    {
+      "id": "02",
+      "screen": "Entrenamiento",
+      "navigationRoute": "training",
+      "status": "unavailable",
+      "includedPath": null,
+      "plannedPath": "design/reference/02-training.png",
+      "sha256": null,
+      "reason": "Original no accesible en historial ni adjuntos recuperados; no se ha generado sustituto."
+    },
+    {
+      "id": "03",
+      "screen": "Detalle de rutina",
+      "navigationRoute": "routine/{routineId}",
+      "status": "unavailable",
+      "includedPath": null,
+      "plannedPath": "design/reference/03-routine.png",
+      "sha256": null,
+      "reason": "Original no accesible en historial ni adjuntos recuperados; no se ha generado sustituto."
+    },
+    {
+      "id": "04",
+      "screen": "Sesión activa",
+      "navigationRoute": "session/{sessionId}",
+      "status": "unavailable",
+      "includedPath": null,
+      "plannedPath": "design/reference/04-session.png",
+      "sha256": null,
+      "reason": "Original no accesible en historial ni adjuntos recuperados; no se ha generado sustituto."
+    },
+    {
+      "id": "05",
+      "screen": "Salud",
+      "navigationRoute": "health",
+      "status": "unavailable",
+      "includedPath": null,
+      "plannedPath": "design/reference/05-health.png",
+      "sha256": null,
+      "reason": "Original no accesible en historial ni adjuntos recuperados; no se ha generado sustituto."
+    },
+    {
+      "id": "06",
+      "screen": "Nutrición",
+      "navigationRoute": "nutrition",
+      "status": "unavailable",
+      "includedPath": null,
+      "plannedPath": "design/reference/06-nutrition.png",
+      "sha256": null,
+      "reason": "Original no accesible en historial ni adjuntos recuperados; no se ha generado sustituto."
+    },
+    {
+      "id": "07",
+      "screen": "Hidratación",
+      "navigationRoute": "hydration",
+      "status": "unavailable",
+      "includedPath": null,
+      "plannedPath": "design/reference/07-hydration.png",
+      "sha256": null,
+      "reason": "Original no accesible en historial ni adjuntos recuperados; no se ha generado sustituto."
+    },
+    {
+      "id": "08",
+      "screen": "Sueño",
+      "navigationRoute": "sleep",
+      "status": "unavailable",
+      "includedPath": null,
+      "plannedPath": "design/reference/08-sleep.png",
+      "sha256": null,
+      "reason": "Original no accesible en historial ni adjuntos recuperados; no se ha generado sustituto."
+    },
+    {
+      "id": "09",
+      "screen": "Progreso",
+      "navigationRoute": "progress",
+      "status": "unavailable",
+      "includedPath": null,
+      "plannedPath": "design/reference/09-progress.png",
+      "sha256": null,
+      "reason": "Original no accesible en historial ni adjuntos recuperados; no se ha generado sustituto."
+    },
+    {
+      "id": "10",
+      "screen": "Perfil y Apariencia",
+      "navigationRoute": "profile",
+      "status": "unavailable",
+      "includedPath": null,
+      "plannedPath": "design/reference/10-profile.png",
+      "sha256": null,
+      "reason": "Original no accesible en historial ni adjuntos recuperados; no se ha generado sustituto."
+    }
+  ]
+}
