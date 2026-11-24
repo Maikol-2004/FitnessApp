@@ -1,6 +1,14 @@
 package com.maikol.fitnessapp.core.designsystem.component
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.ui.res.painterResource
+import com.maikol.fitnessapp.core.designsystem.theme.FitnessThemeExtras
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.heightIn
@@ -43,6 +51,7 @@ fun PrimaryButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     busy: Boolean = false,
+    @DrawableRes iconRes: Int? = null,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val phase by remember { snapshotFlow { busy }.toLoadingPhase() }.collectAsState(LoadingPhase.HIDDEN)
@@ -59,11 +68,7 @@ fun PrimaryButton(
             .then(if (showSpinner) Modifier.semantics { contentDescription = "$text, $loadingLabel" } else Modifier),
     ) {
         Box(contentAlignment = Alignment.Center) {
-            Text(
-                text,
-                style = MaterialTheme.typography.labelLarge,
-                modifier = Modifier.alpha(if (showSpinner) 0f else 1f),
-            )
+            ButtonLabel(text, iconRes, Modifier.alpha(if (showSpinner) 0f else 1f))
             if (showSpinner) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(20.dp),
@@ -75,6 +80,47 @@ fun PrimaryButton(
     }
 }
 
+/**
+ * Acción secundaria sobre grafito elevado (Pausar, Ver historial, Omitir…): misma altura, radio y
+ * pulsación que [PrimaryButton], sin competir con el champán de la acción principal.
+ */
+@Composable
+fun SecondaryButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    @DrawableRes iconRes: Int? = null,
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    Button(
+        onClick = onClick,
+        enabled = enabled,
+        shape = MaterialTheme.shapes.medium,
+        interactionSource = interactionSource,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = FitnessThemeExtras.colors.surfaceRaised,
+            contentColor = MaterialTheme.colorScheme.onSurface,
+        ),
+        modifier = modifier
+            .heightIn(min = MinTouchTarget)
+            .pressScale(interactionSource, LocalMotionEnabled.current),
+    ) {
+        ButtonLabel(text, iconRes)
+    }
+}
+
+@Composable
+private fun ButtonLabel(text: String, @DrawableRes iconRes: Int?, modifier: Modifier = Modifier) {
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier) {
+        if (iconRes != null) {
+            Icon(painterResource(iconRes), contentDescription = null, modifier = Modifier.size(18.dp))
+            Spacer(Modifier.width(Spacing.s))
+        }
+        Text(text, style = MaterialTheme.typography.labelLarge, maxLines = 2)
+    }
+}
+
 @Preview(name = "PrimaryButton estados", backgroundColor = 0xFF121416, showBackground = true)
 @Composable
 private fun PrimaryButtonPreview() {
@@ -82,6 +128,7 @@ private fun PrimaryButtonPreview() {
         Column(modifier = Modifier.padding(Spacing.l)) {
             PrimaryButton(text = "Ver entrenamiento", onClick = {})
             PrimaryButton(text = "Guardar", onClick = {}, enabled = false, modifier = Modifier.padding(top = Spacing.s))
+            SecondaryButton(text = "Pausar", onClick = {}, iconRes = R.drawable.ic_pause, modifier = Modifier.padding(top = Spacing.s))
         }
     }
 }

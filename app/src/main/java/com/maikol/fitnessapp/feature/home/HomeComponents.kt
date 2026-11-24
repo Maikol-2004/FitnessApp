@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -31,6 +32,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -40,6 +42,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.maikol.fitnessapp.R
@@ -229,7 +232,15 @@ private fun ActivityDetails(metrics: ActivityMetrics, modifier: Modifier) {
  * la única acción es el botón.
  */
 @Composable
-fun NextWorkoutCard(onViewTraining: () -> Unit, modifier: Modifier = Modifier) {
+fun NextWorkoutCard(
+    next: NextWorkout,
+    starting: Boolean,
+    failed: Boolean,
+    onViewTraining: () -> Unit,
+    onStart: (routineId: String) -> Unit,
+    onContinue: (sessionId: String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     PhotoBackground(
         photo = R.drawable.training_gym_hero,
         photoAlignment = Alignment.CenterEnd,
@@ -241,26 +252,83 @@ fun NextWorkoutCard(onViewTraining: () -> Unit, modifier: Modifier = Modifier) {
         Column(modifier = Modifier.padding(Spacing.l)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_calendar),
+                    painter = painterResource(if (next is NextWorkout.Active) R.drawable.ic_timer else R.drawable.ic_calendar),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(22.dp),
                 )
                 Spacer(Modifier.width(Spacing.m))
                 Text(
-                    stringResource(R.string.home_next_title),
+                    stringResource(if (next is NextWorkout.Active) R.string.home_next_active_title else R.string.home_next_title),
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.semantics { heading() },
                 )
             }
             Spacer(Modifier.height(Spacing.xs))
-            Text(
-                stringResource(R.string.home_next_empty_body),
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.86f),
-            )
-            Spacer(Modifier.height(Spacing.l))
-            PrimaryButton(text = stringResource(R.string.home_next_cta), onClick = onViewTraining)
+            when (next) {
+                NextWorkout.None -> {
+                    Text(
+                        stringResource(R.string.home_next_empty_body),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.86f),
+                    )
+                    Spacer(Modifier.height(Spacing.l))
+                    PrimaryButton(text = stringResource(R.string.home_next_cta), onClick = onViewTraining)
+                }
+                is NextWorkout.Active -> {
+                    NextRoutineText(
+                        overline = stringResource(if (next.session.paused) R.string.training_open_session_paused else R.string.training_open_session_title),
+                        name = next.session.routineName,
+                        detail = null,
+                    )
+                    Spacer(Modifier.height(Spacing.l))
+                    PrimaryButton(
+                        text = stringResource(R.string.training_continue),
+                        onClick = { onContinue(next.session.id) },
+                        iconRes = R.drawable.ic_play,
+                    )
+                }
+                is NextWorkout.Planned -> {
+                    NextRoutineText(
+                        overline = stringResource(if (next.selected) R.string.home_next_selected else R.string.home_next_available),
+                        name = next.routine.name,
+                        detail = pluralStringResource(R.plurals.exercise_count, next.routine.exerciseCount, next.routine.exerciseCount) +
+                            " · " + pluralStringResource(R.plurals.set_count, next.routine.setCount, next.routine.setCount),
+                    )
+                    if (failed) {
+                        Spacer(Modifier.height(Spacing.s))
+                        Text(stringResource(R.string.training_action_failed), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error)
+                    }
+                    Spacer(Modifier.height(Spacing.l))
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s)) {
+                        PrimaryButton(
+                            text = stringResource(R.string.home_next_start),
+                            onClick = { onStart(next.routine.id) },
+                            busy = starting,
+                            iconRes = R.drawable.ic_play,
+                        )
+                        TextButton(onClick = onViewTraining, modifier = Modifier.heightIn(min = MinTouchTarget)) {
+                            Text(stringResource(R.string.home_next_change), style = MaterialTheme.typography.labelLarge)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun NextRoutineText(overline: String, name: String, detail: String?) {
+    Column(Modifier.semantics(mergeDescendants = true) {}) {
+        Text(
+            overline.uppercase(),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.primary,
+        )
+        Spacer(Modifier.height(2.dp))
+        Text(name, style = MaterialTheme.typography.headlineSmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
+        if (detail != null) {
+            Text(detail, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.86f))
         }
     }
 }

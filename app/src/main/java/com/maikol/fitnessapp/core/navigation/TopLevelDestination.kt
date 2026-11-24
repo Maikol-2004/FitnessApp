@@ -31,3 +31,29 @@ enum class SecondaryDestination(val route: String) {
     HYDRATION("hydration"),
     SLEEP("sleep"),
 }
+
+/** Rutas del flujo de Entrenar (H2). Todas pertenecen a la pestaña Entrenar. */
+object TrainingRoutes {
+    const val EDITOR = "routine-editor?routineId={routineId}"
+    const val DETAIL = "routine/{routineId}"
+    const val SESSION = "session/{sessionId}"
+    const val SUMMARY = "summary/{sessionId}?celebrate={celebrate}"
+    const val HISTORY = "history"
+
+    fun editor(routineId: String? = null) = if (routineId == null) "routine-editor" else "routine-editor?routineId=$routineId"
+    fun detail(routineId: String) = "routine/$routineId"
+    fun session(sessionId: String) = "session/$sessionId"
+    fun summary(sessionId: String, celebrate: Boolean = false) = "summary/$sessionId?celebrate=$celebrate"
+
+    private val all = setOf(EDITOR, DETAIL, SESSION, SUMMARY, HISTORY)
+
+    /** Flujos de concentración: sin barra inferior (editor, detalle, sesión y resumen). */
+    private val immersive = setOf(EDITOR, DETAIL, SESSION, SUMMARY)
+
+    fun owns(route: String?) = route in all
+    fun isImmersive(route: String?) = route in immersive
+}
+
+/** Pestaña a la que pertenece cualquier ruta; los secundarios de Inicio y el resto, a Inicio. */
+fun tabOf(route: String?): TopLevelDestination =
+    TopLevelDestination.fromRoute(route) ?: if (TrainingRoutes.owns(route)) TopLevelDestination.TRAINING else TopLevelDestination.HOME

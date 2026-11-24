@@ -21,6 +21,8 @@ data class UserPreferences(
     val unitSystem: UnitSystem = UnitSystem.METRIC,
     /** Ajuste propio de la app; se suma (no sustituye) a la escala de animación del sistema. */
     val reduceMotion: Boolean = false,
+    /** Rutina elegida como «Próximo entrenamiento» (ID local). Sin calendario: solo una selección. */
+    val nextRoutineId: String? = null,
 )
 
 /**
@@ -38,6 +40,7 @@ class UserPreferencesRepository(
                 displayName = prefs[Keys.DISPLAY_NAME]?.takeIf { it.isNotBlank() },
                 unitSystem = prefs[Keys.UNIT_SYSTEM].toUnitSystem(),
                 reduceMotion = prefs[Keys.REDUCE_MOTION] ?: false,
+                nextRoutineId = prefs[Keys.NEXT_ROUTINE_ID],
             )
         }
         .distinctUntilChanged()
@@ -58,6 +61,13 @@ class UserPreferencesRepository(
         dataStore.edit { prefs -> prefs[Keys.REDUCE_MOTION] = enabled }
     }
 
+    /** null limpia la selección (p. ej. al archivar la rutina elegida). */
+    suspend fun setNextRoutineId(routineId: String?) {
+        dataStore.edit { prefs ->
+            if (routineId == null) prefs.remove(Keys.NEXT_ROUTINE_ID) else prefs[Keys.NEXT_ROUTINE_ID] = routineId
+        }
+    }
+
     private fun String?.toUnitSystem(): UnitSystem =
         UnitSystem.entries.firstOrNull { it.name == this } ?: UnitSystem.METRIC
 
@@ -65,6 +75,7 @@ class UserPreferencesRepository(
         val UNIT_SYSTEM = stringPreferencesKey("unit_system")
         val DISPLAY_NAME = stringPreferencesKey("display_name")
         val REDUCE_MOTION = booleanPreferencesKey("reduce_motion")
+        val NEXT_ROUTINE_ID = stringPreferencesKey("next_routine_id")
     }
 
     companion object {

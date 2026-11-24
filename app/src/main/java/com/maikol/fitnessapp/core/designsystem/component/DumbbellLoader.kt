@@ -87,7 +87,8 @@ fun LoadingRegion(
     val phase by remember { snapshotFlow { isLoading }.toLoadingPhase() }
         .collectAsState(initial = LoadingPhase.HIDDEN)
     if (!isLoading) {
-        content()
+        // El contenido ocupa el mismo espacio que el indicador (p. ej. weight en una Column).
+        Box(modifier = modifier) { content() }
     } else {
         Box(modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
             if (phase != LoadingPhase.HIDDEN) {

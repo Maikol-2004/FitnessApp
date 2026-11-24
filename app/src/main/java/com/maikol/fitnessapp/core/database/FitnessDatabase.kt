@@ -1,6 +1,7 @@
 package com.maikol.fitnessapp.core.database
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Database
@@ -13,10 +14,7 @@ import androidx.room.Upsert
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.flow.Flow
 
-/**
- * Tabla técnica (no de negocio): metadatos de la propia base de datos.
- * Las entidades de dominio (rutinas, sesiones…) se añaden en su fase con migraciones verificables.
- */
+/** Tabla técnica (no de negocio): metadatos de la propia base de datos. Se conserva desde H0. */
 @Entity(tableName = "app_metadata")
 data class AppMetadataEntity(
     @PrimaryKey val key: String,
@@ -32,9 +30,27 @@ interface AppMetadataDao {
     suspend fun upsert(entity: AppMetadataEntity)
 }
 
-@Database(entities = [AppMetadataEntity::class], version = 1, exportSchema = true)
+/**
+ * v1 (H0): app_metadata. v2 (H2): rutinas y sesiones. La migración 1→2 solo crea tablas nuevas
+ * (AutoMigration generada desde los esquemas exportados) y conserva app_metadata.
+ */
+@Database(
+    entities = [
+        AppMetadataEntity::class,
+        RoutineEntity::class,
+        RoutineExerciseEntity::class,
+        PlannedSetEntity::class,
+        WorkoutSessionEntity::class,
+        SessionExerciseEntity::class,
+        PerformedSetEntity::class,
+    ],
+    version = 2,
+    exportSchema = true,
+    autoMigrations = [AutoMigration(from = 1, to = 2)],
+)
 abstract class FitnessDatabase : RoomDatabase() {
     abstract fun appMetadataDao(): AppMetadataDao
+    abstract fun trainingDao(): TrainingDao
 
     companion object {
         const val FILE_NAME = "fitness.db"

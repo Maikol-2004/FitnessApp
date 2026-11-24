@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import com.maikol.fitnessapp.R
 import com.maikol.fitnessapp.core.designsystem.component.FitnessCard
 import com.maikol.fitnessapp.core.designsystem.component.PhotoBackground
-import com.maikol.fitnessapp.core.designsystem.component.PrimaryButton
 import com.maikol.fitnessapp.core.designsystem.theme.FitnessTheme
 import com.maikol.fitnessapp.core.designsystem.theme.Spacing
 
@@ -47,7 +46,6 @@ enum class UpcomingFeature(
     @param:DrawableRes val iconRes: Int,
     @param:DrawableRes val photoRes: Int,
 ) {
-    TRAINING(R.string.destination_training, R.string.upcoming_training_body, R.drawable.ic_dumbbell, R.drawable.training_gym_hero),
     PROGRESS(R.string.destination_progress, R.string.upcoming_progress_body, R.drawable.ic_trending_up, R.drawable.h1_progress),
     HEALTH(R.string.destination_health, R.string.upcoming_health_body, R.drawable.ic_heart, R.drawable.h1_health),
     NUTRITION(R.string.category_nutrition, R.string.upcoming_nutrition_body, R.drawable.ic_restaurant, R.drawable.h1_nutrition),
@@ -56,7 +54,7 @@ enum class UpcomingFeature(
 }
 
 /**
- * Estado final de disponibilidad. [onBack]: flecha Atrás (destinos secundarios).
+ * Sin acciones Guardar/Registrar/Crear: estas áreas llegan en fases posteriores.
  * [onBackHome]: único botón permitido en H1 (Entrenar). No hay acciones Guardar/Registrar/Crear.
  */
 @Composable
@@ -64,7 +62,6 @@ fun UpcomingFeatureScreen(
     feature: UpcomingFeature,
     modifier: Modifier = Modifier,
     onBack: (() -> Unit)? = null,
-    onBackHome: (() -> Unit)? = null,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
     Column(
@@ -129,13 +126,6 @@ fun UpcomingFeatureScreen(
                     stringResource(feature.bodyRes),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-            if (onBackHome != null) {
-                PrimaryButton(
-                    text = stringResource(R.string.upcoming_back_home),
-                    onClick = onBackHome,
-                    modifier = Modifier.padding(top = Spacing.l),
                 )
             }
             Spacer(Modifier.height(Spacing.xl))

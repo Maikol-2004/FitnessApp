@@ -12,4 +12,14 @@ class TopLevelDestinationTest {
             TopLevelDestination.entries.map { it.route },
         )
     }
+
+    @Test
+    fun trainingFlowRoutes_belongToTrainingTab_andOnlyListAndHistoryShowTheBar() {
+        listOf(TrainingRoutes.EDITOR, TrainingRoutes.DETAIL, TrainingRoutes.SESSION, TrainingRoutes.SUMMARY, TrainingRoutes.HISTORY)
+            .forEach { assertEquals(it, TopLevelDestination.TRAINING, tabOf(it)) }
+        assertEquals(TopLevelDestination.HOME, tabOf(SecondaryDestination.SLEEP.route))
+        assertEquals(TopLevelDestination.HOME, tabOf(null))
+        assertEquals(false, TrainingRoutes.isImmersive(TrainingRoutes.HISTORY))
+        assertEquals(true, TrainingRoutes.isImmersive(TrainingRoutes.SESSION))
+    }
 }

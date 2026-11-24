@@ -49,13 +49,171 @@
 
     <!-- Secciones aún no disponibles -->
     <string name="upcoming_label">Próximamente</string>
-    <string name="upcoming_back_home">Volver a Inicio</string>
-    <string name="upcoming_training_body">Aquí crearás tus rutinas con ejercicios, series, repeticiones, carga y descanso, las iniciarás como sesión y consultarás tu historial.</string>
     <string name="upcoming_progress_body">Aquí verás tu volumen semanal, tus marcas personales por ejercicio y la evolución de tu peso, con gráficos y su tabla equivalente.</string>
     <string name="upcoming_health_body">Podrás conectar Health Connect de forma opcional para ver pasos, distancia, minutos de actividad, calorías activas, frecuencia cardíaca y sueño, con su fuente y hora de actualización. No se pedirá ningún permiso hasta que decidas conectar.</string>
     <string name="upcoming_nutrition_body">Podrás registrar tus comidas y alimentos favoritos, con calorías y macros por 100 g o por ración, y fijar tus metas diarias.</string>
     <string name="upcoming_hydration_body">Podrás registrar el agua que bebes con accesos rápidos, fijar tu objetivo diario y activar recordatorios opcionales.</string>
     <string name="upcoming_sleep_body">Podrás registrar tus horas de descanso manualmente o importarlas si tu fuente de salud las aporta, y ver su evolución semanal.</string>
+
+    <!-- Entrenar (H2) -->
+    <string name="training_subtitle">Rutinas propias, sesiones e historial</string>
+    <string name="training_routines_title">Tus rutinas</string>
+    <string name="training_create">Crear rutina</string>
+    <string name="training_empty_title">Aún no tienes rutinas</string>
+    <string name="training_empty_body">Crea tu primera rutina con sus ejercicios, series, repeticiones, carga y descanso. Después podrás iniciarla como sesión.</string>
+    <string name="training_counts">%1$s · %2$s</string>
+    <plurals name="exercise_count">
+        <item quantity="one">%d ejercicio</item>
+        <item quantity="other">%d ejercicios</item>
+    </plurals>
+    <plurals name="set_count">
+        <item quantity="one">%d serie</item>
+        <item quantity="other">%d series</item>
+    </plurals>
+    <string name="training_next_badge">Próxima</string>
+    <string name="training_routine_actions">Acciones de %1$s</string>
+    <string name="action_edit">Editar</string>
+    <string name="action_duplicate">Duplicar</string>
+    <string name="action_archive">Archivar</string>
+    <string name="action_restore">Restaurar</string>
+    <string name="action_set_next">Marcar como próxima</string>
+    <string name="action_unset_next">Quitar como próxima</string>
+    <string name="action_close">Cerrar</string>
+    <string name="duplicate_suffix">" (copia)"</string>
+    <string name="training_archived_title">Archivadas (%1$d)</string>
+    <string name="training_archived_body">Las rutinas archivadas no aparecen en Inicio y su historial se conserva.</string>
+    <string name="training_open_session_title">Sesión en curso</string>
+    <string name="training_open_session_paused">En pausa</string>
+    <string name="training_continue">Continuar sesión</string>
+    <string name="training_history_title">Historial</string>
+    <string name="training_history_empty">Tus sesiones terminadas aparecerán aquí, con su duración, series y volumen.</string>
+    <string name="training_history_all">Ver todo el historial</string>
+    <string name="training_action_failed">No se pudo completar la acción. Inténtalo de nuevo.</string>
+
+    <!-- Editor de rutina -->
+    <string name="editor_new_title">Nueva rutina</string>
+    <string name="editor_edit_title">Editar rutina</string>
+    <string name="editor_name_label">Nombre de la rutina</string>
+    <string name="editor_notes_label">Notas (opcional)</string>
+    <string name="editor_exercises_title">Ejercicios</string>
+    <string name="editor_exercise_label">Ejercicio %1$d</string>
+    <string name="editor_exercise_name_label">Nombre del ejercicio</string>
+    <string name="editor_exercise_notes_label">Notas del ejercicio (opcional)</string>
+    <string name="editor_add_exercise">Añadir ejercicio</string>
+    <string name="editor_add_set">Añadir serie</string>
+    <string name="editor_col_set">Serie</string>
+    <string name="editor_col_reps">Reps</string>
+    <string name="editor_col_rest">Desc. (s)</string>
+    <string name="editor_warmup">Calentamiento</string>
+    <string name="editor_warmup_short">C</string>
+    <string name="editor_warmup_toggle">Serie %1$d de calentamiento</string>
+    <string name="editor_move_up">Subir %1$s</string>
+    <string name="editor_move_down">Bajar %1$s</string>
+    <string name="editor_delete_exercise_short">Eliminar ejercicio</string>
+    <string name="editor_working_set">Serie efectiva</string>
+    <string name="editor_warmup_hint">Toca el número de una serie para marcarla como calentamiento (C): cuenta como serie, pero no suma volumen.</string>
+    <string name="editor_delete_set">Eliminar serie %1$d</string>
+    <string name="editor_field_description">Serie %1$d, %2$s</string>
+    <string name="editor_save">Guardar rutina</string>
+    <string name="editor_save_failed">No se pudo guardar. Tus datos siguen aquí; inténtalo de nuevo.</string>
+    <string name="editor_fix_errors">Revisa los campos marcados para guardar.</string>
+    <string name="editor_error_name">Ponle un nombre a la rutina.</string>
+    <string name="editor_error_no_exercises">Añade al menos un ejercicio.</string>
+    <string name="editor_error_exercise_name">Escribe el nombre del ejercicio.</string>
+    <string name="editor_error_no_sets">Añade al menos una serie.</string>
+    <string name="error_reps">Reps: número entero de 1 a 999.</string>
+    <string name="error_load">Carga: número igual o mayor que 0 (coma o punto decimal).</string>
+    <string name="error_rest">Descanso: segundos enteros de 0 a 3600.</string>
+    <string name="editor_discard_title">¿Descartar cambios?</string>
+    <string name="editor_discard_body">Los cambios sin guardar de esta rutina se perderán.</string>
+    <string name="editor_discard_confirm">Descartar</string>
+    <string name="editor_keep_editing">Seguir editando</string>
+
+    <!-- Detalle de rutina -->
+    <string name="detail_start">Iniciar entrenamiento</string>
+    <string name="detail_next_selected">Próxima rutina</string>
+    <string name="detail_other_session">Ya tienes una sesión en curso (%1$s). Continúala o termínala antes de empezar otra.</string>
+    <string name="detail_rest">Descanso %1$s</string>
+    <string name="detail_archived">Rutina archivada. Restáurala para poder iniciarla.</string>
+    <string name="detail_not_found">Esta rutina ya no existe.</string>
+    <string name="preparing_workout">Preparando tu entrenamiento</string>
+    <string name="bodyweight">Sin carga</string>
+
+    <!-- Sesión activa -->
+    <string name="session_title">Sesión activa</string>
+    <string name="session_elapsed">Tiempo efectivo</string>
+    <string name="session_progress">Series %1$d de %2$d</string>
+    <string name="session_progress_description">Progreso: %1$d de %2$d series completadas</string>
+    <string name="session_exercise_position">Ejercicio %1$d de %2$d</string>
+    <string name="session_prev_exercise">Ejercicio anterior</string>
+    <string name="session_next_exercise">Ejercicio siguiente</string>
+    <string name="session_col_set">Serie</string>
+    <string name="session_col_reps">Reps</string>
+    <string name="session_col_done">Hecha</string>
+    <string name="session_set_field">Serie %1$d de %2$s, %3$s</string>
+    <string name="session_complete_set">Completar serie %1$d</string>
+    <string name="session_uncomplete_set">Desmarcar serie %1$d</string>
+    <string name="session_set_completed">Completada</string>
+    <string name="session_set_pending">Pendiente</string>
+    <string name="session_add_set">Añadir serie</string>
+    <string name="session_next_named">Siguiente: %1$s</string>
+    <string name="session_set_failed">No se pudo guardar la serie. Inténtalo de nuevo.</string>
+    <string name="session_pause">Pausar</string>
+    <string name="session_resume">Reanudar</string>
+    <string name="session_finish">Finalizar</string>
+    <string name="session_paused_banner">Sesión en pausa: el tiempo y el descanso están detenidos.</string>
+    <string name="session_time_uncertain">No se pudo verificar el tiempo (reinicio o cambio de hora). Revisa la duración mostrada.</string>
+    <string name="session_time_confirm">Confirmar tiempo</string>
+    <string name="session_more">Más opciones</string>
+    <string name="session_discard">Descartar sesión</string>
+    <string name="session_discard_title">¿Descartar esta sesión?</string>
+    <string name="session_discard_body">No se guardará en el historial ni contará para tu volumen.</string>
+    <string name="session_discard_confirm">Descartar</string>
+    <string name="session_keep">Seguir entrenando</string>
+    <string name="session_finish_title">¿Finalizar entrenamiento?</string>
+    <string name="session_finish_body">Has completado %1$d de %2$d series. Las pendientes no se guardarán como hechas.</string>
+    <string name="session_finish_confirm">Finalizar con lo registrado</string>
+    <string name="session_finish_empty_title">Aún no has completado series</string>
+    <string name="session_finish_empty_body">Una sesión sin series no se guarda en el historial. Puedes seguir entrenando o descartarla.</string>
+    <string name="session_invalid_title">Hay valores sin guardar</string>
+    <string name="session_invalid_body">Hay campos con un valor no válido que no se han guardado. Corrígelos o descarta esos cambios antes de finalizar.</string>
+    <string name="session_invalid_discard">Descartar cambios no válidos</string>
+    <string name="session_invalid_review">Revisar</string>
+    <string name="session_finish_failed">No se pudo finalizar. La sesión sigue abierta; inténtalo de nuevo.</string>
+    <string name="session_not_found">Esta sesión ya no está disponible.</string>
+    <string name="rest_title">Descanso</string>
+    <string name="rest_done">Descanso terminado</string>
+    <string name="rest_skip">Omitir</string>
+    <string name="rest_minus">−15 s</string>
+    <string name="rest_plus">+15 s</string>
+    <string name="rest_minus_description">Restar 15 segundos al descanso</string>
+    <string name="rest_plus_description">Sumar 15 segundos al descanso</string>
+    <string name="rest_description">Descanso: quedan %1$s</string>
+
+    <!-- Resumen e historial -->
+    <string name="summary_completed_title">Entrenamiento completado</string>
+    <string name="summary_title">Resumen</string>
+    <string name="summary_duration">Duración</string>
+    <string name="summary_volume">Volumen</string>
+    <string name="summary_exercises">Ejercicios</string>
+    <string name="summary_sets">Series</string>
+    <string name="summary_logged_title">Ejercicios registrados</string>
+    <string name="summary_no_sets">Sin series completadas</string>
+    <string name="summary_set_line">%1$s × %2$d</string>
+    <string name="summary_set_bodyweight">%1$d reps</string>
+    <string name="summary_warmup">Calentamiento</string>
+    <string name="summary_view_history">Ver historial</string>
+    <string name="summary_back_home">Volver a Inicio</string>
+    <string name="summary_volume_note">Volumen: carga × repeticiones de las series completadas, sin calentamiento ni peso corporal.</string>
+    <string name="history_title">Historial</string>
+    <string name="history_line">%1$s · %2$s · %3$s</string>
+
+    <!-- Inicio conectado (H2) -->
+    <string name="home_next_selected">Rutina seleccionada</string>
+    <string name="home_next_available">Rutina disponible</string>
+    <string name="home_next_active_title">Sesión en curso</string>
+    <string name="home_next_start">Iniciar entrenamiento</string>
+    <string name="home_next_change">Ver rutinas</string>
 
     <!-- Perfil -->
     <string name="profile_title">Perfil</string>

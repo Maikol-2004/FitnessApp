@@ -59,6 +59,15 @@ class UserPreferencesRepositoryTest {
     }
 
     @Test
+    fun nextRoutine_persistsAndCanBeCleared() {
+        val file = File(tmp.root, "d.preferences_pb")
+        withRepository(file) { it.setNextRoutineId("r-1") }
+        assertEquals("r-1", withRepository(file) { it.userPreferences.first().nextRoutineId })
+        withRepository(file) { it.setNextRoutineId(null) }
+        assertNull(withRepository(file) { it.userPreferences.first().nextRoutineId })
+    }
+
+    @Test
     fun blankName_removesSavedNameSoGreetingFallsBackToHola() {
         val name = withRepository(File(tmp.root, "c.preferences_pb")) {
             it.setDisplayName("Alex")

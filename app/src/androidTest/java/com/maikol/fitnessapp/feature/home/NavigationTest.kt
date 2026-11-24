@@ -18,7 +18,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-/** H1-03 y H1-08: seis tarjetas, cinco raíces y avatar; Atrás, selección y toques repetidos. */
+/** H1-03 y H1-08 (con Entrenar ya real en H2): seis tarjetas, cinco raíces y avatar; Atrás, selección y toques repetidos. */
 @RunWith(AndroidJUnit4::class)
 class NavigationTest {
 
@@ -59,7 +59,7 @@ class NavigationTest {
     fun rootCategories_selectTheirTabAndBackReturnsHome() {
         waitForText(homeMarker)
         val roots = listOf(
-            Triple("Planifica rutinas y sigue tus sesiones.", "crearás tus rutinas", "Entrenar"),
+            Triple("Planifica rutinas y sigue tus sesiones.", "Tus rutinas", "Entrenar"),
             Triple("Consulta tu actividad y datos de salud.", "Health Connect", "Salud"),
             Triple("Sigue tus marcas, peso y evolución.", "volumen semanal", "Progreso"),
         )
@@ -92,9 +92,11 @@ class NavigationTest {
 
         tab("Inicio").performClick()
         waitForText(homeMarker)
+        // Sin rutinas, la tarjeta de Inicio lleva a Entrenar con su estado vacío real (H2).
         rule.onNodeWithText("Ver entrenamiento").performScrollTo().performClick()
-        waitForText("crearás tus rutinas")
-        rule.onNodeWithText("Volver a Inicio").performClick()
+        waitForText("Aún no tienes rutinas")
+        assertTabSelected("Entrenar")
+        tab("Inicio").performClick()
         waitForText(homeMarker)
         assertTabSelected("Inicio")
     }

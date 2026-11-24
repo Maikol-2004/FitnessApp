@@ -52,9 +52,17 @@ fun HomeRoute(
     onOpenHealth: () -> Unit,
     onOpenTraining: () -> Unit,
     onOpenProfile: () -> Unit,
+    onOpenSession: (String) -> Unit,
     viewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val toOpen = (uiState as? HomeUiState.Ready)?.sessionToOpen
+    LaunchedEffect(toOpen) {
+        toOpen?.let {
+            viewModel.onSessionOpened()
+            onOpenSession(it)
+        }
+    }
     LoadingRegion(
         isLoading = uiState is HomeUiState.Loading,
         message = stringResource(R.string.loading_data),
@@ -68,6 +76,11 @@ fun HomeRoute(
             onOpenHealth = onOpenHealth,
             onOpenTraining = onOpenTraining,
             onOpenProfile = onOpenProfile,
+            next = ready.next,
+            nextStarting = ready.starting,
+            nextFailed = ready.startFailed,
+            onStartRoutine = viewModel::startRoutine,
+            onContinueSession = onOpenSession,
         )
     }
 }
@@ -81,6 +94,11 @@ fun HomeScreen(
     onOpenTraining: () -> Unit,
     onOpenProfile: () -> Unit,
     modifier: Modifier = Modifier,
+    next: NextWorkout = NextWorkout.None,
+    nextStarting: Boolean = false,
+    nextFailed: Boolean = false,
+    onStartRoutine: (String) -> Unit = {},
+    onContinueSession: (String) -> Unit = {},
     demoLabel: Boolean = false,
 ) {
     val entrance = rememberHomeFirstEntrance()
@@ -110,7 +128,7 @@ fun HomeScreen(
             Spacer(Modifier.height(Spacing.xl))
             CategoryGrid(singleColumn = compact, onOpenCategory = onOpenCategory)
             Spacer(Modifier.height(Spacing.cardGap))
-            NextWorkoutCard(onViewTraining = onOpenTraining)
+            NextWorkoutCard(next, nextStarting, nextFailed, onViewTraining = onOpenTraining, onStart = onStartRoutine, onContinue = onContinueSession)
         }
     }
 }

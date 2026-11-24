@@ -31,6 +31,9 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -41,6 +44,17 @@ import com.maikol.fitnessapp.core.designsystem.theme.FitnessThemeExtras
 import com.maikol.fitnessapp.feature.home.CategoryTarget
 import com.maikol.fitnessapp.feature.home.HomeRoute
 import com.maikol.fitnessapp.feature.profile.ProfileRoute
+import com.maikol.fitnessapp.feature.training.ui.HistoryRoute
+import com.maikol.fitnessapp.feature.training.ui.RoutineDetailRoute
+import com.maikol.fitnessapp.feature.training.ui.RoutineDetailViewModel
+import com.maikol.fitnessapp.feature.training.ui.RoutineEditorRoute
+import com.maikol.fitnessapp.feature.training.ui.RoutineEditorViewModel
+import com.maikol.fitnessapp.feature.training.ui.SessionRoute
+import com.maikol.fitnessapp.feature.training.ui.SessionViewModel
+import com.maikol.fitnessapp.feature.training.ui.SummaryRoute
+import com.maikol.fitnessapp.feature.training.ui.SummaryViewModel
+import com.maikol.fitnessapp.feature.training.ui.TrainingNavigation
+import com.maikol.fitnessapp.feature.training.ui.TrainingRoute
 import com.maikol.fitnessapp.feature.upcoming.UpcomingFeature
 import com.maikol.fitnessapp.feature.upcoming.UpcomingFeatureScreen
 
@@ -49,13 +63,17 @@ import com.maikol.fitnessapp.feature.upcoming.UpcomingFeatureScreen
 fun FitnessApp() {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
-    // Los secundarios (Nutrición, Hidratación, Sueño) pertenecen a la pila de Inicio.
-    val selected = TopLevelDestination.fromRoute(backStackEntry?.destination?.route) ?: TopLevelDestination.HOME
+    // Los secundarios de Inicio pertenecen a su pila; el flujo de entrenamiento, a Entrenar.
+    val route = backStackEntry?.destination?.route
+    val selected = tabOf(route)
 
     Scaffold(
         contentWindowInsets = WindowInsets(0),
         bottomBar = {
-            FitnessNavigationBar(selected = selected, onSelect = { navController.navigateToTopLevel(it) })
+            // Editor, detalle, sesión y resumen ocupan la pantalla: su acción principal va abajo.
+            if (!TrainingRoutes.isImmersive(route)) {
+                FitnessNavigationBar(selected = selected, onSelect = { navController.navigateToTopLevel(it) })
+            }
         },
     ) { innerPadding ->
         FitnessNavHost(navController = navController, modifier = Modifier.padding(innerPadding))
@@ -102,7 +120,7 @@ private fun FitnessNavigationBar(selected: TopLevelDestination, onSelect: (TopLe
 fun NavController.navigateToTopLevel(destination: TopLevelDestination) {
     val currentRoute = currentBackStackEntry?.destination?.route
     if (currentRoute == destination.route) return
-    val currentTab = TopLevelDestination.fromRoute(currentRoute) ?: TopLevelDestination.HOME
+    val currentTab = tabOf(currentRoute)
     if (currentTab == destination) {
         popBackStack(destination.route, inclusive = false)
         return
@@ -171,14 +189,14 @@ private fun FitnessNavHost(navController: NavHostController, modifier: Modifier 
                 onOpenHealth = { navController.navigateToTopLevel(TopLevelDestination.HEALTH) },
                 onOpenTraining = { navController.navigateToTopLevel(TopLevelDestination.TRAINING) },
                 onOpenProfile = { navController.navigateToTopLevel(TopLevelDestination.PROFILE) },
+                onOpenSession = { sessionId ->
+                    // La sesión vive en la pila de Entrenar: Atrás desde ella vuelve a la lista de rutinas.
+                    navController.navigateToTopLevel(TopLevelDestination.TRAINING)
+                    navController.navigate(TrainingRoutes.session(sessionId)) { launchSingleTop = true }
+                },
             )
         }
-        composable(TopLevelDestination.TRAINING.route) {
-            UpcomingFeatureScreen(
-                UpcomingFeature.TRAINING,
-                onBackHome = { navController.navigateToTopLevel(TopLevelDestination.HOME) },
-            )
-        }
+        trainingGraph(navController)
         composable(TopLevelDestination.PROGRESS.route) { UpcomingFeatureScreen(UpcomingFeature.PROGRESS) }
         composable(TopLevelDestination.HEALTH.route) { UpcomingFeatureScreen(UpcomingFeature.HEALTH) }
         composable(TopLevelDestination.PROFILE.route) { ProfileRoute() }
@@ -192,6 +210,100 @@ private fun FitnessNavHost(navController: NavHostController, modifier: Modifier 
             UpcomingFeatureScreen(UpcomingFeature.SLEEP, onBack = { navController.popSecondary(SecondaryDestination.SLEEP) })
         }
     }
+}
+
+private fun NavGraphBuilder.trainingGraph(nav: NavHostController) {
+    composable(TopLevelDestination.TRAINING.route) {
+        TrainingRoute(
+            TrainingNavigation(
+                createRoutine = { nav.navigate(TrainingRoutes.editor()) { launchSingleTop = true } },
+                openRoutine = { nav.navigate(TrainingRoutes.detail(it)) { launchSingleTop = true } },
+                editRoutine = { nav.navigate(TrainingRoutes.editor(it)) { launchSingleTop = true } },
+                openSession = { nav.navigate(TrainingRoutes.session(it)) { launchSingleTop = true } },
+                openSummary = { nav.navigate(TrainingRoutes.summary(it)) { launchSingleTop = true } },
+                openHistory = { nav.navigate(TrainingRoutes.HISTORY) { launchSingleTop = true } },
+            ),
+        )
+    }
+    composable(
+        TrainingRoutes.EDITOR,
+        arguments = listOf(navArgument(RoutineEditorViewModel.ARG_ROUTINE_ID) { type = NavType.StringType; nullable = true; defaultValue = null }),
+    ) {
+        RoutineEditorRoute(
+            onClose = { nav.popIf(TrainingRoutes.EDITOR) },
+            onSaved = { routineId, isNew ->
+                if (isNew) {
+                    // Rutina nueva: se sustituye el editor por su detalle (Atrás vuelve a la lista).
+                    nav.navigate(TrainingRoutes.detail(routineId)) { popUpTo(TrainingRoutes.EDITOR) { inclusive = true } }
+                } else {
+                    nav.popIf(TrainingRoutes.EDITOR)
+                }
+            },
+        )
+    }
+    composable(
+        TrainingRoutes.DETAIL,
+        arguments = listOf(navArgument(RoutineDetailViewModel.ARG_ROUTINE_ID) { type = NavType.StringType }),
+    ) {
+        RoutineDetailRoute(
+            onBack = { nav.popIf(TrainingRoutes.DETAIL) },
+            onEdit = { nav.navigate(TrainingRoutes.editor(it)) { launchSingleTop = true } },
+            onOpenSession = { nav.navigate(TrainingRoutes.session(it)) { launchSingleTop = true } },
+            onOpenRoutine = { nav.navigate(TrainingRoutes.detail(it)) { popUpTo(TrainingRoutes.DETAIL) { inclusive = true } } },
+        )
+    }
+    composable(
+        TrainingRoutes.SESSION,
+        arguments = listOf(navArgument(SessionViewModel.ARG_SESSION_ID) { type = NavType.StringType }),
+    ) {
+        RoutineSessionDestination(nav)
+    }
+    composable(
+        TrainingRoutes.SUMMARY,
+        arguments = listOf(
+            navArgument(SummaryViewModel.ARG_SESSION_ID) { type = NavType.StringType },
+            navArgument(SummaryViewModel.ARG_CELEBRATE) { type = NavType.BoolType; defaultValue = false },
+        ),
+    ) {
+        SummaryRoute(
+            onBack = { nav.popIf(TrainingRoutes.SUMMARY) },
+            onOpenHistory = {
+                nav.navigate(TrainingRoutes.HISTORY) { popUpTo(TopLevelDestination.TRAINING.route) }
+            },
+            onBackHome = {
+                // La pila de Entrenar queda en su raíz: al volver a la pestaña no reaparece el resumen.
+                nav.popBackStack(TopLevelDestination.TRAINING.route, inclusive = false)
+                nav.navigateToTopLevel(TopLevelDestination.HOME)
+            },
+        )
+    }
+    composable(TrainingRoutes.HISTORY) {
+        HistoryRoute(
+            onBack = { nav.popIf(TrainingRoutes.HISTORY) },
+            onOpenSummary = { nav.navigate(TrainingRoutes.summary(it)) { launchSingleTop = true } },
+        )
+    }
+}
+
+@Composable
+private fun RoutineSessionDestination(nav: NavHostController) {
+    SessionRoute(
+        onBack = { nav.popIf(TrainingRoutes.SESSION) },
+        onFinished = { sessionId ->
+            // Finalizar sustituye la sesión por su resumen: Atrás no vuelve a una sesión cerrada.
+            nav.navigate(TrainingRoutes.summary(sessionId, celebrate = true)) {
+                popUpTo(TrainingRoutes.SESSION) { inclusive = true }
+            }
+        },
+        onOpenSummary = { sessionId ->
+            nav.navigate(TrainingRoutes.summary(sessionId)) { popUpTo(TrainingRoutes.SESSION) { inclusive = true } }
+        },
+    )
+}
+
+/** Atrás desde una pantalla del flujo: solo si sigue arriba (un doble toque no vacía la pila). */
+private fun NavController.popIf(route: String) {
+    if (currentBackStackEntry?.destination?.route == route) popBackStack()
 }
 
 /** Atrás desde un secundario: solo retira ese destino si sigue arriba (un doble toque no vacía la pila). */
