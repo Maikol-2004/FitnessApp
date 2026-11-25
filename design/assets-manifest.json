@@ -137,5 +137,14 @@
     }
   ],
   "historicalOriginalScreensRecovered": 0,
-  "note": "Seven new generated photographs plus three genuine reference files. No original ten-screen pack recovered. Exact colors are in titanium-champagne/colors.json."
+  "note": "Original seven photo assets remain available. For the current Home card framing correction preserving two columns, prefer the six v2 variants in currentHomePolishManifest. Historical original screen pack still not recovered.",
+  "currentHomePolishManifest": "design/polish-v2/manifest.json",
+  "currentHomePolishSpec": "docs/09_VISUAL_POLISH.md",
+  "currentMenu": {
+    "style": "First Liquid Glass",
+    "reference": "design/liquid-glass/approved-menu.webp",
+    "tokens": "design/liquid-glass/tokens.json",
+    "spec": "docs/11_LIQUID_GLASS.md"
+  },
+  "currentExecutionPlan": "docs/10_FUNCTIONAL_MVP.md"
 }

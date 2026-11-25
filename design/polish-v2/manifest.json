@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-25",
+  "status": "New framing assets inspected; runtime UI implementation pending Claude",
+  "layout": {
+    "normalColumns": 2,
+    "normalRows": 3,
+    "leftTextFraction": [
+      0.52,
+      0.58
+    ],
+    "rightSubjectFraction": [
+      0.34,
+      0.4
+    ],
+    "instruction": "Preserve two cards per row. Rejected single-column mockup is excluded."
+  },
+  "scope": "Only Home category backgrounds; original v1 files remain for other uses.",
+  "assets": [
+    {
+      "category": "training",
+      "path": "design/polish-v2/photos/category_training_right_v2.webp",
+      "runtimeTarget": "app/src/main/res/drawable-nodpi/category_training_right_v2.webp",
+      "width": 1402,
+      "height": 1122,
+      "bytes": 79404,
+      "sha256": "c89e46f628e5965634797480f5d82850432442875d6a3ea6f5b63ddbd864b5a4",
+      "available": true,
+      "origin": "Edited from previous generated photo using built-in image tool; new right-aligned composition. WebP encoded without resizing.",
+      "framing": "Subject smaller and complete on right; negative space left and upper title band. Confirm actual crop in two-column UI."
+    },
+    {
+      "category": "health",
+      "path": "design/polish-v2/photos/category_health_right_v2.webp",
+      "runtimeTarget": "app/src/main/res/drawable-nodpi/category_health_right_v2.webp",
+      "width": 1402,
+      "height": 1122,
+      "bytes": 93084,
+      "sha256": "423797d471b945d66cbda3b5212325c188f3c05da8f45daec51bfdec96355409",
+      "available": true,
+      "origin": "Edited from previous generated photo using built-in image tool; new right-aligned composition. WebP encoded without resizing.",
+      "framing": "Subject smaller and complete on right; negative space left and upper title band. Confirm actual crop in two-column UI."
+    },
+    {
+      "category": "nutrition",
+      "path": "design/polish-v2/photos/category_nutrition_right_v2.webp",
+      "runtimeTarget": "app/src/main/res/drawable-nodpi/category_nutrition_right_v2.webp",
+      "width": 1402,
+      "height": 1122,
+      "bytes": 96600,
+      "sha256": "e553a571de451d741dde46d0466eaa761273e604908f1383d3d247b8199d22d5",
+      "available": true,
+      "origin": "Edited from previous generated photo using built-in image tool; new right-aligned composition. WebP encoded without resizing.",
+      "framing": "Subject smaller and complete on right; negative space left and upper title band. Confirm actual crop in two-column UI."
+    },
+    {
+      "category": "hydration",
+      "path": "design/polish-v2/photos/category_hydration_right_v2.webp",
+      "runtimeTarget": "app/src/main/res/drawable-nodpi/category_hydration_right_v2.webp",
+      "width": 1402,
+      "height": 1122,
+      "bytes": 37544,
+      "sha256": "f4b9283247f99ba4004e83bf3ed76ec225031d545f0012277daaf1c4a95445f3",
+      "available": true,
+      "origin": "Edited from previous generated photo using built-in image tool; new right-aligned composition. WebP encoded without resizing.",
+      "framing": "Subject smaller and complete on right; negative space left and upper title band. Confirm actual crop in two-column UI."
+    },
+    {
+      "category": "sleep",
+      "path": "design/polish-v2/photos/category_sleep_right_v2.webp",
+      "runtimeTarget": "app/src/main/res/drawable-nodpi/category_sleep_right_v2.webp",
+      "width": 1448,
+      "height": 1086,
+      "bytes": 37488,
+      "sha256": "ce28fdceb736983d514fb514cc1d52cfee788dd8e82a36b6ee76ef5c33609680",
+      "available": true,
+      "origin": "Edited from previous generated photo using built-in image tool; new right-aligned composition. WebP encoded without resizing.",
+      "framing": "Subject smaller and complete on right; negative space left and upper title band. Confirm actual crop in two-column UI."
+    },
+    {
+      "category": "progress",
+      "path": "design/polish-v2/photos/category_progress_right_v2.webp",
+      "runtimeTarget": "app/src/main/res/drawable-nodpi/category_progress_right_v2.webp",
+      "width": 1402,
+      "height": 1122,
+      "bytes": 52466,
+      "sha256": "cfe89ebdf8735b5e5ecb28959aa719bb389df6bcc0c8d7a438cdab50ca808c46",
+      "available": true,
+      "origin": "Edited from previous generated photo using built-in image tool; new right-aligned composition. WebP encoded without resizing.",
+      "framing": "Subject smaller and complete on right; negative space left and upper title band. Confirm actual crop in two-column UI."
+    }
+  ]
+}

@@ -1,5 +1,9 @@
 # Plan maestro de entrega H1 y H2
 
+> Encargo posterior F1: docs/10_FUNCTIONAL_MVP.md autoriza las funciones manuales mínimas de todos los apartados en un solo lote, conservando H2. docs/11_LIQUID_GLASS.md fija el menú elegido. Los hitos originales conservan su alcance avanzado, no bloquean F1.
+
+> Corrección visual posterior 2026-11-25: [09_VISUAL_POLISH.md](09_VISUAL_POLISH.md) precisa encuadre, textos, dock y botones, manteniendo dos tarjetas por fila y lo funcional de H2. No volver a implementar fases terminadas.
+
 Actualización del usuario del 24 de noviembre de 2026. Este documento y `08_MOTION.md` actualizan H1 y H2 del paquete inicial. Se aprueban como objetivo colores, estructura y movimiento; la ejecución se autoriza por fase. No se implementa código Android al subir este plan.
 
 ## Qué significa terminar una fase
@@ -150,3 +154,4 @@ Preferir APIs Compose actuales del proyecto (Image/painterResource, Canvas, Anim
 
 ## Después de H2 sin rehacer la base
 H3 conecta salud con permisos y fuentes reales al resumen ya diseñado. H4 activa nutrición/hidratación con el relleno de agua M11. H5 activa sueño; H6 añade tendencias/PR avanzado/peso y temas cuando se aprueben; H7 gestiona exportación/borrado y auditoría global. Cada módulo se cierra con su propio diseño, estados y movimiento, no deja esa parte para una fase genérica de pulido. Revisión transversal posterior solo para problemas descubiertos, consistencia y dispositivos, sin cambiar caprichosamente lo aprobado.
+
