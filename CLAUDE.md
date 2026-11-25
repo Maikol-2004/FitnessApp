@@ -1,5 +1,8 @@
 # Instrucciones para Claude Code
 
+## Encargo vigente G2 — imágenes y ficha de cada ejercicio
+Prevalecen docs/14_EXERCISE_MEDIA_AND_PROGRESS.md y docs/CLAUDE_NEXT.md. Medios por catalogId en design/exercises-v1/manifest.json; revisar VISUAL_REVIEW.md. G1 está completado: conservarlo junto a los datos. Los frames son posiciones estáticas, no vídeos fluidos. Implementar ficha y estadísticas reales sin rehacer fases previas. No push posterior del código integrado sin autorización.
+
 ## Encargo vigente G1 — biblioteca guiada de ejercicios
 Prevalecen docs/13_EXERCISE_LIBRARY.md y docs/CLAUDE_NEXT.md para el nuevo encargo. Conservar el refinamiento visual ya terminado localmente y los datos. G1 añade catálogo y selección de ejercicios, fichas y guía de sesión sin regenerar Entrenar. Los encargos anteriores son antecedentes cuando contradigan el alcance actual. No push posterior de implementación sin autorización.
 

@@ -1,0 +1,2730 @@
+{
+  "catalogCount": 50,
+  "coveredCount": 50,
+  "missing": [],
+  "runtimeImageCount": 250,
+  "sourceSheetCount": 50,
+  "videoCount": 0,
+  "allImagesDecoded": true,
+  "files": [
+    {
+      "path": "back_assisted_pull_up/anatomy.webp",
+      "dimensions": [
+        650,
+        594
+      ],
+      "bytes": 20574,
+      "sha256": "5a12a9f06c619615295508c5de5eda5b2e43a95a0d56159d7222c9ecb66071fb"
+    },
+    {
+      "path": "back_assisted_pull_up/frames/01.webp",
+      "dimensions": [
+        650,
+        593
+      ],
+      "bytes": 27088,
+      "sha256": "199b15a5ca7311056b15c5be211f3088602613897d95fc716548372904ad963f"
+    },
+    {
+      "path": "back_assisted_pull_up/frames/02.webp",
+      "dimensions": [
+        650,
+        593
+      ],
+      "bytes": 26444,
+      "sha256": "d87398fadd2475d8264e5e2198d210e38f3a338ae69dac8f278b33a01a7fca18"
+    },
+    {
+      "path": "back_assisted_pull_up/frames/03.webp",
+      "dimensions": [
+        650,
+        594
+      ],
+      "bytes": 24802,
+      "sha256": "8de30c465d2c548a9244007cff46cd02dfa3c1a856f91ba3d43dd0d1a4daddfd"
+    },
+    {
+      "path": "back_assisted_pull_up/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 8806,
+      "sha256": "403c1293dacab99b40069ce8e0089151c22495892d59fb8f5ba7ba567e7afe48"
+    },
+    {
+      "path": "back_chest_supported_row/anatomy.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 23522,
+      "sha256": "383136c8e70de4377acf8e237bf11568ae44ebc39673ea457e85ac3d05acc0c9"
+    },
+    {
+      "path": "back_chest_supported_row/frames/01.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 31150,
+      "sha256": "dd0e00d8bbcbafb805d34ffe8ec8da67a87676480b0cb93d10114b0d1498f7a4"
+    },
+    {
+      "path": "back_chest_supported_row/frames/02.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 28858,
+      "sha256": "b3c6ce32ccaee925e68ee286da8a47e8026864f2c143a05b60f43481f60ec877"
+    },
+    {
+      "path": "back_chest_supported_row/frames/03.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 28552,
+      "sha256": "45286a81bc8372ab77eda3e9a2d99814acbd77f8a360c4d1e25f625ebda9e9a9"
+    },
+    {
+      "path": "back_chest_supported_row/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 10348,
+      "sha256": "303fd81b440a8d615b03bb1601bfb42982cf5233ded09db133f09c1ac63bacb2"
+    },
+    {
+      "path": "back_lat_pulldown/anatomy.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 23504,
+      "sha256": "1b7e7f6d01d5af37465588fcedfb7abf8d24c610aca36c2a3f7cc494390f3983"
+    },
+    {
+      "path": "back_lat_pulldown/frames/01.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 30392,
+      "sha256": "fa541fe76151386194cf35ef14eebcb4d6f4ac3928e23a0b2348af69f52585f3"
+    },
+    {
+      "path": "back_lat_pulldown/frames/02.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 29470,
+      "sha256": "d550dd3dc65a9ca56b79743f25f7255c63d148be25419d7e9ed4ef87d4a9aef7"
+    },
+    {
+      "path": "back_lat_pulldown/frames/03.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 29916,
+      "sha256": "6fb2ae88a30a3966ba9e61194b684c5cd15996fd8e1a5c3940cf0fc4ba478575"
+    },
+    {
+      "path": "back_lat_pulldown/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 10584,
+      "sha256": "c2ffa84ba3729532594bb5cdced27ef579172e462a4a0450aaae0492458a4632"
+    },
+    {
+      "path": "back_one_arm_dumbbell_row/anatomy.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 22994,
+      "sha256": "5c66733ce453236cf27cb07c9df92a1c7a914c5c3e1e2ee2a995296288d0bfc1"
+    },
+    {
+      "path": "back_one_arm_dumbbell_row/frames/01.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 32596,
+      "sha256": "e7ebe45737f9ef503641f25fe5664c3bd7f2c7a81c2956310764d4971b8a137e"
+    },
+    {
+      "path": "back_one_arm_dumbbell_row/frames/02.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 29250,
+      "sha256": "33c6df433cbd5222b32b8c4a1ea4f341823174c3304e8690bb16e7bbc282fd64"
+    },
+    {
+      "path": "back_one_arm_dumbbell_row/frames/03.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 29544,
+      "sha256": "2cc2870f90102973345a1bde89b92df173716b30425b98bf3ab7345eac48dfc9"
+    },
+    {
+      "path": "back_one_arm_dumbbell_row/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 9894,
+      "sha256": "1e3309995650294177935e15b2139627a0f2684b6973b9fdd6cf6eb23e9b6409"
+    },
+    {
+      "path": "back_seated_cable_row/anatomy.webp",
+      "dimensions": [
+        625,
+        618
+      ],
+      "bytes": 22258,
+      "sha256": "bc9ca018eaae95dfd2dbdb3bdd9419b05cbe17a0d1f8a4116f92eef1b434554b"
+    },
+    {
+      "path": "back_seated_cable_row/frames/01.webp",
+      "dimensions": [
+        624,
+        617
+      ],
+      "bytes": 34942,
+      "sha256": "317155c6c1a4e70bd4f74f12a873f197fde1ebbee0fcdd709332080c7892206d"
+    },
+    {
+      "path": "back_seated_cable_row/frames/02.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 34170,
+      "sha256": "64054077c341134d448ec5b72a249fdd244c1088a89688d8bcd4b599a717e487"
+    },
+    {
+      "path": "back_seated_cable_row/frames/03.webp",
+      "dimensions": [
+        624,
+        618
+      ],
+      "bytes": 35060,
+      "sha256": "8df5a5d0f6310dc70a609359c274782a287af823c4482650fd01a628e9b98622"
+    },
+    {
+      "path": "back_seated_cable_row/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 12164,
+      "sha256": "1309d2416cb4f4248d6d1aee77cfbe8f8d8c17bba719667414f367be6588f173"
+    },
+    {
+      "path": "biceps_cable_curl/anatomy.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 22668,
+      "sha256": "2456475d731757b221e01ff5fcc9c4db9b6f0da7b062a355da353ad3a7bd9193"
+    },
+    {
+      "path": "biceps_cable_curl/frames/01.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 22392,
+      "sha256": "d74ef13a575a30dd7df00f51e0e33deb2580c3ac5f57a0c5a573dcaab6c1f925"
+    },
+    {
+      "path": "biceps_cable_curl/frames/02.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 22582,
+      "sha256": "f802d0ffcd81051283ac0eccc052124370114430806afab5fa988f9f2e9560a7"
+    },
+    {
+      "path": "biceps_cable_curl/frames/03.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 23068,
+      "sha256": "447877dabe183de080369150f299a57e2228ba83021ffae44529669712e233fe"
+    },
+    {
+      "path": "biceps_cable_curl/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 8308,
+      "sha256": "49222f656a3129b43c45d425d5fd398a36e7db617fa7941d33b8522cde3d209a"
+    },
+    {
+      "path": "biceps_dumbbell_curl/anatomy.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 20210,
+      "sha256": "c4f539762a6e03407ee9432562c99678a56a35ac62a57934328de4cbdc59b513"
+    },
+    {
+      "path": "biceps_dumbbell_curl/frames/01.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 15350,
+      "sha256": "22ab2e46d6e82e575d1961acf56cfd527f2b7e0142de70d64a6646f017d3f86b"
+    },
+    {
+      "path": "biceps_dumbbell_curl/frames/02.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 15128,
+      "sha256": "388a8914a22c5e527e8c08f3f55dff95a41d800d53d27c1d654f872b0dae5638"
+    },
+    {
+      "path": "biceps_dumbbell_curl/frames/03.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 15922,
+      "sha256": "7158da10272ba04c39baf0326ea004d2f2850bdb0f118fbd980dcc8b4bae944c"
+    },
+    {
+      "path": "biceps_dumbbell_curl/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 5604,
+      "sha256": "6f9abd952e668a7672178a70ad2fd8590f7b1b6ce571c78125d86ea80ab11c38"
+    },
+    {
+      "path": "biceps_ez_bar_curl/anatomy.webp",
+      "dimensions": [
+        618,
+        625
+      ],
+      "bytes": 21216,
+      "sha256": "fa6e3707aa4b8eebfef3d7ea40fc31ca606fcc5cfa3e2669772e3f2e0852a68b"
+    },
+    {
+      "path": "biceps_ez_bar_curl/frames/01.webp",
+      "dimensions": [
+        617,
+        624
+      ],
+      "bytes": 18662,
+      "sha256": "e76aa7b20f14953a11af7d75c5fd967261c1a44ac688fcfcae2d855d32e57071"
+    },
+    {
+      "path": "biceps_ez_bar_curl/frames/02.webp",
+      "dimensions": [
+        618,
+        624
+      ],
+      "bytes": 18386,
+      "sha256": "833c36fdf87564de355ff221645dc01741091db9ac79b194d80e1c77495255a9"
+    },
+    {
+      "path": "biceps_ez_bar_curl/frames/03.webp",
+      "dimensions": [
+        617,
+        625
+      ],
+      "bytes": 19468,
+      "sha256": "ab514ae2ebfcd5880b23aa5dfb66c382cbb3a7094b04177f86c1bea9821e5e77"
+    },
+    {
+      "path": "biceps_ez_bar_curl/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 6542,
+      "sha256": "199c0154df504831b7ba4f87d2014aaf1295702c43d3d9cf7ff9197cac167483"
+    },
+    {
+      "path": "biceps_hammer_curl/anatomy.webp",
+      "dimensions": [
+        618,
+        625
+      ],
+      "bytes": 20810,
+      "sha256": "70eb10c98b48010452e93ba46364d109089de5e3ba2df3cc2dc4fea119f46af6"
+    },
+    {
+      "path": "biceps_hammer_curl/frames/01.webp",
+      "dimensions": [
+        617,
+        624
+      ],
+      "bytes": 13942,
+      "sha256": "c9989309752b8c124cc9d602f9dbf9273e95f7c7b67fe8c2f2dc5483476ebf19"
+    },
+    {
+      "path": "biceps_hammer_curl/frames/02.webp",
+      "dimensions": [
+        618,
+        624
+      ],
+      "bytes": 14252,
+      "sha256": "ace261eea41c7108a8c825cb3fc257745ff7a07c18c6add1849a6ca6f288ac84"
+    },
+    {
+      "path": "biceps_hammer_curl/frames/03.webp",
+      "dimensions": [
+        617,
+        625
+      ],
+      "bytes": 14632,
+      "sha256": "783874269a96a1fee9b23e749ab1520766dbb61f1f9cb33f753e77f66e1c1b0a"
+    },
+    {
+      "path": "biceps_hammer_curl/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 5564,
+      "sha256": "c91286e5848fd5201179d8ad1dd623cd291b132acf64d9f321beaff8ce2b6e0d"
+    },
+    {
+      "path": "biceps_preacher_curl/anatomy.webp",
+      "dimensions": [
+        625,
+        618
+      ],
+      "bytes": 23384,
+      "sha256": "0c2b4838f3b92a541f0fda79a985af56c6849afc982dfd02d075c22b653c8e86"
+    },
+    {
+      "path": "biceps_preacher_curl/frames/01.webp",
+      "dimensions": [
+        624,
+        617
+      ],
+      "bytes": 32228,
+      "sha256": "5dac33b695d6f09ebe18a82bd4c50c41f1290406ef5f9a76fa1088ae18d0ff15"
+    },
+    {
+      "path": "biceps_preacher_curl/frames/02.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 31700,
+      "sha256": "6c21d8a213af052123ec89b7ba56185e0f669060a3b1e261c522c5e259e9abe8"
+    },
+    {
+      "path": "biceps_preacher_curl/frames/03.webp",
+      "dimensions": [
+        624,
+        618
+      ],
+      "bytes": 32642,
+      "sha256": "ec85947782918738f376ea296e757d470a36988931eacdfbf19edc45a44e4990"
+    },
+    {
+      "path": "biceps_preacher_curl/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 11042,
+      "sha256": "aa6ccb7b2feb4a1b2a0712195098d3bf6312bf17f04b8defc5115a6cca53a0c5"
+    },
+    {
+      "path": "calves_leg_press_raise/anatomy.webp",
+      "dimensions": [
+        625,
+        618
+      ],
+      "bytes": 22530,
+      "sha256": "ae8b01e8b65f57ef2f80c57fd87aa29e2e61136e01f009d6fbf394a50622abe7"
+    },
+    {
+      "path": "calves_leg_press_raise/frames/01.webp",
+      "dimensions": [
+        624,
+        617
+      ],
+      "bytes": 37774,
+      "sha256": "88db61b1e15fcbbda6a641b68116a3083415fecd61e632e7b708a594415cd4f6"
+    },
+    {
+      "path": "calves_leg_press_raise/frames/02.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 37892,
+      "sha256": "43c5801058dbce3d6c53cde756bda69a4e59c89185d11e863a985a43e6c6f4e8"
+    },
+    {
+      "path": "calves_leg_press_raise/frames/03.webp",
+      "dimensions": [
+        624,
+        618
+      ],
+      "bytes": 38134,
+      "sha256": "e84d0bf0afb8c7a00d84164fd1c502100c05ceb4a92666350cc71174a143587d"
+    },
+    {
+      "path": "calves_leg_press_raise/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 14290,
+      "sha256": "3f67fe96ff9addfc3726bd5ce95374320f7513fe7e1aeee94312d28c54761053"
+    },
+    {
+      "path": "calves_seated_machine_raise/anatomy.webp",
+      "dimensions": [
+        625,
+        618
+      ],
+      "bytes": 21834,
+      "sha256": "ef9d0c10652b11d2001cee3637abdfb88d99f97805eaf59ef64fc6f0d31e2c09"
+    },
+    {
+      "path": "calves_seated_machine_raise/frames/01.webp",
+      "dimensions": [
+        624,
+        617
+      ],
+      "bytes": 25304,
+      "sha256": "9f97e8d17324dcaa7f1bef5c7de0743df16dfb035112427c790c85804037b7d1"
+    },
+    {
+      "path": "calves_seated_machine_raise/frames/02.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 25308,
+      "sha256": "a32dd9a1a2f93ce8166ec449206bda4d9a98376e47f576479c2cbb2eaa639356"
+    },
+    {
+      "path": "calves_seated_machine_raise/frames/03.webp",
+      "dimensions": [
+        624,
+        618
+      ],
+      "bytes": 26140,
+      "sha256": "5ca7ba6a8b5b24b6213adbc2e35d5ceafe4efb2899c69f51caa263deb313b489"
+    },
+    {
+      "path": "calves_seated_machine_raise/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 9328,
+      "sha256": "1a7fafa174b880cf2db505b5a138b79cf22b1621bedaeba912200b7cb2518b83"
+    },
+    {
+      "path": "calves_single_leg_bodyweight_raise/anatomy.webp",
+      "dimensions": [
+        617,
+        626
+      ],
+      "bytes": 18384,
+      "sha256": "fd53f476023c7498914b3aaecbc9ea25c6c8164d7e5066ce84e9ce068112767d"
+    },
+    {
+      "path": "calves_single_leg_bodyweight_raise/frames/01.webp",
+      "dimensions": [
+        617,
+        625
+      ],
+      "bytes": 17762,
+      "sha256": "e8c1ae5388371f6d95fdd28b144b364e08a8961b7b8ccd4defe7fdc30d66ce8f"
+    },
+    {
+      "path": "calves_single_leg_bodyweight_raise/frames/02.webp",
+      "dimensions": [
+        617,
+        625
+      ],
+      "bytes": 17582,
+      "sha256": "b7c0087bb4d38f8557e856459ca6355494b4f78b3a6fea70f31a75e8e017bb4b"
+    },
+    {
+      "path": "calves_single_leg_bodyweight_raise/frames/03.webp",
+      "dimensions": [
+        617,
+        626
+      ],
+      "bytes": 17248,
+      "sha256": "620c9d76f087628d8310529ad26135676834543fbdc716be9e84f8dfb77383ab"
+    },
+    {
+      "path": "calves_single_leg_bodyweight_raise/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 6510,
+      "sha256": "5613b48d6180b86f0a10b3f5225b4bb7bc675619f9e80370d64d086d0d841fd6"
+    },
+    {
+      "path": "calves_standing_machine_raise/anatomy.webp",
+      "dimensions": [
+        618,
+        625
+      ],
+      "bytes": 21216,
+      "sha256": "43c0ab840feb1ec01ab9688a82db86d8a5ba661f18ffeb698daa9410af7d584b"
+    },
+    {
+      "path": "calves_standing_machine_raise/frames/01.webp",
+      "dimensions": [
+        617,
+        624
+      ],
+      "bytes": 26244,
+      "sha256": "1874456e825ee805474053109bb0b6ca83243550ebe5b46e9c9d40233bf34c6e"
+    },
+    {
+      "path": "calves_standing_machine_raise/frames/02.webp",
+      "dimensions": [
+        618,
+        624
+      ],
+      "bytes": 26504,
+      "sha256": "76f50ce72493b34c52c260a7a8b2b280461e3f9fae69806055964a534162145b"
+    },
+    {
+      "path": "calves_standing_machine_raise/frames/03.webp",
+      "dimensions": [
+        617,
+        625
+      ],
+      "bytes": 27472,
+      "sha256": "15aca6e565e83ca62127dd32eec66ced0c23d219d38f97c4d31485c400282c0b"
+    },
+    {
+      "path": "calves_standing_machine_raise/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 9636,
+      "sha256": "3f0b193cf37fea6847d84a315b15fe301821fb2bfcb5e30c76de765ccec159d9"
+    },
+    {
+      "path": "calves_standing_raise/anatomy.webp",
+      "dimensions": [
+        618,
+        625
+      ],
+      "bytes": 19194,
+      "sha256": "32688b10b05d32b0c24b22aaeed41b6b9437dd7c5c88fdf52d4c2daaf9383594"
+    },
+    {
+      "path": "calves_standing_raise/frames/01.webp",
+      "dimensions": [
+        617,
+        624
+      ],
+      "bytes": 25604,
+      "sha256": "6065e0d7e539310c3dad4bfbd7f3c72135f84db71c96509306d565a55c99c296"
+    },
+    {
+      "path": "calves_standing_raise/frames/02.webp",
+      "dimensions": [
+        618,
+        624
+      ],
+      "bytes": 25146,
+      "sha256": "b9b7f1f7facb17617cf87e98288086c7ba739e38f7a82bfc727e5f0d9ca94afb"
+    },
+    {
+      "path": "calves_standing_raise/frames/03.webp",
+      "dimensions": [
+        617,
+        625
+      ],
+      "bytes": 25786,
+      "sha256": "c345e447867331c56591e56b3f7fe336e5c40be9131c55c95cc2dc0d04b69f7b"
+    },
+    {
+      "path": "calves_standing_raise/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 9136,
+      "sha256": "e85a3f61fb8f7235ed46bcb19d4a495838a47610374c26e749378a2bb40526cc"
+    },
+    {
+      "path": "chest_barbell_bench_press/anatomy.webp",
+      "dimensions": [
+        625,
+        618
+      ],
+      "bytes": 27174,
+      "sha256": "03d0eba6f157562d492e979161ddae1df91e788567001f0921aafc7df35bf364"
+    },
+    {
+      "path": "chest_barbell_bench_press/frames/01.webp",
+      "dimensions": [
+        624,
+        617
+      ],
+      "bytes": 22792,
+      "sha256": "92499d472ec98dd6010ad3353f1440170364b73479f9400e0f47be4af27ee309"
+    },
+    {
+      "path": "chest_barbell_bench_press/frames/02.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 21816,
+      "sha256": "68f8c399b7445502fdb543387a5eee4b66c465a95475b095dc3bb35bd5faa4b1"
+    },
+    {
+      "path": "chest_barbell_bench_press/frames/03.webp",
+      "dimensions": [
+        624,
+        618
+      ],
+      "bytes": 22020,
+      "sha256": "8eb94f84bece455fb24f0290627e6600a6f8b80a36bccf575aae7b86a7de0b91"
+    },
+    {
+      "path": "chest_barbell_bench_press/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 8158,
+      "sha256": "33105dda393be7b7cacb8a22882cad6e296b3d355a11f698630ff7a3b421f546"
+    },
+    {
+      "path": "chest_dumbbell_bench_press/anatomy.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 35438,
+      "sha256": "8577f267f432c6e952fc8042bc638ea2314650c940e13a38775f2f0f5f614a57"
+    },
+    {
+      "path": "chest_dumbbell_bench_press/frames/01.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 26702,
+      "sha256": "9899b6c7886469746fa12b68c718222d1f12ee19bd803d77c4314657d3fe2040"
+    },
+    {
+      "path": "chest_dumbbell_bench_press/frames/02.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 25072,
+      "sha256": "a333bececdf3b1da89eacbcf6a3f1f205360af998247bde644d74f4a29bc1857"
+    },
+    {
+      "path": "chest_dumbbell_bench_press/frames/03.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 24628,
+      "sha256": "3a708bd533c65dedfcf9e0633f3b6080be93e3c0e10af95024bcc828b816d794"
+    },
+    {
+      "path": "chest_dumbbell_bench_press/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 9028,
+      "sha256": "1ee0d4353cf58ec9471f6bfe49e83843833dc85e22e6e66ffafd3e4f076f35db"
+    },
+    {
+      "path": "chest_incline_dumbbell_press/anatomy.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 29460,
+      "sha256": "34f9c110dac43e1c43ae51b156be0aa3b16d41b119fc3a1818d918c8bb26eddd"
+    },
+    {
+      "path": "chest_incline_dumbbell_press/frames/01.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 26346,
+      "sha256": "89ade1153f0a3181b8295b0c0cae1245204e63e4291af1d531cc039d42378c30"
+    },
+    {
+      "path": "chest_incline_dumbbell_press/frames/02.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 27494,
+      "sha256": "5f86e91d2131767e05e35e15de442b2ec98417e22da562a3b48c2f06caade5ce"
+    },
+    {
+      "path": "chest_incline_dumbbell_press/frames/03.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 29466,
+      "sha256": "637976f9da06037ffde3be89092ba4df7c041e7124e320aa294f9d6e433d597e"
+    },
+    {
+      "path": "chest_incline_dumbbell_press/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 9390,
+      "sha256": "5c7e5db0f41fc098c814757aa618b11377684048e530f0b98bce3110360831d3"
+    },
+    {
+      "path": "chest_machine_fly/anatomy.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 29050,
+      "sha256": "0acd5d8c833dd658ec0bbc828856776f3abb98cf517bf4030e367cc501700d20"
+    },
+    {
+      "path": "chest_machine_fly/frames/01.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 32458,
+      "sha256": "1f11871f8a344e1e62f75735408e846fab253b323d7816e9cd710a2c2d8eaa91"
+    },
+    {
+      "path": "chest_machine_fly/frames/02.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 32012,
+      "sha256": "0154540ccc974b6b4f62ca88c2338032516858344ba27ba1562250c40a4d4414"
+    },
+    {
+      "path": "chest_machine_fly/frames/03.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 32064,
+      "sha256": "d96cd2b4d41611c1becd69ca3058b8826475f71c355dfda4be8b4fb860565401"
+    },
+    {
+      "path": "chest_machine_fly/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 12520,
+      "sha256": "802fcc95aef6952c77d514e0921bc9b21e839467b611ddc946391c3778750d83"
+    },
+    {
+      "path": "chest_push_up/anatomy.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 21720,
+      "sha256": "9edce571f8adb8354941964bd6815ee4cf627d0d3320d2a39aa36c0b92bd59ab"
+    },
+    {
+      "path": "chest_push_up/frames/01.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 23838,
+      "sha256": "29395a06c74e8afe10d45bf4e61455d7262cd0bdde284503e3bd49f747819e5e"
+    },
+    {
+      "path": "chest_push_up/frames/02.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 21334,
+      "sha256": "eb3cf1d275318c4cc9e904471a41894ae013fd3ef243b56c4f07108df7a2de0a"
+    },
+    {
+      "path": "chest_push_up/frames/03.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 18986,
+      "sha256": "adc0856d60e19ff3d7ebc7870fbe1534001081f6a2dd7206f114a7c6beaadfc0"
+    },
+    {
+      "path": "chest_push_up/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 8204,
+      "sha256": "e37bb4baaaf37e9785eb65a71c856476a88c85b53b2b945046bf9186a0dfa654"
+    },
+    {
+      "path": "core_cable_crunch/anatomy.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 20870,
+      "sha256": "c8e9e1aee1c40e2a19c871fdbe1c2cf0ece2a87c4da60b0efcacbe529461695f"
+    },
+    {
+      "path": "core_cable_crunch/frames/01.webp",
+      "dimensions": [
+        625,
+        616
+      ],
+      "bytes": 29608,
+      "sha256": "b8ad3cfb344a05f63e66f79ebc272c96d089b18c8e3b0a73e70eac475e5fbf7e"
+    },
+    {
+      "path": "core_cable_crunch/frames/02.webp",
+      "dimensions": [
+        626,
+        616
+      ],
+      "bytes": 29114,
+      "sha256": "dd052e77bd0f31070c8c317131181cd4d56be820ad784b69fc14a57385441713"
+    },
+    {
+      "path": "core_cable_crunch/frames/03.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 28804,
+      "sha256": "338cfdb61f50bd1b71505f09e2442f689b531a2f02ea1e6938b1dda5a600be78"
+    },
+    {
+      "path": "core_cable_crunch/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 10560,
+      "sha256": "60029087b000753faed0b00d785be557240f83fe9796d6fbc5707357a7ac3d5e"
+    },
+    {
+      "path": "core_machine_crunch/anatomy.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 21824,
+      "sha256": "f5b184c3ad4364c267038c66809d5fd7aa580374db8fe1a1ca55c4d8164ae940"
+    },
+    {
+      "path": "core_machine_crunch/frames/01.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 32630,
+      "sha256": "89c0d01d868d92a375a9ecd62670be4e83f1c800b79955edb290bbb676e0ccd5"
+    },
+    {
+      "path": "core_machine_crunch/frames/02.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 32460,
+      "sha256": "6bc7bcefb3e049c7dbb2833e0671e14e43b3deca7cdafa9781c35a57e624586f"
+    },
+    {
+      "path": "core_machine_crunch/frames/03.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 31710,
+      "sha256": "b6209a5131cf3167be933d7d51d1ee22ed00c44e7f02a4f8cd397da76388c866"
+    },
+    {
+      "path": "core_machine_crunch/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 12214,
+      "sha256": "0710f4ce5fe4ed8297c5e4a7a81b26fbc6b3952adee4929194eb08cc9e688026"
+    },
+    {
+      "path": "core_mat_crunch/anatomy.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 18530,
+      "sha256": "dbbf17219e248847a22651d8396f78d78a671c0c7eb68bbba80db2957ce68723"
+    },
+    {
+      "path": "core_mat_crunch/frames/01.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 19206,
+      "sha256": "77e673c6aed21b6b7bb34aa8c87d98363be6746f1688af60ee98757c70ed9ea2"
+    },
+    {
+      "path": "core_mat_crunch/frames/02.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 21560,
+      "sha256": "50c738a691f507a3d42e5695e23d24f8b84c7d1b7f623b7a4773eccfd48fb3d1"
+    },
+    {
+      "path": "core_mat_crunch/frames/03.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 23714,
+      "sha256": "903aeb80d4702e01692e65562eed2a444eca6f090ca4f26b214a4aa5b0d0c559"
+    },
+    {
+      "path": "core_mat_crunch/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 7202,
+      "sha256": "4fa7c892c11b43f03d75e354ce770bbbf27be1156d09ddec6b38cbee5f118bfb"
+    },
+    {
+      "path": "core_reverse_crunch/anatomy.webp",
+      "dimensions": [
+        625,
+        618
+      ],
+      "bytes": 20632,
+      "sha256": "ef611f166938601cdb0b6145e9434c43288eb074d6da7a0850cf9994a6836849"
+    },
+    {
+      "path": "core_reverse_crunch/frames/01.webp",
+      "dimensions": [
+        624,
+        617
+      ],
+      "bytes": 24226,
+      "sha256": "d287964ecd30cd405cd6c437ea859361e26632bb536c83b6f638144c8df62b3b"
+    },
+    {
+      "path": "core_reverse_crunch/frames/02.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 24820,
+      "sha256": "2edc5e154a0c9d3c7514dd03bfc52a72961a2b63a2d679a8df774573bf47157c"
+    },
+    {
+      "path": "core_reverse_crunch/frames/03.webp",
+      "dimensions": [
+        624,
+        618
+      ],
+      "bytes": 25580,
+      "sha256": "f4b7187a6ce8dfeae5b92c41ff2d0299d3f48703ea66bad21261cd607a56e9e6"
+    },
+    {
+      "path": "core_reverse_crunch/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 7522,
+      "sha256": "dfe0722ea55aea276efb35dd68da335eb7dc6ea384648e6dbeebdefcb9b77d2e"
+    },
+    {
+      "path": "core_stability_ball_crunch/anatomy.webp",
+      "dimensions": [
+        625,
+        618
+      ],
+      "bytes": 16774,
+      "sha256": "edf7c3d515b7a334dbd040aae9e32a0193573eb0f50f3082ac833e0940e4b52d"
+    },
+    {
+      "path": "core_stability_ball_crunch/frames/01.webp",
+      "dimensions": [
+        624,
+        617
+      ],
+      "bytes": 23666,
+      "sha256": "5d2588168454d30fe5b9fbadc3e1dab48dce6547a440fffa239aede74b1f160c"
+    },
+    {
+      "path": "core_stability_ball_crunch/frames/02.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 25390,
+      "sha256": "6f15eb01f1dc762822e8da9734182a4fac7a53dba10e97c87b7bca8323549c82"
+    },
+    {
+      "path": "core_stability_ball_crunch/frames/03.webp",
+      "dimensions": [
+        624,
+        618
+      ],
+      "bytes": 27096,
+      "sha256": "d1306300241b2f47a34bbd6e294fe73005714cd7888902da6fb2dd05a3b9dc25"
+    },
+    {
+      "path": "core_stability_ball_crunch/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 9016,
+      "sha256": "29eb6804f351e988a5993c3b8d0a421f9b1460eb9664b697a0c567354d0e5d31"
+    },
+    {
+      "path": "glutes_barbell_hip_thrust/anatomy.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 24334,
+      "sha256": "83b41ae5b9e672e63688b997915bf5d5daf50622f419f7fdd9904c54e359e08e"
+    },
+    {
+      "path": "glutes_barbell_hip_thrust/frames/01.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 26420,
+      "sha256": "043a20c6a7a7aab701e2812774ce692ee61624b285bb8590ade8aa99ca1864f5"
+    },
+    {
+      "path": "glutes_barbell_hip_thrust/frames/02.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 26138,
+      "sha256": "b85f86ae5d94983d863be568648e45b45fd1c5e48844980f13a5336d26015693"
+    },
+    {
+      "path": "glutes_barbell_hip_thrust/frames/03.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 27224,
+      "sha256": "f00f8ef3be29ec757b0e592881e6c45ef3194f3512bd531743b88e249abc3213"
+    },
+    {
+      "path": "glutes_barbell_hip_thrust/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 9462,
+      "sha256": "799dcd3ba0cbe5118160575161bb50801c734fafd10bb37609afcbaeda42d1c3"
+    },
+    {
+      "path": "glutes_bridge/anatomy.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 23924,
+      "sha256": "4462d8148a97b1267a5de8506a0af7a45eca3e06e7afe477cede7b8396216a10"
+    },
+    {
+      "path": "glutes_bridge/frames/01.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 20768,
+      "sha256": "98aa4abf392c2227288a87e84ada20ce65c6a6cf97ee035073d35c743d18b681"
+    },
+    {
+      "path": "glutes_bridge/frames/02.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 19466,
+      "sha256": "c73c499e7d60984305ba03b4fcb57ca6075c8bab8f49782d0704695467f345ad"
+    },
+    {
+      "path": "glutes_bridge/frames/03.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 20752,
+      "sha256": "cdaadbe2aecb5f852be7ef908154fa81bab6b14846756d8bf0d4265f4cb0081b"
+    },
+    {
+      "path": "glutes_bridge/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 7132,
+      "sha256": "90ed2b8c2753c65152e2866c9ecb89361f9fe92fc6758c6fd9636c1322679a00"
+    },
+    {
+      "path": "glutes_cable_kickback/anatomy.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 24360,
+      "sha256": "be9ca66167b945a58d1534e360051a7ccefdaee9ba294c24ac352e9830e7a2cc"
+    },
+    {
+      "path": "glutes_cable_kickback/frames/01.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 26464,
+      "sha256": "87cff2d41642f778c8cc33c01f9e983da0345e1cdf5c5821453fa55ce5a78595"
+    },
+    {
+      "path": "glutes_cable_kickback/frames/02.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 28042,
+      "sha256": "a649fa7f09e4414ad9e6760b1742536ba86ad4d4bf6c86e13abbe0b7e4ca7127"
+    },
+    {
+      "path": "glutes_cable_kickback/frames/03.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 29242,
+      "sha256": "cb38a67cbbd65425bad4d1c3adac7d46c75004643f1c512642a625adaf3cfb9d"
+    },
+    {
+      "path": "glutes_cable_kickback/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 9700,
+      "sha256": "20adffd57732ca4e4c93cbad52dfee41e443d5434c1e67e72fea1875a39cfa3b"
+    },
+    {
+      "path": "glutes_machine_hip_abduction/anatomy.webp",
+      "dimensions": [
+        1312,
+        1199
+      ],
+      "bytes": 92950,
+      "sha256": "4cb9735392bb46e54fec52b8aef5f6db86b07a27049b853442cecd060e134d21"
+    },
+    {
+      "path": "glutes_machine_hip_abduction/frames/01.webp",
+      "dimensions": [
+        624,
+        617
+      ],
+      "bytes": 33178,
+      "sha256": "10f78bbcabc4c995e7d4c9f88e7ae0f70f4c1849d1dd0be74f700e5a25cf0912"
+    },
+    {
+      "path": "glutes_machine_hip_abduction/frames/02.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 32962,
+      "sha256": "130421aa219980d4b80ce55903346a10dc128d5dadf13a1beb626c082b08eb0b"
+    },
+    {
+      "path": "glutes_machine_hip_abduction/frames/03.webp",
+      "dimensions": [
+        624,
+        618
+      ],
+      "bytes": 32496,
+      "sha256": "c26f0bf976d5b6400cf00d14666666cfd586b2d7a3bba61690b3be1a359a4921"
+    },
+    {
+      "path": "glutes_machine_hip_abduction/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 11928,
+      "sha256": "fc59ee3af91adf8989411ea6d3094f7a06dbf9db58884db40cd585ce310d710d"
+    },
+    {
+      "path": "glutes_step_up/anatomy.webp",
+      "dimensions": [
+        617,
+        625
+      ],
+      "bytes": 21152,
+      "sha256": "91177c9917bf011184ad7d539eef5d58154e1006f7aefb8361ddf2e7919adfa5"
+    },
+    {
+      "path": "glutes_step_up/frames/01.webp",
+      "dimensions": [
+        617,
+        625
+      ],
+      "bytes": 18442,
+      "sha256": "fb1ca1f51f704a452735d00e8115ef83060edc898f6f78b05ef4361ad4829cd3"
+    },
+    {
+      "path": "glutes_step_up/frames/02.webp",
+      "dimensions": [
+        617,
+        625
+      ],
+      "bytes": 18066,
+      "sha256": "ff5ebea6ef5ecc96033beccf779821f3e95abdf9fb3801313f913fd3506f020f"
+    },
+    {
+      "path": "glutes_step_up/frames/03.webp",
+      "dimensions": [
+        617,
+        625
+      ],
+      "bytes": 14654,
+      "sha256": "37e7fa6d9bf5738582c5381883b2164e025ca3dabfd460056278d3bad68199d2"
+    },
+    {
+      "path": "glutes_step_up/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 6682,
+      "sha256": "b66a73f58465dc216275c77f541c2e071391029aec1b1d77a1cdad2f4aece0f9"
+    },
+    {
+      "path": "hamstrings_barbell_romanian_deadlift/anatomy.webp",
+      "dimensions": [
+        618,
+        625
+      ],
+      "bytes": 22148,
+      "sha256": "932c74e57fb4f67f6bde15dbf4f28d783f7cbbc50a1946b585f5eb881b63c299"
+    },
+    {
+      "path": "hamstrings_barbell_romanian_deadlift/frames/01.webp",
+      "dimensions": [
+        617,
+        624
+      ],
+      "bytes": 22022,
+      "sha256": "24bbccfda3eaa244619bdb84c3a343f12fe42ea494f7727d77ae2f9c779fc16b"
+    },
+    {
+      "path": "hamstrings_barbell_romanian_deadlift/frames/02.webp",
+      "dimensions": [
+        618,
+        624
+      ],
+      "bytes": 22884,
+      "sha256": "2224b758672e8d58d9fcf4cb5c0a78fb102f21dc3cb0aae390aa888db1c5bfea"
+    },
+    {
+      "path": "hamstrings_barbell_romanian_deadlift/frames/03.webp",
+      "dimensions": [
+        617,
+        625
+      ],
+      "bytes": 23720,
+      "sha256": "02ddd8e21e626c03827cd9a296f52bd685b537e5f3314fdfbc29d166f284d030"
+    },
+    {
+      "path": "hamstrings_barbell_romanian_deadlift/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 8338,
+      "sha256": "225b3e589786f6ebcc5b8746dfcde173bc2af1c3cc8dda85ef043aec22c76722"
+    },
+    {
+      "path": "hamstrings_dumbbell_romanian_deadlift/anatomy.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 23064,
+      "sha256": "f63c5580d90a480ac80704906b811ba7101b152ebcdd5972f864d61c266eba7b"
+    },
+    {
+      "path": "hamstrings_dumbbell_romanian_deadlift/frames/01.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 14696,
+      "sha256": "00138eb31eebfa10ee52ed2097e0e2e450ec78f92381954f648fdcd20583ebb9"
+    },
+    {
+      "path": "hamstrings_dumbbell_romanian_deadlift/frames/02.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 16274,
+      "sha256": "da6f322fc2597cbfb177fdbd69032a91573f35989845535f5aab4ed1fb72679e"
+    },
+    {
+      "path": "hamstrings_dumbbell_romanian_deadlift/frames/03.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 16570,
+      "sha256": "032d43db67a9fffddbcca603a5dbf1e3570e44466e84de9fecface03b9593571"
+    },
+    {
+      "path": "hamstrings_dumbbell_romanian_deadlift/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 6368,
+      "sha256": "13e6726cb8df28ad49c5e6797ea54049d09fea19621dc62b866923e070b1ab59"
+    },
+    {
+      "path": "hamstrings_lying_leg_curl/anatomy.webp",
+      "dimensions": [
+        1312,
+        1199
+      ],
+      "bytes": 87694,
+      "sha256": "4033f35911a1fba208bed916bd3f3aac5c361d73f0213b15331a8329f183480f"
+    },
+    {
+      "path": "hamstrings_lying_leg_curl/frames/01.webp",
+      "dimensions": [
+        624,
+        617
+      ],
+      "bytes": 27476,
+      "sha256": "631e207179757bc29c7b2302c21356228c89a14969249688cdc807ce343f78c4"
+    },
+    {
+      "path": "hamstrings_lying_leg_curl/frames/02.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 27832,
+      "sha256": "d37b004c0bc2a5864c0a1b88dc19e5e74c065435202428b1ba46555cb0a8ef36"
+    },
+    {
+      "path": "hamstrings_lying_leg_curl/frames/03.webp",
+      "dimensions": [
+        624,
+        618
+      ],
+      "bytes": 28202,
+      "sha256": "2b98907e1d513a47702d5b89be53deb5ad440222d1700f258a19efbb80729b62"
+    },
+    {
+      "path": "hamstrings_lying_leg_curl/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 9784,
+      "sha256": "3f8d9ee1441c592f93e394159eebd566c97b4008b3997b5795ac818045094f5e"
+    },
+    {
+      "path": "hamstrings_seated_leg_curl/anatomy.webp",
+      "dimensions": [
+        1312,
+        1199
+      ],
+      "bytes": 87694,
+      "sha256": "4033f35911a1fba208bed916bd3f3aac5c361d73f0213b15331a8329f183480f"
+    },
+    {
+      "path": "hamstrings_seated_leg_curl/frames/01.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 34332,
+      "sha256": "4ca193edd37f5dbd8bbc0ec86aa20d9db2ed7a7aa23ddc08b0164def21f7401a"
+    },
+    {
+      "path": "hamstrings_seated_leg_curl/frames/02.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 32794,
+      "sha256": "b22878b8184ac063ae2b303508f953340dfc95cdaf83886f92381db2ec44c080"
+    },
+    {
+      "path": "hamstrings_seated_leg_curl/frames/03.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 32728,
+      "sha256": "fa4598382a1d726b885a09467c7b353e6fe1d7741aea20f0aa164c312dae9852"
+    },
+    {
+      "path": "hamstrings_seated_leg_curl/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 11724,
+      "sha256": "929abe8a4e5b04163e2f70d3b64d4e06a491911960b5a81562d8b3ba6d4d157c"
+    },
+    {
+      "path": "hamstrings_slider_leg_curl/anatomy.webp",
+      "dimensions": [
+        617,
+        626
+      ],
+      "bytes": 26450,
+      "sha256": "3a5c6ee86c177d3f4cda7c791a1ce2eee7886682b0a7e43edde9fb53adeaad4f"
+    },
+    {
+      "path": "hamstrings_slider_leg_curl/frames/01.webp",
+      "dimensions": [
+        616,
+        625
+      ],
+      "bytes": 20886,
+      "sha256": "df752326c7fbe9a3975da060e14cac881290597cfdb973e24383f7d73eded744"
+    },
+    {
+      "path": "hamstrings_slider_leg_curl/frames/02.webp",
+      "dimensions": [
+        617,
+        625
+      ],
+      "bytes": 19326,
+      "sha256": "32547d37570972e2cfe49c27cb8c4bad54109ed54370a5c71f3207fbc413033f"
+    },
+    {
+      "path": "hamstrings_slider_leg_curl/frames/03.webp",
+      "dimensions": [
+        616,
+        626
+      ],
+      "bytes": 20146,
+      "sha256": "2ca576feafa16c646a8bf5d33b8d0269d565689ba441571b9e7355ac6bfd5702"
+    },
+    {
+      "path": "hamstrings_slider_leg_curl/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 7226,
+      "sha256": "af3c3b25cbc1d787e373f14447daf394dcded61176f85c11971b2cfab9839ac5"
+    },
+    {
+      "path": "quads_barbell_back_squat/anatomy.webp",
+      "dimensions": [
+        625,
+        618
+      ],
+      "bytes": 32646,
+      "sha256": "706d5422d98484acc8d6e8fae7eb8ab96ae85af541018d350f6adfcb3689f788"
+    },
+    {
+      "path": "quads_barbell_back_squat/frames/01.webp",
+      "dimensions": [
+        624,
+        617
+      ],
+      "bytes": 30640,
+      "sha256": "9612af0a1b6c17a4e24737c28c7de05eeb42f1adf51a510be6d5c34688e792d3"
+    },
+    {
+      "path": "quads_barbell_back_squat/frames/02.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 32196,
+      "sha256": "72699c0e874c6f98464ea382812f4aa1261748f8807120e59c2be2765ba8a4f8"
+    },
+    {
+      "path": "quads_barbell_back_squat/frames/03.webp",
+      "dimensions": [
+        624,
+        618
+      ],
+      "bytes": 30722,
+      "sha256": "f0c33d5b5d0291452d3226c43efd57d852097551cf2bb1b31032afb98be3e121"
+    },
+    {
+      "path": "quads_barbell_back_squat/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 11312,
+      "sha256": "633719e77e025dc08af58010233671fb17a493975dfe8a26db7f5236e55e8026"
+    },
+    {
+      "path": "quads_goblet_squat/anatomy.webp",
+      "dimensions": [
+        625,
+        618
+      ],
+      "bytes": 24708,
+      "sha256": "853162e3d187acccdf050daf399ec7ab2420c44d321c0ccb5235a195c8b1bf20"
+    },
+    {
+      "path": "quads_goblet_squat/frames/01.webp",
+      "dimensions": [
+        624,
+        617
+      ],
+      "bytes": 15308,
+      "sha256": "9ea56502103757574aaa48d680e3603bd91057d7bb299fc7af604fcf97aa90be"
+    },
+    {
+      "path": "quads_goblet_squat/frames/02.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 17042,
+      "sha256": "f525641560c3a528a1b396d30542c4f0c61769c65f5e05a98600f2d70ea4ed41"
+    },
+    {
+      "path": "quads_goblet_squat/frames/03.webp",
+      "dimensions": [
+        624,
+        618
+      ],
+      "bytes": 16236,
+      "sha256": "3bf2d8a290576d663224a073f351e6de438dc3f1be882a4485dc7c9ce6331c0d"
+    },
+    {
+      "path": "quads_goblet_squat/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 6304,
+      "sha256": "79a2b36a41a7475971a8980512825cd27ae37faf7f05c9f6bde3682a3726f08b"
+    },
+    {
+      "path": "quads_leg_extension/anatomy.webp",
+      "dimensions": [
+        617,
+        626
+      ],
+      "bytes": 21978,
+      "sha256": "23a9fb6af389842b6918686dc520ffd8b0ba7b589fbac0ecf8c49e1e7b537898"
+    },
+    {
+      "path": "quads_leg_extension/frames/01.webp",
+      "dimensions": [
+        617,
+        625
+      ],
+      "bytes": 29356,
+      "sha256": "6294f24241bf4b40cae5eedc3398812193b1da919d3ea2191576980ab4171513"
+    },
+    {
+      "path": "quads_leg_extension/frames/02.webp",
+      "dimensions": [
+        617,
+        625
+      ],
+      "bytes": 30696,
+      "sha256": "e04fb079e524e17dc7aefc31377735c1ba35d8178d2a9db703712467b4cfac53"
+    },
+    {
+      "path": "quads_leg_extension/frames/03.webp",
+      "dimensions": [
+        617,
+        626
+      ],
+      "bytes": 29754,
+      "sha256": "6635da81626fe1fbf73bccb933282bd8728189ab79ff37b9ebe76628f518cc2d"
+    },
+    {
+      "path": "quads_leg_extension/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 11420,
+      "sha256": "b11e652214d6d26b55ed54b97f6c48731e01965c496566b92c2dc01fae8dcc3c"
+    },
+    {
+      "path": "quads_leg_press/anatomy.webp",
+      "dimensions": [
+        617,
+        626
+      ],
+      "bytes": 22748,
+      "sha256": "ed8fa1f336a66fa2942ae41a9c26e1616768ff698f1a4c43e0ed63c2ac2bfc8a"
+    },
+    {
+      "path": "quads_leg_press/frames/01.webp",
+      "dimensions": [
+        616,
+        625
+      ],
+      "bytes": 40194,
+      "sha256": "6fc6d1c8b6e835d29a8b768486971b1c2c75135e0358da8d2d4d8341034355ef"
+    },
+    {
+      "path": "quads_leg_press/frames/02.webp",
+      "dimensions": [
+        617,
+        625
+      ],
+      "bytes": 39048,
+      "sha256": "4bf08df5bb2bca00aec954dfeb309955f42e9dc992252a4a2fc1c14fac5b81b0"
+    },
+    {
+      "path": "quads_leg_press/frames/03.webp",
+      "dimensions": [
+        616,
+        626
+      ],
+      "bytes": 38348,
+      "sha256": "f646fc8a52d8afb405bf2d546bbe32884dd974ac07209f152cdef9a693b6f3f1"
+    },
+    {
+      "path": "quads_leg_press/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 14118,
+      "sha256": "37b1273a3d84fa176db6296cd940efc208ebdbc6d3bbf1cf656165790f5eac39"
+    },
+    {
+      "path": "quads_split_squat/anatomy.webp",
+      "dimensions": [
+        625,
+        618
+      ],
+      "bytes": 22388,
+      "sha256": "e24e4228a71221408a5d4b60da27a3a1e585d36f8c375f67ccae0a864d7713d3"
+    },
+    {
+      "path": "quads_split_squat/frames/01.webp",
+      "dimensions": [
+        624,
+        617
+      ],
+      "bytes": 16836,
+      "sha256": "8793645b80d2917ff7c9accd218a28e4431c406c526aa87f2a171320f4165857"
+    },
+    {
+      "path": "quads_split_squat/frames/02.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 17266,
+      "sha256": "1f80597d0228d613348102085588fab77ad9dca689451f52954c26a8ea2994f4"
+    },
+    {
+      "path": "quads_split_squat/frames/03.webp",
+      "dimensions": [
+        624,
+        618
+      ],
+      "bytes": 17436,
+      "sha256": "739ae5a30dd596cc26d5fd0874115e283531932e6e341073a43d1cdb411b733e"
+    },
+    {
+      "path": "quads_split_squat/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 6332,
+      "sha256": "48c5abbd6468a97640928a6c6fe9ad8c8753c9ff174481931913a271a9b10fa0"
+    },
+    {
+      "path": "shoulders_cable_lateral_raise/anatomy.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 22320,
+      "sha256": "ff6a49ee4187a6df6a20dd72ccc51d4b93225355c072385b826b7a3b84567fa4"
+    },
+    {
+      "path": "shoulders_cable_lateral_raise/frames/01.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 23566,
+      "sha256": "207290e44b3af05a20ec4f017953b016d770b318859f539ad3529407f1b5d59f"
+    },
+    {
+      "path": "shoulders_cable_lateral_raise/frames/02.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 24220,
+      "sha256": "067955e1ef7d3787fdf37794a54f9fb75fa3713217869d23025e8bce2d54e48b"
+    },
+    {
+      "path": "shoulders_cable_lateral_raise/frames/03.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 24650,
+      "sha256": "82516d58510eece9cdc441c2929acbaa1600d55331ec61bdb4005b31887439ce"
+    },
+    {
+      "path": "shoulders_cable_lateral_raise/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 9080,
+      "sha256": "f65a8b5ed13dead848e2609b3bdfc1ef0512fccab0673659d9e94a119da19c41"
+    },
+    {
+      "path": "shoulders_dumbbell_lateral_raise/anatomy.webp",
+      "dimensions": [
+        625,
+        618
+      ],
+      "bytes": 22782,
+      "sha256": "f97aa97333efc07f0c7bd17f23e182e1472d4362d831188781fa298524ff93e5"
+    },
+    {
+      "path": "shoulders_dumbbell_lateral_raise/frames/01.webp",
+      "dimensions": [
+        624,
+        617
+      ],
+      "bytes": 13820,
+      "sha256": "aca44385b6f01d11543d7846c779785c0118d0e6dc21e76faf4c12fb5710c741"
+    },
+    {
+      "path": "shoulders_dumbbell_lateral_raise/frames/02.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 15798,
+      "sha256": "7396e3506940d36856db3f42fbda3b87530156bfbb0c0585fc4f111f136b538b"
+    },
+    {
+      "path": "shoulders_dumbbell_lateral_raise/frames/03.webp",
+      "dimensions": [
+        624,
+        618
+      ],
+      "bytes": 15896,
+      "sha256": "022572fdc9bd619b708df2bf20a3661275733186da936749345faa045bd9fa57"
+    },
+    {
+      "path": "shoulders_dumbbell_lateral_raise/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 6170,
+      "sha256": "34c84c1a808ef1902c910b71ac776cfb4780f059b819d3e00e45f4fa991421f8"
+    },
+    {
+      "path": "shoulders_dumbbell_rear_delt_fly/anatomy.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 25252,
+      "sha256": "198ef47dea2ec7623cfd518e5300b792d47c99f524a34cb0d3de5847a87a5fd8"
+    },
+    {
+      "path": "shoulders_dumbbell_rear_delt_fly/frames/01.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 22846,
+      "sha256": "ff59b1cd217fd911536aa464bbc5f494a1891e3742ae9bd72b5a1ac61e5e2340"
+    },
+    {
+      "path": "shoulders_dumbbell_rear_delt_fly/frames/02.webp",
+      "dimensions": [
+        626,
+        617
+      ],
+      "bytes": 22216,
+      "sha256": "1badbcafbd4c2aef1b5363d56258157144f6e22675a5b0527d06f3999e739a42"
+    },
+    {
+      "path": "shoulders_dumbbell_rear_delt_fly/frames/03.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 22912,
+      "sha256": "e9598d5d579154c3fadc4b1a8f5633b3264847866d1d9a25efcec3e54aa1bc37"
+    },
+    {
+      "path": "shoulders_dumbbell_rear_delt_fly/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 8498,
+      "sha256": "c88cf0c4be3b2661439f6ce7918b1b8b045119d9ca6127c5c061177eb872f67b"
+    },
+    {
+      "path": "shoulders_reverse_machine_fly/anatomy.webp",
+      "dimensions": [
+        617,
+        626
+      ],
+      "bytes": 29972,
+      "sha256": "02103fc7f7a87e0517a6fec9265c43986bd8aadd79c72589be6f061579be1881"
+    },
+    {
+      "path": "shoulders_reverse_machine_fly/frames/01.webp",
+      "dimensions": [
+        617,
+        625
+      ],
+      "bytes": 32244,
+      "sha256": "ae45b8c52dcabffa8cf8178ba029b92bf06ccc148ac0a9ebcd74196f2e0cade2"
+    },
+    {
+      "path": "shoulders_reverse_machine_fly/frames/02.webp",
+      "dimensions": [
+        617,
+        625
+      ],
+      "bytes": 35830,
+      "sha256": "5494345dad69d68d6fdf32623feb968d19fb08f0c2c7fbff104362dbc90c236a"
+    },
+    {
+      "path": "shoulders_reverse_machine_fly/frames/03.webp",
+      "dimensions": [
+        617,
+        626
+      ],
+      "bytes": 36908,
+      "sha256": "21aa1b395115b5e7aaa9f8e130e36696ebb24540e888a727923e36b16b88ec86"
+    },
+    {
+      "path": "shoulders_reverse_machine_fly/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 12966,
+      "sha256": "8538009f81b9cd30c87be6738c9bae5973af7a70fed997670c76a7c9881f9312"
+    },
+    {
+      "path": "shoulders_seated_dumbbell_press/anatomy.webp",
+      "dimensions": [
+        617,
+        626
+      ],
+      "bytes": 25212,
+      "sha256": "03bad386e6de07901af2e1ff870a7fd0337fc008a078226f94c74c9583766793"
+    },
+    {
+      "path": "shoulders_seated_dumbbell_press/frames/01.webp",
+      "dimensions": [
+        617,
+        625
+      ],
+      "bytes": 21746,
+      "sha256": "f62f0902c49ef08a8e5c7c7b6f5db0b50ac009fbe7e5ce4fb37d149ce03ed27a"
+    },
+    {
+      "path": "shoulders_seated_dumbbell_press/frames/02.webp",
+      "dimensions": [
+        617,
+        625
+      ],
+      "bytes": 22204,
+      "sha256": "1346a1d0b16a2f09a0b29305c6950a39d5521bc2eab66291ff1524ba7574ce21"
+    },
+    {
+      "path": "shoulders_seated_dumbbell_press/frames/03.webp",
+      "dimensions": [
+        617,
+        626
+      ],
+      "bytes": 21592,
+      "sha256": "e36d2a9a66c72535449237cc3cc84f014927000a1b842e2be3f5e2c7633a973f"
+    },
+    {
+      "path": "shoulders_seated_dumbbell_press/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 8504,
+      "sha256": "c47fe09bf3a810e349e679ef424991de8c1c145389fda1d11eb9246682aced43"
+    },
+    {
+      "path": "sources/back_assisted_pull_up.webp",
+      "dimensions": [
+        1312,
+        1199
+      ],
+      "bytes": 82624,
+      "sha256": "f6d4be8d05d8562f0e02e01a57ab2af24bd0da572c72308474d98439736c93de"
+    },
+    {
+      "path": "sources/back_chest_supported_row.webp",
+      "dimensions": [
+        1263,
+        1246
+      ],
+      "bytes": 91538,
+      "sha256": "27c8a8e23e74b86cccc8f6406f35d649cf5f1ee8ef6cc641e04104d598c77b54"
+    },
+    {
+      "path": "sources/back_lat_pulldown.webp",
+      "dimensions": [
+        1263,
+        1246
+      ],
+      "bytes": 93052,
+      "sha256": "a1be5d7e907eaf87c049394424f2b2542fa2f735e4654427b97974195e611a44"
+    },
+    {
+      "path": "sources/back_one_arm_dumbbell_row.webp",
+      "dimensions": [
+        1262,
+        1246
+      ],
+      "bytes": 92386,
+      "sha256": "2f9c073fc0f7ff1d172d3d56a7f65c3f1a53d039e6ebf08f6c51f5f732827c18"
+    },
+    {
+      "path": "sources/back_seated_cable_row.webp",
+      "dimensions": [
+        1261,
+        1247
+      ],
+      "bytes": 105314,
+      "sha256": "a217ac519e82f12e20eaeb54abc90ebcd7a6e47f9257aeb0b09b65d0ecd43e61"
+    },
+    {
+      "path": "sources/biceps_cable_curl.webp",
+      "dimensions": [
+        1263,
+        1246
+      ],
+      "bytes": 75048,
+      "sha256": "8e517c2eb72de7b9edfb5b56cabcf35f112a2ca74d822144371973065da4d921"
+    },
+    {
+      "path": "sources/biceps_dumbbell_curl.webp",
+      "dimensions": [
+        1263,
+        1246
+      ],
+      "bytes": 53314,
+      "sha256": "9c4fbaddaefe7dd91f5612a39970a95fa549ad51cc0be3e919f507d8d529f7dd"
+    },
+    {
+      "path": "sources/biceps_ez_bar_curl.webp",
+      "dimensions": [
+        1247,
+        1261
+      ],
+      "bytes": 62868,
+      "sha256": "ca9ada0071368667c0fd815e138f1f01bd5e0435d47af1ec4ba0880debf4716e"
+    },
+    {
+      "path": "sources/biceps_hammer_curl.webp",
+      "dimensions": [
+        1247,
+        1261
+      ],
+      "bytes": 52364,
+      "sha256": "01ba54b1507d1fbea86b16e2d79a870f4b799b5b26772ed997674adcbe0edc33"
+    },
+    {
+      "path": "sources/biceps_preacher_curl.webp",
+      "dimensions": [
+        1261,
+        1247
+      ],
+      "bytes": 98378,
+      "sha256": "9f4cda49b504ae3f0de727eb4106da1397d6b2ce46b197b1c649b0e9e5fa5f1f"
+    },
+    {
+      "path": "sources/calves_leg_press_raise.webp",
+      "dimensions": [
+        1261,
+        1247
+      ],
+      "bytes": 116814,
+      "sha256": "919922ed940986ed36b6388b0250c53dcf16bcf4e8de1143f28fd0e6057964e5"
+    },
+    {
+      "path": "sources/calves_seated_machine_raise.webp",
+      "dimensions": [
+        1261,
+        1247
+      ],
+      "bytes": 81470,
+      "sha256": "10880e54c98829271e4f15794704469b2580fcbf3a02d65434452ca05a05fedb"
+    },
+    {
+      "path": "sources/calves_single_leg_bodyweight_raise.webp",
+      "dimensions": [
+        1246,
+        1263
+      ],
+      "bytes": 58666,
+      "sha256": "27554206f54189a1047672753ad97593bde4bbbdcb0e95e85be0020f478da0f8"
+    },
+    {
+      "path": "sources/calves_standing_machine_raise.webp",
+      "dimensions": [
+        1247,
+        1261
+      ],
+      "bytes": 85744,
+      "sha256": "421f8087c730f826cb70d346e9d8d37510628f089331acf1b2d1baa434e06838"
+    },
+    {
+      "path": "sources/calves_standing_raise.webp",
+      "dimensions": [
+        1247,
+        1261
+      ],
+      "bytes": 79942,
+      "sha256": "bd8500384f81146bc7ec9d070dda36bebcbbd3fbba91fb077e2136ec5bd3e555"
+    },
+    {
+      "path": "sources/chest_barbell_bench_press.webp",
+      "dimensions": [
+        1261,
+        1247
+      ],
+      "bytes": 75744,
+      "sha256": "e54dc582a0410c68876fe292e83bce14b53e56d77a4c76179cb57050d4f4c574"
+    },
+    {
+      "path": "sources/chest_dumbbell_bench_press.webp",
+      "dimensions": [
+        1262,
+        1246
+      ],
+      "bytes": 91870,
+      "sha256": "ef6faae97626c92a216598889d3fcabb1e8f82d143c3314f0785e2477bb53665"
+    },
+    {
+      "path": "sources/chest_incline_dumbbell_press.webp",
+      "dimensions": [
+        1263,
+        1246
+      ],
+      "bytes": 90426,
+      "sha256": "75a2346f091ae27496cf73757c0ab9f421389547c40b06436bf4e54e92794e57"
+    },
+    {
+      "path": "sources/chest_machine_fly.webp",
+      "dimensions": [
+        1263,
+        1246
+      ],
+      "bytes": 102326,
+      "sha256": "e923839ec448f7b945b901328a98986e5f26403fa81b8f3d2dbd09b3ffc14317"
+    },
+    {
+      "path": "sources/chest_push_up.webp",
+      "dimensions": [
+        1263,
+        1246
+      ],
+      "bytes": 70368,
+      "sha256": "e1d627909225c489d74a2ed859e118f8be6c53ccacf4e02588c2127961d45747"
+    },
+    {
+      "path": "sources/core_cable_crunch.webp",
+      "dimensions": [
+        1263,
+        1245
+      ],
+      "bytes": 88622,
+      "sha256": "42e38548789b83aae01c2db7d196ebc647f38aa4701e8ea885b38c50cb5158d5"
+    },
+    {
+      "path": "sources/core_machine_crunch.webp",
+      "dimensions": [
+        1263,
+        1246
+      ],
+      "bytes": 97870,
+      "sha256": "7dfe874200c94fa9f510697838d992b4c7a84d21602ebd4ce57e4bff0e0e4494"
+    },
+    {
+      "path": "sources/core_mat_crunch.webp",
+      "dimensions": [
+        1263,
+        1246
+      ],
+      "bytes": 68364,
+      "sha256": "9494d63c0e5c15a1fc41f68b132a7e7657729000a6463b3ab5004562586295d6"
+    },
+    {
+      "path": "sources/core_reverse_crunch.webp",
+      "dimensions": [
+        1261,
+        1247
+      ],
+      "bytes": 77676,
+      "sha256": "c2d253f0d995f217ad565d1c6b89ccc7f72c7774bfec0f6cca2594a99461ae26"
+    },
+    {
+      "path": "sources/core_stability_ball_crunch.webp",
+      "dimensions": [
+        1261,
+        1247
+      ],
+      "bytes": 75656,
+      "sha256": "f0025b6fd188371312bdafb06e7de0c08e4f568a0ae77a0ebdc33490c429ae32"
+    },
+    {
+      "path": "sources/glutes_barbell_hip_thrust.webp",
+      "dimensions": [
+        1263,
+        1246
+      ],
+      "bytes": 83218,
+      "sha256": "2609c8bd09d5b01bafbde3d9075070a7ceb9ce827f7d9d47bb6acca13db724f4"
+    },
+    {
+      "path": "sources/glutes_bridge.webp",
+      "dimensions": [
+        1263,
+        1246
+      ],
+      "bytes": 66868,
+      "sha256": "c723fd4eb9bb1203e5f868e3df66e17c785c2852c73817ecf950fc84c3943e7c"
+    },
+    {
+      "path": "sources/glutes_cable_kickback.webp",
+      "dimensions": [
+        1262,
+        1246
+      ],
+      "bytes": 87342,
+      "sha256": "e8576158804567a9922c766b40ecf902f1984498af427860fdbfb6663ad6a67b"
+    },
+    {
+      "path": "sources/glutes_machine_hip_abduction.webp",
+      "dimensions": [
+        1261,
+        1247
+      ],
+      "bytes": 98474,
+      "sha256": "553f7fc56ef8107ccedeb9d74504d0284cd8df53cb9db7194f2ca6df40e65969"
+    },
+    {
+      "path": "sources/glutes_step_up.webp",
+      "dimensions": [
+        1246,
+        1262
+      ],
+      "bytes": 58624,
+      "sha256": "869ee663a3aeed5889eb96ff3c91ee8aeb7099d4bb3cf881d1fa7e8710e6554c"
+    },
+    {
+      "path": "sources/hamstrings_barbell_romanian_deadlift.webp",
+      "dimensions": [
+        1247,
+        1261
+      ],
+      "bytes": 73628,
+      "sha256": "8b8a3153b5abe98f1f5f8108b20fcb6a59863115f9aa5d6a205cf7a306f5d323"
+    },
+    {
+      "path": "sources/hamstrings_dumbbell_romanian_deadlift.webp",
+      "dimensions": [
+        1263,
+        1246
+      ],
+      "bytes": 57746,
+      "sha256": "fcf8fa71293fd1569c43d2a68acc46d2817817e5fa0e9c323312b98cb69b9b25"
+    },
+    {
+      "path": "sources/hamstrings_lying_leg_curl.webp",
+      "dimensions": [
+        1261,
+        1247
+      ],
+      "bytes": 86704,
+      "sha256": "e2238bdb31045a7b8b78c8dd137921197ada0b83d039c969b65172709a35e5f8"
+    },
+    {
+      "path": "sources/hamstrings_seated_leg_curl.webp",
+      "dimensions": [
+        1263,
+        1246
+      ],
+      "bytes": 102404,
+      "sha256": "59f6b36b318e2e94831e50334623660de663b2a500232b783c96fc5b3e8b3917"
+    },
+    {
+      "path": "sources/hamstrings_slider_leg_curl.webp",
+      "dimensions": [
+        1245,
+        1263
+      ],
+      "bytes": 70632,
+      "sha256": "bfadf6973574b1e42e44f1e4592f026ca456ab8e0feaad1fcbbd27b1bc286d11"
+    },
+    {
+      "path": "sources/hip_abduction_anatomy.webp",
+      "dimensions": [
+        1312,
+        1199
+      ],
+      "bytes": 92950,
+      "sha256": "4cb9735392bb46e54fec52b8aef5f6db86b07a27049b853442cecd060e134d21"
+    },
+    {
+      "path": "sources/knee_curl_anatomy.webp",
+      "dimensions": [
+        1312,
+        1199
+      ],
+      "bytes": 87694,
+      "sha256": "4033f35911a1fba208bed916bd3f3aac5c361d73f0213b15331a8329f183480f"
+    },
+    {
+      "path": "sources/quads_barbell_back_squat.webp",
+      "dimensions": [
+        1261,
+        1247
+      ],
+      "bytes": 102000,
+      "sha256": "4322eba3a21a478c5c27a8d41040f8c7a7405a6c6487f565b7121b9ccf4d857f"
+    },
+    {
+      "path": "sources/quads_goblet_squat.webp",
+      "dimensions": [
+        1261,
+        1247
+      ],
+      "bytes": 59486,
+      "sha256": "6e234aa776cce94ea37051f1d5c088d92232a80870e6aeaadcd9fb4a7ee0918f"
+    },
+    {
+      "path": "sources/quads_leg_extension.webp",
+      "dimensions": [
+        1246,
+        1263
+      ],
+      "bytes": 91572,
+      "sha256": "8687c18a92cad3d024e0aefb7e81edcfb157c419b9f38436bcce2191fce503a9"
+    },
+    {
+      "path": "sources/quads_leg_press.webp",
+      "dimensions": [
+        1245,
+        1263
+      ],
+      "bytes": 118712,
+      "sha256": "3a96f182934b1ff181155874e3bb0749e58284965dc67abcfb3ef93625c88c83"
+    },
+    {
+      "path": "sources/quads_split_squat.webp",
+      "dimensions": [
+        1261,
+        1247
+      ],
+      "bytes": 59060,
+      "sha256": "0e00df4229245c6ce4ebe216ace015f685710cc8cd991a944f406051eb7055d4"
+    },
+    {
+      "path": "sources/shoulders_cable_lateral_raise.webp",
+      "dimensions": [
+        1263,
+        1246
+      ],
+      "bytes": 76692,
+      "sha256": "a7a283bf9ce3a6f0870535b3379b2d5e8e05a0ca3ce960dcd1f6c74dd79f246d"
+    },
+    {
+      "path": "sources/shoulders_dumbbell_lateral_raise.webp",
+      "dimensions": [
+        1261,
+        1247
+      ],
+      "bytes": 55176,
+      "sha256": "a6113246f45bb7787c2feb39392facd93f9a8e827ee8c92271ed39351d962ed8"
+    },
+    {
+      "path": "sources/shoulders_dumbbell_rear_delt_fly.webp",
+      "dimensions": [
+        1263,
+        1246
+      ],
+      "bytes": 76544,
+      "sha256": "afd0febaa4cce8d65d292be2f65441eddfc360105871b916e9e9c3a360367ff9"
+    },
+    {
+      "path": "sources/shoulders_reverse_machine_fly.webp",
+      "dimensions": [
+        1246,
+        1263
+      ],
+      "bytes": 109240,
+      "sha256": "9a1093ba0340c90336c08dcd52bcfe5f384e2e63a467432674bbee7747e84919"
+    },
+    {
+      "path": "sources/shoulders_seated_dumbbell_press.webp",
+      "dimensions": [
+        1246,
+        1263
+      ],
+      "bytes": 72734,
+      "sha256": "341f3dd9b2ab948343934c0971e750c6e4073ec949fe379b51ccbee67fe4a93b"
+    },
+    {
+      "path": "sources/triceps_bar_pushdown.webp",
+      "dimensions": [
+        1246,
+        1263
+      ],
+      "bytes": 77484,
+      "sha256": "277b333778dfa7d78922d390a9e5722bf9b313ddab014208e9239f1f29674f5a"
+    },
+    {
+      "path": "sources/triceps_cable_overhead_extension.webp",
+      "dimensions": [
+        1262,
+        1246
+      ],
+      "bytes": 75104,
+      "sha256": "f2579c854c6cd306376b67a827368447cdd027cad91cc2816875bd6a9aaeac2d"
+    },
+    {
+      "path": "sources/triceps_ez_skull_crusher.webp",
+      "dimensions": [
+        1261,
+        1247
+      ],
+      "bytes": 82162,
+      "sha256": "817bae2931c7af6c52cc96373e07675f63b7aac9adc8cdd9c461801bf84f8b9f"
+    },
+    {
+      "path": "sources/triceps_one_arm_dumbbell_extension.webp",
+      "dimensions": [
+        1261,
+        1247
+      ],
+      "bytes": 63794,
+      "sha256": "306883d916e9dab8285439bb3890d389f8fd9f05665d3bd82d6e2ded206fa511"
+    },
+    {
+      "path": "sources/triceps_rope_pushdown.webp",
+      "dimensions": [
+        1295,
+        1214
+      ],
+      "bytes": 79696,
+      "sha256": "063b81ff910af9a254dedd0abe430ae55e7262a706d8c61a11a33708af43a9d2"
+    },
+    {
+      "path": "triceps_bar_pushdown/anatomy.webp",
+      "dimensions": [
+        617,
+        626
+      ],
+      "bytes": 25956,
+      "sha256": "5a05bb5a9fa40bb3dc2847046b107bf9b92cce4ca11d5d9050e04f183ab92bd3"
+    },
+    {
+      "path": "triceps_bar_pushdown/frames/01.webp",
+      "dimensions": [
+        617,
+        625
+      ],
+      "bytes": 22428,
+      "sha256": "97aa34c467ad445de3a3ff72f12239b7dc6d7f19f3aa3b39281c77ba62dedea8"
+    },
+    {
+      "path": "triceps_bar_pushdown/frames/02.webp",
+      "dimensions": [
+        617,
+        625
+      ],
+      "bytes": 22344,
+      "sha256": "3aa67be9e1e241feafca82e9fe383c8fc285000b676bd5bb707e7883b450eb26"
+    },
+    {
+      "path": "triceps_bar_pushdown/frames/03.webp",
+      "dimensions": [
+        617,
+        626
+      ],
+      "bytes": 22698,
+      "sha256": "1eae0792cef3025379685fac7f30768916e1dd14ab2ca7e89f45f6cfccc8f4a4"
+    },
+    {
+      "path": "triceps_bar_pushdown/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 8682,
+      "sha256": "5d7ab051aef26d1b5b915e7bca2596136024e3a1b3c8e9592e66d8c4443f803e"
+    },
+    {
+      "path": "triceps_cable_overhead_extension/anatomy.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 20608,
+      "sha256": "43f8a11199364f06fcca1e3664077724694cb712ff0b3e12477bd725c9c94a01"
+    },
+    {
+      "path": "triceps_cable_overhead_extension/frames/01.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 22222,
+      "sha256": "1390006493a0820c66d1f5fcb0b6dc356e953aa5a981329f80b449c1249a4ff3"
+    },
+    {
+      "path": "triceps_cable_overhead_extension/frames/02.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 23058,
+      "sha256": "7847329fb150840faa79998cfff21219bc02591668609bcd8ea5e7f1a3c8c329"
+    },
+    {
+      "path": "triceps_cable_overhead_extension/frames/03.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 22766,
+      "sha256": "c09640705a7009ee21703b7621efda5f81ddf517c0116bebe20c148b92467758"
+    },
+    {
+      "path": "triceps_cable_overhead_extension/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 8870,
+      "sha256": "e8295736eeda79b9d98a73b9866ae9b48689f8853a912fa5072bc78188edabc2"
+    },
+    {
+      "path": "triceps_ez_skull_crusher/anatomy.webp",
+      "dimensions": [
+        625,
+        618
+      ],
+      "bytes": 18982,
+      "sha256": "85343affc133dd77f69e5ce00d23c111ed7edb3356755d22e6a8c1e9b4637cb6"
+    },
+    {
+      "path": "triceps_ez_skull_crusher/frames/01.webp",
+      "dimensions": [
+        624,
+        617
+      ],
+      "bytes": 29492,
+      "sha256": "6b840f29f9a271bec86fc958d193a69373395277dec90201ee6d6038c0e8af37"
+    },
+    {
+      "path": "triceps_ez_skull_crusher/frames/02.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 26030,
+      "sha256": "3a1c135adeee6c6076737f382d32e1b7840ced683ee5c35d2678efb6b7449c0e"
+    },
+    {
+      "path": "triceps_ez_skull_crusher/frames/03.webp",
+      "dimensions": [
+        624,
+        618
+      ],
+      "bytes": 25902,
+      "sha256": "7ca6cfd743b98c6b77b9a1be38921939c3bc4213c410a6837314c6a3d1df1191"
+    },
+    {
+      "path": "triceps_ez_skull_crusher/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 9202,
+      "sha256": "9101cc784e43beb1bc8c53b3b34b958f2fb6d3b6e4e9c8ee16b033369f88a38b"
+    },
+    {
+      "path": "triceps_one_arm_dumbbell_extension/anatomy.webp",
+      "dimensions": [
+        625,
+        618
+      ],
+      "bytes": 17912,
+      "sha256": "573275d2bcea75b4b650ab9558792b4d14c68bece338bb7106ff3aab2be178b5"
+    },
+    {
+      "path": "triceps_one_arm_dumbbell_extension/frames/01.webp",
+      "dimensions": [
+        624,
+        617
+      ],
+      "bytes": 19304,
+      "sha256": "6f71ceea2661f9730d86c21f2f87362dabaa9646d5a26179ec415197c3170da1"
+    },
+    {
+      "path": "triceps_one_arm_dumbbell_extension/frames/02.webp",
+      "dimensions": [
+        625,
+        617
+      ],
+      "bytes": 19476,
+      "sha256": "f48f89a23ab4867eac4602b4f76980209b9b2078a0cf1b00c65ff7d755af9351"
+    },
+    {
+      "path": "triceps_one_arm_dumbbell_extension/frames/03.webp",
+      "dimensions": [
+        624,
+        618
+      ],
+      "bytes": 19896,
+      "sha256": "2adb29099ad9bab2497ebff23e2cf398c90999c606540f6ef0c2cb9dba289bc6"
+    },
+    {
+      "path": "triceps_one_arm_dumbbell_extension/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 7142,
+      "sha256": "b44828b0834476608fb5b955eb418dfad153b43a368232b22844473a38b355d1"
+    },
+    {
+      "path": "triceps_rope_pushdown/anatomy.webp",
+      "dimensions": [
+        642,
+        601
+      ],
+      "bytes": 18776,
+      "sha256": "3c6819fe0c6aa8ec9ec24feed04db6a46754ec9f56ce0b2700b27e1e233e126a"
+    },
+    {
+      "path": "triceps_rope_pushdown/frames/01.webp",
+      "dimensions": [
+        641,
+        601
+      ],
+      "bytes": 25320,
+      "sha256": "794abae568658091cb2fddadfbb66f206d9eae8f897c8ab46eb6f1d122750930"
+    },
+    {
+      "path": "triceps_rope_pushdown/frames/02.webp",
+      "dimensions": [
+        642,
+        601
+      ],
+      "bytes": 25626,
+      "sha256": "c661203c93b3860a8d08300cd845abfad540a602a30d278631a21b71886f2675"
+    },
+    {
+      "path": "triceps_rope_pushdown/frames/03.webp",
+      "dimensions": [
+        641,
+        601
+      ],
+      "bytes": 26506,
+      "sha256": "306506922c0719ce321e22c0c12d1660acd86392982b0d297041027ced3b3c8a"
+    },
+    {
+      "path": "triceps_rope_pushdown/thumbnail.webp",
+      "dimensions": [
+        320,
+        320
+      ],
+      "bytes": 8888,
+      "sha256": "9949282f52c4b60a49f99eece107282ef6078918c3842ea46f2a12287aef2bf5"
+    }
+  ],
+  "anatomyCorrectionSourceCount": 2
+}

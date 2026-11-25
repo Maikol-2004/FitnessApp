@@ -1,0 +1,1429 @@
+{
+  "version": 1,
+  "baseCommit": "cb7aa08",
+  "generator": "OpenAI built-in image generation",
+  "palette": {
+    "background": "#121416",
+    "primary": "#D8C3A5",
+    "secondary": "#A77B47"
+  },
+  "mediaRoot": "design/exercises-v1",
+  "items": [
+    {
+      "catalogId": "chest_barbell_bench_press",
+      "name": "Press banca con barra",
+      "primary": "CHEST",
+      "secondary": [
+        "TRICEPS",
+        "SHOULDERS"
+      ],
+      "thumbnail": "chest_barbell_bench_press/thumbnail.webp",
+      "anatomy": "chest_barbell_bench_press/anatomy.webp",
+      "frames": [
+        "chest_barbell_bench_press/frames/01.webp",
+        "chest_barbell_bench_press/frames/02.webp",
+        "chest_barbell_bench_press/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/chest_barbell_bench_press.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "chest_dumbbell_bench_press",
+      "name": "Press banca con mancuernas",
+      "primary": "CHEST",
+      "secondary": [
+        "TRICEPS",
+        "SHOULDERS"
+      ],
+      "thumbnail": "chest_dumbbell_bench_press/thumbnail.webp",
+      "anatomy": "chest_dumbbell_bench_press/anatomy.webp",
+      "frames": [
+        "chest_dumbbell_bench_press/frames/01.webp",
+        "chest_dumbbell_bench_press/frames/02.webp",
+        "chest_dumbbell_bench_press/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/chest_dumbbell_bench_press.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "chest_incline_dumbbell_press",
+      "name": "Press inclinado con mancuernas",
+      "primary": "CHEST",
+      "secondary": [
+        "SHOULDERS",
+        "TRICEPS"
+      ],
+      "thumbnail": "chest_incline_dumbbell_press/thumbnail.webp",
+      "anatomy": "chest_incline_dumbbell_press/anatomy.webp",
+      "frames": [
+        "chest_incline_dumbbell_press/frames/01.webp",
+        "chest_incline_dumbbell_press/frames/02.webp",
+        "chest_incline_dumbbell_press/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/chest_incline_dumbbell_press.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "chest_machine_fly",
+      "name": "Aperturas en máquina",
+      "primary": "CHEST",
+      "secondary": [
+        "SHOULDERS"
+      ],
+      "thumbnail": "chest_machine_fly/thumbnail.webp",
+      "anatomy": "chest_machine_fly/anatomy.webp",
+      "frames": [
+        "chest_machine_fly/frames/01.webp",
+        "chest_machine_fly/frames/02.webp",
+        "chest_machine_fly/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/chest_machine_fly.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "chest_push_up",
+      "name": "Flexiones",
+      "primary": "CHEST",
+      "secondary": [
+        "TRICEPS",
+        "SHOULDERS",
+        "CORE"
+      ],
+      "thumbnail": "chest_push_up/thumbnail.webp",
+      "anatomy": "chest_push_up/anatomy.webp",
+      "frames": [
+        "chest_push_up/frames/01.webp",
+        "chest_push_up/frames/02.webp",
+        "chest_push_up/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/chest_push_up.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "back_lat_pulldown",
+      "name": "Jalón al pecho",
+      "primary": "BACK",
+      "secondary": [
+        "BICEPS"
+      ],
+      "thumbnail": "back_lat_pulldown/thumbnail.webp",
+      "anatomy": "back_lat_pulldown/anatomy.webp",
+      "frames": [
+        "back_lat_pulldown/frames/01.webp",
+        "back_lat_pulldown/frames/02.webp",
+        "back_lat_pulldown/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/back_lat_pulldown.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "back_seated_cable_row",
+      "name": "Remo sentado en polea",
+      "primary": "BACK",
+      "secondary": [
+        "BICEPS"
+      ],
+      "thumbnail": "back_seated_cable_row/thumbnail.webp",
+      "anatomy": "back_seated_cable_row/anatomy.webp",
+      "frames": [
+        "back_seated_cable_row/frames/01.webp",
+        "back_seated_cable_row/frames/02.webp",
+        "back_seated_cable_row/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/back_seated_cable_row.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "back_one_arm_dumbbell_row",
+      "name": "Remo con mancuerna",
+      "primary": "BACK",
+      "secondary": [
+        "BICEPS"
+      ],
+      "thumbnail": "back_one_arm_dumbbell_row/thumbnail.webp",
+      "anatomy": "back_one_arm_dumbbell_row/anatomy.webp",
+      "frames": [
+        "back_one_arm_dumbbell_row/frames/01.webp",
+        "back_one_arm_dumbbell_row/frames/02.webp",
+        "back_one_arm_dumbbell_row/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/back_one_arm_dumbbell_row.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "back_assisted_pull_up",
+      "name": "Dominada asistida",
+      "primary": "BACK",
+      "secondary": [
+        "BICEPS",
+        "CORE"
+      ],
+      "thumbnail": "back_assisted_pull_up/thumbnail.webp",
+      "anatomy": "back_assisted_pull_up/anatomy.webp",
+      "frames": [
+        "back_assisted_pull_up/frames/01.webp",
+        "back_assisted_pull_up/frames/02.webp",
+        "back_assisted_pull_up/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "assistance_context_required",
+      "sourceSheet": "sources/back_assisted_pull_up.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "back_chest_supported_row",
+      "name": "Remo con apoyo de pecho",
+      "primary": "BACK",
+      "secondary": [
+        "BICEPS",
+        "SHOULDERS"
+      ],
+      "thumbnail": "back_chest_supported_row/thumbnail.webp",
+      "anatomy": "back_chest_supported_row/anatomy.webp",
+      "frames": [
+        "back_chest_supported_row/frames/01.webp",
+        "back_chest_supported_row/frames/02.webp",
+        "back_chest_supported_row/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/back_chest_supported_row.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "shoulders_seated_dumbbell_press",
+      "name": "Press sentado con mancuernas",
+      "primary": "SHOULDERS",
+      "secondary": [
+        "TRICEPS"
+      ],
+      "thumbnail": "shoulders_seated_dumbbell_press/thumbnail.webp",
+      "anatomy": "shoulders_seated_dumbbell_press/anatomy.webp",
+      "frames": [
+        "shoulders_seated_dumbbell_press/frames/01.webp",
+        "shoulders_seated_dumbbell_press/frames/02.webp",
+        "shoulders_seated_dumbbell_press/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/shoulders_seated_dumbbell_press.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "shoulders_dumbbell_lateral_raise",
+      "name": "Elevaciones laterales",
+      "primary": "SHOULDERS",
+      "secondary": [],
+      "thumbnail": "shoulders_dumbbell_lateral_raise/thumbnail.webp",
+      "anatomy": "shoulders_dumbbell_lateral_raise/anatomy.webp",
+      "frames": [
+        "shoulders_dumbbell_lateral_raise/frames/01.webp",
+        "shoulders_dumbbell_lateral_raise/frames/02.webp",
+        "shoulders_dumbbell_lateral_raise/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/shoulders_dumbbell_lateral_raise.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "shoulders_cable_lateral_raise",
+      "name": "Elevaciones laterales en polea",
+      "primary": "SHOULDERS",
+      "secondary": [],
+      "thumbnail": "shoulders_cable_lateral_raise/thumbnail.webp",
+      "anatomy": "shoulders_cable_lateral_raise/anatomy.webp",
+      "frames": [
+        "shoulders_cable_lateral_raise/frames/01.webp",
+        "shoulders_cable_lateral_raise/frames/02.webp",
+        "shoulders_cable_lateral_raise/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/shoulders_cable_lateral_raise.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "shoulders_dumbbell_rear_delt_fly",
+      "name": "Pájaros con mancuernas",
+      "primary": "SHOULDERS",
+      "secondary": [
+        "BACK"
+      ],
+      "thumbnail": "shoulders_dumbbell_rear_delt_fly/thumbnail.webp",
+      "anatomy": "shoulders_dumbbell_rear_delt_fly/anatomy.webp",
+      "frames": [
+        "shoulders_dumbbell_rear_delt_fly/frames/01.webp",
+        "shoulders_dumbbell_rear_delt_fly/frames/02.webp",
+        "shoulders_dumbbell_rear_delt_fly/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/shoulders_dumbbell_rear_delt_fly.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "shoulders_reverse_machine_fly",
+      "name": "Aperturas inversas en máquina",
+      "primary": "SHOULDERS",
+      "secondary": [
+        "BACK"
+      ],
+      "thumbnail": "shoulders_reverse_machine_fly/thumbnail.webp",
+      "anatomy": "shoulders_reverse_machine_fly/anatomy.webp",
+      "frames": [
+        "shoulders_reverse_machine_fly/frames/01.webp",
+        "shoulders_reverse_machine_fly/frames/02.webp",
+        "shoulders_reverse_machine_fly/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/shoulders_reverse_machine_fly.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "biceps_dumbbell_curl",
+      "name": "Curl con mancuernas",
+      "primary": "BICEPS",
+      "secondary": [],
+      "thumbnail": "biceps_dumbbell_curl/thumbnail.webp",
+      "anatomy": "biceps_dumbbell_curl/anatomy.webp",
+      "frames": [
+        "biceps_dumbbell_curl/frames/01.webp",
+        "biceps_dumbbell_curl/frames/02.webp",
+        "biceps_dumbbell_curl/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/biceps_dumbbell_curl.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "biceps_ez_bar_curl",
+      "name": "Curl con barra EZ",
+      "primary": "BICEPS",
+      "secondary": [],
+      "thumbnail": "biceps_ez_bar_curl/thumbnail.webp",
+      "anatomy": "biceps_ez_bar_curl/anatomy.webp",
+      "frames": [
+        "biceps_ez_bar_curl/frames/01.webp",
+        "biceps_ez_bar_curl/frames/02.webp",
+        "biceps_ez_bar_curl/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/biceps_ez_bar_curl.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "biceps_hammer_curl",
+      "name": "Curl martillo",
+      "primary": "BICEPS",
+      "secondary": [],
+      "thumbnail": "biceps_hammer_curl/thumbnail.webp",
+      "anatomy": "biceps_hammer_curl/anatomy.webp",
+      "frames": [
+        "biceps_hammer_curl/frames/01.webp",
+        "biceps_hammer_curl/frames/02.webp",
+        "biceps_hammer_curl/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/biceps_hammer_curl.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "biceps_cable_curl",
+      "name": "Curl en polea",
+      "primary": "BICEPS",
+      "secondary": [],
+      "thumbnail": "biceps_cable_curl/thumbnail.webp",
+      "anatomy": "biceps_cable_curl/anatomy.webp",
+      "frames": [
+        "biceps_cable_curl/frames/01.webp",
+        "biceps_cable_curl/frames/02.webp",
+        "biceps_cable_curl/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/biceps_cable_curl.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "biceps_preacher_curl",
+      "name": "Curl predicador",
+      "primary": "BICEPS",
+      "secondary": [],
+      "thumbnail": "biceps_preacher_curl/thumbnail.webp",
+      "anatomy": "biceps_preacher_curl/anatomy.webp",
+      "frames": [
+        "biceps_preacher_curl/frames/01.webp",
+        "biceps_preacher_curl/frames/02.webp",
+        "biceps_preacher_curl/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/biceps_preacher_curl.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "triceps_rope_pushdown",
+      "name": "Extensión en polea con cuerda",
+      "primary": "TRICEPS",
+      "secondary": [],
+      "thumbnail": "triceps_rope_pushdown/thumbnail.webp",
+      "anatomy": "triceps_rope_pushdown/anatomy.webp",
+      "frames": [
+        "triceps_rope_pushdown/frames/01.webp",
+        "triceps_rope_pushdown/frames/02.webp",
+        "triceps_rope_pushdown/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/triceps_rope_pushdown.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "triceps_bar_pushdown",
+      "name": "Extensión en polea con barra",
+      "primary": "TRICEPS",
+      "secondary": [],
+      "thumbnail": "triceps_bar_pushdown/thumbnail.webp",
+      "anatomy": "triceps_bar_pushdown/anatomy.webp",
+      "frames": [
+        "triceps_bar_pushdown/frames/01.webp",
+        "triceps_bar_pushdown/frames/02.webp",
+        "triceps_bar_pushdown/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/triceps_bar_pushdown.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "triceps_cable_overhead_extension",
+      "name": "Extensión por encima de la cabeza en polea",
+      "primary": "TRICEPS",
+      "secondary": [],
+      "thumbnail": "triceps_cable_overhead_extension/thumbnail.webp",
+      "anatomy": "triceps_cable_overhead_extension/anatomy.webp",
+      "frames": [
+        "triceps_cable_overhead_extension/frames/01.webp",
+        "triceps_cable_overhead_extension/frames/02.webp",
+        "triceps_cable_overhead_extension/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/triceps_cable_overhead_extension.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "triceps_ez_skull_crusher",
+      "name": "Extensión tumbado con barra EZ",
+      "primary": "TRICEPS",
+      "secondary": [],
+      "thumbnail": "triceps_ez_skull_crusher/thumbnail.webp",
+      "anatomy": "triceps_ez_skull_crusher/anatomy.webp",
+      "frames": [
+        "triceps_ez_skull_crusher/frames/01.webp",
+        "triceps_ez_skull_crusher/frames/02.webp",
+        "triceps_ez_skull_crusher/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/triceps_ez_skull_crusher.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "triceps_one_arm_dumbbell_extension",
+      "name": "Extensión unilateral con mancuerna",
+      "primary": "TRICEPS",
+      "secondary": [],
+      "thumbnail": "triceps_one_arm_dumbbell_extension/thumbnail.webp",
+      "anatomy": "triceps_one_arm_dumbbell_extension/anatomy.webp",
+      "frames": [
+        "triceps_one_arm_dumbbell_extension/frames/01.webp",
+        "triceps_one_arm_dumbbell_extension/frames/02.webp",
+        "triceps_one_arm_dumbbell_extension/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/triceps_one_arm_dumbbell_extension.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "quads_goblet_squat",
+      "name": "Sentadilla goblet",
+      "primary": "QUADS",
+      "secondary": [
+        "GLUTES",
+        "CORE"
+      ],
+      "thumbnail": "quads_goblet_squat/thumbnail.webp",
+      "anatomy": "quads_goblet_squat/anatomy.webp",
+      "frames": [
+        "quads_goblet_squat/frames/01.webp",
+        "quads_goblet_squat/frames/02.webp",
+        "quads_goblet_squat/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/quads_goblet_squat.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "quads_barbell_back_squat",
+      "name": "Sentadilla con barra",
+      "primary": "QUADS",
+      "secondary": [
+        "GLUTES",
+        "HAMSTRINGS",
+        "CORE"
+      ],
+      "thumbnail": "quads_barbell_back_squat/thumbnail.webp",
+      "anatomy": "quads_barbell_back_squat/anatomy.webp",
+      "frames": [
+        "quads_barbell_back_squat/frames/01.webp",
+        "quads_barbell_back_squat/frames/02.webp",
+        "quads_barbell_back_squat/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/quads_barbell_back_squat.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "quads_leg_press",
+      "name": "Prensa de piernas",
+      "primary": "QUADS",
+      "secondary": [
+        "GLUTES"
+      ],
+      "thumbnail": "quads_leg_press/thumbnail.webp",
+      "anatomy": "quads_leg_press/anatomy.webp",
+      "frames": [
+        "quads_leg_press/frames/01.webp",
+        "quads_leg_press/frames/02.webp",
+        "quads_leg_press/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/quads_leg_press.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "quads_leg_extension",
+      "name": "Extensión de rodilla en máquina",
+      "primary": "QUADS",
+      "secondary": [],
+      "thumbnail": "quads_leg_extension/thumbnail.webp",
+      "anatomy": "quads_leg_extension/anatomy.webp",
+      "frames": [
+        "quads_leg_extension/frames/01.webp",
+        "quads_leg_extension/frames/02.webp",
+        "quads_leg_extension/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/quads_leg_extension.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "quads_split_squat",
+      "name": "Sentadilla dividida",
+      "primary": "QUADS",
+      "secondary": [
+        "GLUTES"
+      ],
+      "thumbnail": "quads_split_squat/thumbnail.webp",
+      "anatomy": "quads_split_squat/anatomy.webp",
+      "frames": [
+        "quads_split_squat/frames/01.webp",
+        "quads_split_squat/frames/02.webp",
+        "quads_split_squat/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/quads_split_squat.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "hamstrings_seated_leg_curl",
+      "name": "Curl femoral sentado",
+      "primary": "HAMSTRINGS",
+      "secondary": [],
+      "thumbnail": "hamstrings_seated_leg_curl/thumbnail.webp",
+      "anatomy": "hamstrings_seated_leg_curl/anatomy.webp",
+      "frames": [
+        "hamstrings_seated_leg_curl/frames/01.webp",
+        "hamstrings_seated_leg_curl/frames/02.webp",
+        "hamstrings_seated_leg_curl/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/hamstrings_seated_leg_curl.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "anatomySource": "sources/knee_curl_anatomy.webp",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "hamstrings_lying_leg_curl",
+      "name": "Curl femoral tumbado",
+      "primary": "HAMSTRINGS",
+      "secondary": [
+        "CALVES"
+      ],
+      "thumbnail": "hamstrings_lying_leg_curl/thumbnail.webp",
+      "anatomy": "hamstrings_lying_leg_curl/anatomy.webp",
+      "frames": [
+        "hamstrings_lying_leg_curl/frames/01.webp",
+        "hamstrings_lying_leg_curl/frames/02.webp",
+        "hamstrings_lying_leg_curl/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/hamstrings_lying_leg_curl.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "anatomySource": "sources/knee_curl_anatomy.webp",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "hamstrings_barbell_romanian_deadlift",
+      "name": "Peso muerto rumano con barra",
+      "primary": "HAMSTRINGS",
+      "secondary": [
+        "GLUTES",
+        "BACK"
+      ],
+      "thumbnail": "hamstrings_barbell_romanian_deadlift/thumbnail.webp",
+      "anatomy": "hamstrings_barbell_romanian_deadlift/anatomy.webp",
+      "frames": [
+        "hamstrings_barbell_romanian_deadlift/frames/01.webp",
+        "hamstrings_barbell_romanian_deadlift/frames/02.webp",
+        "hamstrings_barbell_romanian_deadlift/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/hamstrings_barbell_romanian_deadlift.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "hamstrings_dumbbell_romanian_deadlift",
+      "name": "Peso muerto rumano con mancuernas",
+      "primary": "HAMSTRINGS",
+      "secondary": [
+        "GLUTES",
+        "BACK"
+      ],
+      "thumbnail": "hamstrings_dumbbell_romanian_deadlift/thumbnail.webp",
+      "anatomy": "hamstrings_dumbbell_romanian_deadlift/anatomy.webp",
+      "frames": [
+        "hamstrings_dumbbell_romanian_deadlift/frames/01.webp",
+        "hamstrings_dumbbell_romanian_deadlift/frames/02.webp",
+        "hamstrings_dumbbell_romanian_deadlift/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/hamstrings_dumbbell_romanian_deadlift.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "hamstrings_slider_leg_curl",
+      "name": "Curl femoral con deslizadores",
+      "primary": "HAMSTRINGS",
+      "secondary": [
+        "GLUTES",
+        "CORE"
+      ],
+      "thumbnail": "hamstrings_slider_leg_curl/thumbnail.webp",
+      "anatomy": "hamstrings_slider_leg_curl/anatomy.webp",
+      "frames": [
+        "hamstrings_slider_leg_curl/frames/01.webp",
+        "hamstrings_slider_leg_curl/frames/02.webp",
+        "hamstrings_slider_leg_curl/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/hamstrings_slider_leg_curl.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "glutes_barbell_hip_thrust",
+      "name": "Hip thrust con barra",
+      "primary": "GLUTES",
+      "secondary": [
+        "HAMSTRINGS"
+      ],
+      "thumbnail": "glutes_barbell_hip_thrust/thumbnail.webp",
+      "anatomy": "glutes_barbell_hip_thrust/anatomy.webp",
+      "frames": [
+        "glutes_barbell_hip_thrust/frames/01.webp",
+        "glutes_barbell_hip_thrust/frames/02.webp",
+        "glutes_barbell_hip_thrust/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/glutes_barbell_hip_thrust.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "glutes_bridge",
+      "name": "Puente de glúteos",
+      "primary": "GLUTES",
+      "secondary": [
+        "HAMSTRINGS"
+      ],
+      "thumbnail": "glutes_bridge/thumbnail.webp",
+      "anatomy": "glutes_bridge/anatomy.webp",
+      "frames": [
+        "glutes_bridge/frames/01.webp",
+        "glutes_bridge/frames/02.webp",
+        "glutes_bridge/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/glutes_bridge.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "glutes_cable_kickback",
+      "name": "Patada en polea",
+      "primary": "GLUTES",
+      "secondary": [
+        "HAMSTRINGS"
+      ],
+      "thumbnail": "glutes_cable_kickback/thumbnail.webp",
+      "anatomy": "glutes_cable_kickback/anatomy.webp",
+      "frames": [
+        "glutes_cable_kickback/frames/01.webp",
+        "glutes_cable_kickback/frames/02.webp",
+        "glutes_cable_kickback/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/glutes_cable_kickback.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "glutes_machine_hip_abduction",
+      "name": "Abducción en máquina",
+      "primary": "GLUTES",
+      "secondary": [],
+      "thumbnail": "glutes_machine_hip_abduction/thumbnail.webp",
+      "anatomy": "glutes_machine_hip_abduction/anatomy.webp",
+      "frames": [
+        "glutes_machine_hip_abduction/frames/01.webp",
+        "glutes_machine_hip_abduction/frames/02.webp",
+        "glutes_machine_hip_abduction/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/glutes_machine_hip_abduction.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "anatomySource": "sources/hip_abduction_anatomy.webp",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "glutes_step_up",
+      "name": "Subida al banco",
+      "primary": "GLUTES",
+      "secondary": [
+        "QUADS"
+      ],
+      "thumbnail": "glutes_step_up/thumbnail.webp",
+      "anatomy": "glutes_step_up/anatomy.webp",
+      "frames": [
+        "glutes_step_up/frames/01.webp",
+        "glutes_step_up/frames/02.webp",
+        "glutes_step_up/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/glutes_step_up.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "calves_standing_raise",
+      "name": "Elevaciones de talón de pie",
+      "primary": "CALVES",
+      "secondary": [],
+      "thumbnail": "calves_standing_raise/thumbnail.webp",
+      "anatomy": "calves_standing_raise/anatomy.webp",
+      "frames": [
+        "calves_standing_raise/frames/01.webp",
+        "calves_standing_raise/frames/02.webp",
+        "calves_standing_raise/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/calves_standing_raise.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "calves_seated_machine_raise",
+      "name": "Elevaciones sentado en máquina",
+      "primary": "CALVES",
+      "secondary": [],
+      "thumbnail": "calves_seated_machine_raise/thumbnail.webp",
+      "anatomy": "calves_seated_machine_raise/anatomy.webp",
+      "frames": [
+        "calves_seated_machine_raise/frames/01.webp",
+        "calves_seated_machine_raise/frames/02.webp",
+        "calves_seated_machine_raise/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/calves_seated_machine_raise.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "calves_leg_press_raise",
+      "name": "Elevaciones en prensa",
+      "primary": "CALVES",
+      "secondary": [],
+      "thumbnail": "calves_leg_press_raise/thumbnail.webp",
+      "anatomy": "calves_leg_press_raise/anatomy.webp",
+      "frames": [
+        "calves_leg_press_raise/frames/01.webp",
+        "calves_leg_press_raise/frames/02.webp",
+        "calves_leg_press_raise/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/calves_leg_press_raise.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "calves_single_leg_bodyweight_raise",
+      "name": "Elevación unilateral con peso corporal",
+      "primary": "CALVES",
+      "secondary": [],
+      "thumbnail": "calves_single_leg_bodyweight_raise/thumbnail.webp",
+      "anatomy": "calves_single_leg_bodyweight_raise/anatomy.webp",
+      "frames": [
+        "calves_single_leg_bodyweight_raise/frames/01.webp",
+        "calves_single_leg_bodyweight_raise/frames/02.webp",
+        "calves_single_leg_bodyweight_raise/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/calves_single_leg_bodyweight_raise.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "calves_standing_machine_raise",
+      "name": "Elevaciones de pie en máquina",
+      "primary": "CALVES",
+      "secondary": [],
+      "thumbnail": "calves_standing_machine_raise/thumbnail.webp",
+      "anatomy": "calves_standing_machine_raise/anatomy.webp",
+      "frames": [
+        "calves_standing_machine_raise/frames/01.webp",
+        "calves_standing_machine_raise/frames/02.webp",
+        "calves_standing_machine_raise/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/calves_standing_machine_raise.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "core_mat_crunch",
+      "name": "Crunch en colchoneta",
+      "primary": "CORE",
+      "secondary": [],
+      "thumbnail": "core_mat_crunch/thumbnail.webp",
+      "anatomy": "core_mat_crunch/anatomy.webp",
+      "frames": [
+        "core_mat_crunch/frames/01.webp",
+        "core_mat_crunch/frames/02.webp",
+        "core_mat_crunch/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/core_mat_crunch.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "core_cable_crunch",
+      "name": "Crunch en polea",
+      "primary": "CORE",
+      "secondary": [],
+      "thumbnail": "core_cable_crunch/thumbnail.webp",
+      "anatomy": "core_cable_crunch/anatomy.webp",
+      "frames": [
+        "core_cable_crunch/frames/01.webp",
+        "core_cable_crunch/frames/02.webp",
+        "core_cable_crunch/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/core_cable_crunch.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "core_machine_crunch",
+      "name": "Crunch en máquina",
+      "primary": "CORE",
+      "secondary": [],
+      "thumbnail": "core_machine_crunch/thumbnail.webp",
+      "anatomy": "core_machine_crunch/anatomy.webp",
+      "frames": [
+        "core_machine_crunch/frames/01.webp",
+        "core_machine_crunch/frames/02.webp",
+        "core_machine_crunch/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/core_machine_crunch.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "core_reverse_crunch",
+      "name": "Crunch inverso",
+      "primary": "CORE",
+      "secondary": [],
+      "thumbnail": "core_reverse_crunch/thumbnail.webp",
+      "anatomy": "core_reverse_crunch/anatomy.webp",
+      "frames": [
+        "core_reverse_crunch/frames/01.webp",
+        "core_reverse_crunch/frames/02.webp",
+        "core_reverse_crunch/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/core_reverse_crunch.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    },
+    {
+      "catalogId": "core_stability_ball_crunch",
+      "name": "Crunch en fitball",
+      "primary": "CORE",
+      "secondary": [],
+      "thumbnail": "core_stability_ball_crunch/thumbnail.webp",
+      "anatomy": "core_stability_ball_crunch/anatomy.webp",
+      "frames": [
+        "core_stability_ball_crunch/frames/01.webp",
+        "core_stability_ball_crunch/frames/02.webp",
+        "core_stability_ball_crunch/frames/03.webp"
+      ],
+      "video": null,
+      "mediaType": "generated_static_sequence",
+      "sequence": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "frameDurationMs": 1200,
+      "loadSemantics": "external_load_or_bodyweight",
+      "sourceSheet": "sources/core_stability_ball_crunch.webp",
+      "reviewStatus": "illustrative_draft_not_professionally_validated",
+      "autoplayDefault": false
+    }
+  ]
+}
