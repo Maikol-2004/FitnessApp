@@ -1,0 +1,42 @@
+[
+  {
+    "path": "app/src/main/java/com/maikol/fitnessapp/feature/home/HomeComponents.kt",
+    "sha256": "ec9669c2e1f023618066ff9a8c876827f7ee19138fd2d1eef532893743e6de82",
+    "base_git_blob": "53acc78c4351be94e803e25cfbf1633cfb2bd7b7"
+  },
+  {
+    "path": "app/src/main/java/com/maikol/fitnessapp/feature/profile/ProfileScreen.kt",
+    "sha256": "69ae6ebc71ef428dcb00c6d208f1cbf787cd648ecb043e58fa587cc9e132597e",
+    "base_git_blob": "cb7802e3bd5dec328a9ae8e7327c11582d9db465"
+  },
+  {
+    "path": "app/src/main/java/com/maikol/fitnessapp/feature/tracking/TrackingUi.kt",
+    "sha256": "dfe1795fcf98534f79e9edd6cb871d5ca2574c0eb61545f187471bffd429fc80",
+    "base_git_blob": "3491b7cfd75cd97ae969c2dc2d027b0f7128fc45"
+  },
+  {
+    "path": "app/src/main/java/com/maikol/fitnessapp/core/designsystem/component/FitnessCard.kt",
+    "sha256": "737a15a7249c38037983ed605a6cc119b06f94b3233aca2af8eed1a1b79e775a",
+    "base_git_blob": "38056ef8685d22697b1b5bcec7e6b74d42600970"
+  },
+  {
+    "path": "app/src/main/res/values/strings_visual.xml",
+    "sha256": "78aa680c145719781793c697bc23cb8c8a1169145d12328437752e1a41ab581a",
+    "base_git_blob": null
+  },
+  {
+    "path": "app/src/main/res/drawable/ic_steps.xml",
+    "sha256": "44ddc2c94305d690658c27f92363ea01d5f885d9a051ff9d9f30cadeb0813d1d",
+    "base_git_blob": null
+  },
+  {
+    "path": "app/src/main/res/drawable/ic_flame.xml",
+    "sha256": "a2a48b8a7eeae0aacc16d766190f89306d3e0c5da369442b5875b29826470139",
+    "base_git_blob": null
+  },
+  {
+    "path": "app/src/main/res/drawable/ic_route.xml",
+    "sha256": "e5c633ea731156ced5cd7a91c1e051aeebe60b4b0527010c2d89c786ebbf6eb7",
+    "base_git_blob": null
+  }
+]

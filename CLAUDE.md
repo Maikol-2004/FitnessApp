@@ -1,5 +1,8 @@
 # Instrucciones para Claude Code
 
+## Encargo vigente: refinamiento visual tras F1.1
+Prevalecen docs/12_VISUAL_REFINEMENT.md y docs/CLAUDE_NEXT.md. F1/F1.1 están completadas; integrar la propuesta de deliveries/2026-11-25-visual sin reconstruir fases ni perder datos. Los encargos anteriores se conservan como historia cuando no contradigan este. Mantener dos columnas, fotos existentes y primer Liquid Glass. Esta entrega documental no modifica app/ ni autoriza un push futuro del código integrado por Claude.
+
 ## Encargo actual F1 y Liquid Glass
 Prevalecen docs/10_FUNCTIONAL_MVP.md, docs/11_LIQUID_GLASS.md y docs/CLAUDE_NEXT.md. El usuario solicita conservar H2, mantener dos columnas y ejecutar un lote funcional completo: todas las tarjetas con registro local real, primer Liquid Glass y pruebas conjuntas al final. No parar entre antiguos H3–H6 para ese mínimo; no rehacer H0/H2. Las restricciones antiguas de solo ajuste visual o solo H1 son históricas para este encargo. Seguir los límites de F1, no inventar datos ni borrar trabajo; no push de implementación sin autorización posterior.
 

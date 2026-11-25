@@ -1,0 +1,122 @@
+C:\Users\giral\Documents\Codex\2026-11-23\referenced-chatgpt-conversation-this-is-an\work\fitness-visual\gradle\libs.versions.toml:8: Warning: A newer version of androidx.compose:compose-bom than 2026.09.00 is available: 2026.11.01 [GradleDependency]
+composeBom = "2026.09.00"
+             ~~~~~~~~~~~~
+C:\Users\giral\Documents\Codex\2026-11-23\referenced-chatgpt-conversation-this-is-an\work\fitness-visual\gradle\libs.versions.toml:16: Warning: A newer version of org.jetbrains.kotlinx:kotlinx-coroutines-test than 1.9.0 is available: 1.11.0 [GradleDependency]
+coroutines = "1.9.0"
+             ~~~~~~~
+
+   Explanation for issues of type "GradleDependency":
+   This detector looks for usages of libraries where the version you are using
+   is not the current stable release. Using older versions is fine, and there
+   are cases where you deliberately want to stick with an older version.
+   However, you may simply not be aware that a more recent version is
+   available, and that is what this lint check helps find.
+
+C:\Users\giral\Documents\Codex\2026-11-23\referenced-chatgpt-conversation-this-is-an\work\fitness-visual\app\src\main\java\com\maikol\fitnessapp\feature\training\ui\SessionScreen.kt:149: Warning: Using Configuration.screenHeightDp instead of LocalWindowInfo.current.containerSize [ConfigurationScreenWidthHeight from androidx.compose.ui]
+    val compactHeight = LocalConfiguration.current.screenHeightDp < 520
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "ConfigurationScreenWidthHeight":
+   Configuration.screenWidthDp and Configuration.screenHeightDp have different
+   insets behaviour depending on target SDK version, and are rounded to the
+   nearest Dp. This means that using these values in composition to size a
+   layout can result in issues, as these values do not accurately represent
+   the actual available window size. Instead it is recommended to use
+   WindowInfo.containerSize which accurately represents the window size.
+
+   Vendor: Jetpack Compose
+   Identifier: androidx.compose.ui
+   Feedback: https://issuetracker.google.com/issues/new?component=612128
+
+C:\Users\giral\Documents\Codex\2026-11-23\referenced-chatgpt-conversation-this-is-an\work\fitness-visual\app\src\main\res\values\strings.xml:138: Warning: Formatting %d followed by words ("series"): This should probably be a plural rather than a string [PluralsCandidate]
+    <string name="session_progress_description">Progreso: %1$d de %2$d series completadas</string>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\giral\Documents\Codex\2026-11-23\referenced-chatgpt-conversation-this-is-an\work\fitness-visual\app\src\main\res\values\strings.xml:166: Warning: Formatting %d followed by words ("series"): This should probably be a plural rather than a string [PluralsCandidate]
+    <string name="session_finish_body">Has completado %1$d de %2$d series. Las pendientes no se guardarán como hechas.</string>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\giral\Documents\Codex\2026-11-23\referenced-chatgpt-conversation-this-is-an\work\fitness-visual\app\src\main\res\values\strings.xml:195: Warning: Formatting %d followed by words ("reps"): This should probably be a plural rather than a string [PluralsCandidate]
+    <string name="summary_set_bodyweight">%1$d reps</string>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "PluralsCandidate":
+   This lint check looks for potential errors in internationalization where
+   you have translated a message which involves a quantity and it looks like
+   other parts of the string may need grammatical changes.
+
+   For example, rather than something like this:
+     <string name="try_again">Try again in %d seconds.</string>
+   you should be using a plural:
+      <plurals name="try_again">
+           <item quantity="one">Try again in %d second</item>
+           <item quantity="other">Try again in %d seconds</item>
+       </plurals>
+   This will ensure that in other languages the right set of translations are
+   provided for the different quantity classes.
+
+   (This check depends on some heuristics, so it may not accurately determine
+   whether a string really should be a quantity. You can use tools:ignore to
+   filter out false positives.
+
+   https://developer.android.com/guide/topics/resources/string-resource.html#Plurals
+
+C:\Users\giral\Documents\Codex\2026-11-23\referenced-chatgpt-conversation-this-is-an\work\fitness-visual\app\src\main\res\values\strings.xml:24: Warning: The resource R.string.home_activity_no_data appears to be unused [UnusedResources]
+    <string name="home_activity_no_data">Sin datos</string>
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\giral\Documents\Codex\2026-11-23\referenced-chatgpt-conversation-this-is-an\work\fitness-visual\app\src\main\res\values\strings.xml:25: Warning: The resource R.string.home_activity_empty_body appears to be unused [UnusedResources]
+    <string name="home_activity_empty_body">Tu actividad aparecerá aquí.</string>
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\giral\Documents\Codex\2026-11-23\referenced-chatgpt-conversation-this-is-an\work\fitness-visual\app\src\main\res\values\strings.xml:27: Warning: The resource R.string.home_activity_steps appears to be unused [UnusedResources]
+    <string name="home_activity_steps">pasos</string>
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\giral\Documents\Codex\2026-11-23\referenced-chatgpt-conversation-this-is-an\work\fitness-visual\app\src\main\res\values\strings.xml:28: Warning: The resource R.string.home_activity_kcal appears to be unused [UnusedResources]
+    <string name="home_activity_kcal">%1$s kcal activas</string>
+            ~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\giral\Documents\Codex\2026-11-23\referenced-chatgpt-conversation-this-is-an\work\fitness-visual\app\src\main\res\values\strings.xml:30: Warning: The resource R.string.home_activity_ring_empty_description appears to be unused [UnusedResources]
+    <string name="home_activity_ring_empty_description">Pasos de hoy: sin datos</string>
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\giral\Documents\Codex\2026-11-23\referenced-chatgpt-conversation-this-is-an\work\fitness-visual\app\src\main\res\values\strings_f1.xml:60: Warning: The resource R.string.health_goal_missing_short appears to be unused [UnusedResources]
+    <string name="health_goal_missing_short">Configura tu objetivo de pasos en Perfil.</string>
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "UnusedResources":
+   Unused resources make applications larger and slow down builds.
+
+
+   The unused resource check can ignore tests. If you want to include
+   resources that are only referenced from tests, consider packaging them in a
+   test source set instead.
+
+   You can include test sources in the unused resource check by setting the
+   system property lint.unused-resources.include-tests=true, and to exclude
+   them (usually for performance reasons), use
+   lint.unused-resources.exclude-tests=true.
+
+   Available options:
+
+   **skip-libraries** (default is true):
+   Whether the unused resource check should skip reporting unused resources in libraries.
+
+   Many libraries will declare resources that are part of the library surface; other modules depending on the library will also reference the resources. To avoid reporting all these resources as unused (in the context of a library), the unused resource check normally skips reporting unused resources in libraries. Instead, run the unused resource check on the consuming app module (along with `checkDependencies=true`).
+
+   However, there are cases where you want to check that all the resources declared in a library are used; in that case, you can disable the skip option.
+
+   To configure this option, use a `lint.xml` file with an <option> like this:
+
+   ```xml
+   <lint>
+       <issue id="UnusedResources">
+           <option name="skip-libraries" value="true" />
+       </issue>
+   </lint>
+   ```
+
+C:\Users\giral\Documents\Codex\2026-11-23\referenced-chatgpt-conversation-this-is-an\work\fitness-visual\app\src\main\res\values\strings.xml:106: Warning: Replace (c) with copyright symbol © (&#169;) ? [TypographyOther]
+    <string name="editor_warmup_hint">Toca el número de una serie para marcarla como calentamiento (C): cuenta como serie, pero no suma volumen.</string>
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "TypographyOther":
+   This check looks for miscellaneous typographical problems and offers
+   replacement                     sequences that will make the text easier to
+   read and your application more                     polished.
+
+0 errors, 13 warnings
