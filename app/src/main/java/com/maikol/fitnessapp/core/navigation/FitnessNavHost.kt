@@ -236,6 +236,8 @@ private fun NavGraphBuilder.trainingGraph(nav: NavHostController) {
                     nav.popIf(TrainingRoutes.EDITOR)
                 }
             },
+            // Historial de la ficha: el resumen se apila encima; Atrás vuelve al borrador intacto.
+            onOpenSession = { nav.navigate(TrainingRoutes.summary(it)) { launchSingleTop = true } },
         )
     }
     composable(
@@ -295,6 +297,8 @@ private fun RoutineSessionDestination(nav: NavHostController) {
         onOpenSummary = { sessionId ->
             nav.navigate(TrainingRoutes.summary(sessionId)) { popUpTo(TrainingRoutes.SESSION) { inclusive = true } }
         },
+        // Desde la ficha durante el entrenamiento: la sesión sigue abierta debajo (Atrás vuelve a ella).
+        onOpenPastSession = { nav.navigate(TrainingRoutes.summary(it)) { launchSingleTop = true } },
     )
 }
 

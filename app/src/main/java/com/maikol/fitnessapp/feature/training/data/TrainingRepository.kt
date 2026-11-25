@@ -1,6 +1,7 @@
 package com.maikol.fitnessapp.feature.training.data
 
 import androidx.room.withTransaction
+import com.maikol.fitnessapp.core.database.ExerciseSetRow
 import com.maikol.fitnessapp.core.database.FitnessDatabase
 import com.maikol.fitnessapp.core.database.PerformedSetEntity
 import com.maikol.fitnessapp.core.database.PlannedSetEntity
@@ -317,6 +318,14 @@ open class TrainingRepository(
     fun observeHistory(): Flow<List<HistoryEntry>> = dao.observeHistory().map { rows ->
         rows.map { HistoryEntry(it.id, it.routineNameSnapshot, it.endedAt, it.activeMs, it.completedSets, it.exerciseCount, it.volumeKg) }
     }
+
+    /** G2: series completadas por definición del catálogo, en cualquier rutina. */
+    fun observeCatalogExerciseSets(catalogId: String): Flow<List<ExerciseSetRow>> =
+        dao.observeCompletedSetsByCatalogId(catalogId).distinctUntilChanged()
+
+    /** G2: personalizados/legado por su exerciseKey; nunca se mezclan con una definición del catálogo. */
+    fun observeCustomExerciseSets(exerciseKey: String): Flow<List<ExerciseSetRow>> =
+        dao.observeCompletedSetsByExerciseKey(exerciseKey).distinctUntilChanged()
 
     fun now(): ClockReading = clock.now()
 

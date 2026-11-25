@@ -171,6 +171,18 @@ data class RoutineSummaryRow(
     val setCount: Int,
 )
 
+/** G2: una serie completada de un ejercicio, con los datos de su sesión terminada. */
+data class ExerciseSetRow(
+    val sessionId: String,
+    val routineName: String,
+    val endedAt: Long,
+    val exercisePosition: Int,
+    val setPosition: Int,
+    val reps: Int?,
+    val loadKg: Double?,
+    val warmup: Boolean,
+)
+
 /** Fila de historial: sesión completada con sus métricas calculadas en SQL. */
 data class SessionHistoryRow(
     val id: String,

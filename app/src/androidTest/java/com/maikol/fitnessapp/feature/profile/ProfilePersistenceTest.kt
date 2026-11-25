@@ -9,6 +9,7 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextReplacement
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.maikol.fitnessapp.MainActivity
@@ -40,7 +41,7 @@ class ProfilePersistenceTest {
         rule.onNode(hasSetTextAction() and hasText("Tu nombre (opcional)")).performTextReplacement("Prueba H1")
         rule.onNodeWithText("Guardar").performClick()
         rule.waitUntil(5_000) { exists("Guardado") }
-        rule.onNodeWithText("lb · mi").performClick()
+        rule.onNodeWithText("lb · mi").performScrollTo().performClick()
         rule.waitUntil(5_000) { selected("lb · mi") }
 
         rule.activityRule.scenario.recreate()

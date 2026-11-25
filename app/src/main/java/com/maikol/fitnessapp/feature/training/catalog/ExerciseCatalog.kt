@@ -5,8 +5,8 @@ import java.text.Normalizer
 /*
  * G1 (docs/13_EXERCISE_LIBRARY.md): catálogo local y versionado de ejercicios de repeticiones.
  * - Los IDs son inmutables y no dependen del texto: renombrar o traducir no cambia la identidad.
- * - Texto original en español, redactado para este proyecto. Sin medios de demostración: la ficha es
- *   «Guía en texto» (media = null) hasta disponer de recursos con licencia documentada.
+ * - Texto original en español, redactado para este proyecto. G2: los medios (ilustraciones generadas, sin
+ *   vídeo) se asignan por ID en ExerciseMedia.kt; la guía textual se conserva siempre.
  * - El catálogo nunca reescribe rutinas ni sesiones: estas guardan su propio nombre (snapshot).
  */
 
@@ -56,8 +56,6 @@ data class CatalogExercise(
     val steps: List<String>,
     val breathing: String,
     val mistakes: List<String>,
-    /** Recurso visual con licencia documentada; null = guía solo en texto. */
-    val media: String? = null,
 ) {
     val muscles: List<MuscleGroup> get() = listOf(primary) + secondary
     val allEquipment: List<Equipment> get() = equipment + accessories

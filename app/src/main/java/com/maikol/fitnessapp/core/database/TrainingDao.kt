@@ -109,4 +109,35 @@ interface TrainingDao {
         """,
     )
     fun observeHistory(): Flow<List<SessionHistoryRow>>
+
+    // ---- G2: series completadas de un ejercicio en sesiones terminadas (sin reescribir snapshots) ----
+
+    @Query(
+        """
+        SELECT s.id AS sessionId, s.routineNameSnapshot AS routineName, s.endedAt AS endedAt,
+            e.position AS exercisePosition, p.position AS setPosition, p.reps AS reps, p.loadKg AS loadKg,
+            p.warmup AS warmup
+        FROM performed_sets p
+        JOIN session_exercises e ON p.sessionExerciseId = e.id
+        JOIN workout_sessions s ON e.sessionId = s.id
+        WHERE s.status = 'COMPLETED' AND s.endedAt IS NOT NULL AND p.completedAt IS NOT NULL AND e.catalogId = :catalogId
+        ORDER BY s.endedAt, e.position, p.position
+        """,
+    )
+    fun observeCompletedSetsByCatalogId(catalogId: String): Flow<List<ExerciseSetRow>>
+
+    /** Ejercicios personalizados o anteriores a G1: su identidad sigue siendo exerciseKey. */
+    @Query(
+        """
+        SELECT s.id AS sessionId, s.routineNameSnapshot AS routineName, s.endedAt AS endedAt,
+            e.position AS exercisePosition, p.position AS setPosition, p.reps AS reps, p.loadKg AS loadKg,
+            p.warmup AS warmup
+        FROM performed_sets p
+        JOIN session_exercises e ON p.sessionExerciseId = e.id
+        JOIN workout_sessions s ON e.sessionId = s.id
+        WHERE s.status = 'COMPLETED' AND s.endedAt IS NOT NULL AND p.completedAt IS NOT NULL AND e.catalogId IS NULL AND e.exerciseKey = :exerciseKey
+        ORDER BY s.endedAt, e.position, p.position
+        """,
+    )
+    fun observeCompletedSetsByExerciseKey(exerciseKey: String): Flow<List<ExerciseSetRow>>
 }

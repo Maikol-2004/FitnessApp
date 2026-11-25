@@ -101,6 +101,7 @@ fun SessionRoute(
     onBack: () -> Unit,
     onFinished: (sessionId: String) -> Unit,
     onOpenSummary: (sessionId: String) -> Unit,
+    onOpenPastSession: (sessionId: String) -> Unit = {},
     viewModel: SessionViewModel = viewModel(factory = SessionViewModel.Factory),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -122,7 +123,7 @@ fun SessionRoute(
             ClosedSession(session, onBack, onOpenSummary)
             return@LoadingRegion
         }
-        SessionScreen(state, session, viewModel, onBack)
+        SessionScreen(state, session, viewModel, onBack, onOpenPastSession)
     }
     SessionDialogs(state, viewModel)
 }
@@ -142,7 +143,13 @@ private fun ClosedSession(session: Session?, onBack: () -> Unit, onOpenSummary: 
 }
 
 @Composable
-private fun SessionScreen(state: SessionUiState, session: Session, vm: SessionViewModel, onBack: () -> Unit) {
+private fun SessionScreen(
+    state: SessionUiState,
+    session: Session,
+    vm: SessionViewModel,
+    onBack: () -> Unit,
+    onOpenPastSession: (String) -> Unit,
+) {
     // Atrás deja la sesión abierta y recuperable; no la pausa ni la descarta.
     BackHandler(onBack = onBack)
     val exerciseIndex = session.currentExercise.coerceIn(0, (session.exercises.size - 1).coerceAtLeast(0))
@@ -218,7 +225,7 @@ private fun SessionScreen(state: SessionUiState, session: Session, vm: SessionVi
             )
         }
     }
-    ExerciseCatalog.byId(guideId)?.let { ExerciseGuideScreen(it, onClose = { guideId = null }) }
+    ExerciseCatalog.byId(guideId)?.let { ExerciseGuideScreen(it, onClose = { guideId = null }, onOpenSession = onOpenPastSession) }
     }
 }
 

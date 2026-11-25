@@ -67,6 +67,7 @@ import com.maikol.fitnessapp.feature.training.data.loadUnit
 fun RoutineEditorRoute(
     onClose: () -> Unit,
     onSaved: (routineId: String, isNew: Boolean) -> Unit,
+    onOpenSession: (sessionId: String) -> Unit = {},
     viewModel: RoutineEditorViewModel = viewModel(factory = RoutineEditorViewModel.Factory),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -160,6 +161,7 @@ fun RoutineEditorRoute(
         ExerciseGuideScreen(
             exercise = exercise,
             onClose = viewModel::closeGuide,
+            onOpenSession = onOpenSession,
             selection = picker?.let {
                 GuideSelection(
                     selected = exercise.id in it.selected,

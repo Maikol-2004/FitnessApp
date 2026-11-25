@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- G2: ficha con Guía, Progreso e Historial -->
+    <string name="detail_tab_guide">Guía</string>
+    <string name="detail_tab_progress">Progreso</string>
+    <string name="detail_tab_history">Historial</string>
+
+    <string name="sequence_label">Secuencia de 3 posiciones</string>
+    <string name="sequence_position">Posición %1$d de %2$d</string>
+    <string name="sequence_phase_1">Inicio</string>
+    <string name="sequence_phase_2">Intermedia</string>
+    <string name="sequence_phase_3">Final</string>
+    <string name="sequence_prev">Posición anterior</string>
+    <string name="sequence_next">Posición siguiente</string>
+    <string name="sequence_play">Reproducir</string>
+    <string name="sequence_pause">Pausar</string>
+    <string name="sequence_replay">Repetir</string>
+    <string name="sequence_reduced_motion">Movimiento reducido: avanza las posiciones a mano.</string>
+    <string name="sequence_frame_description">%1$s, posición %2$d de 3: %3$s</string>
+    <string name="media_disclaimer">Ilustraciones generadas y orientativas, sin validación profesional. No es un vídeo: son tres posiciones fijas.</string>
+
+    <string name="muscles_title">Músculos implicados</string>
+    <string name="muscles_primary">Principal: %1$s</string>
+    <string name="muscles_secondary">Secundarios: %1$s</string>
+    <string name="muscles_secondary_none">Secundarios: ninguno destacado</string>
+    <string name="muscles_map_description">Mapa muscular esquemático. Principal: %1$s. Secundarios: %2$s.</string>
+    <string name="muscles_none">ninguno</string>
+    <string name="muscles_note">Mapa esquemático: no indica porcentaje de activación.</string>
+
+    <string name="progress_period_all">Todo el historial</string>
+    <string name="progress_period_90">90 días</string>
+    <string name="progress_period_30">30 días</string>
+    <string name="progress_empty_title">Aún no hay registros de este ejercicio</string>
+    <string name="progress_empty_body">Las marcas aparecen cuando completas series de trabajo en un entrenamiento terminado. Añádelo a una rutina y entrena.</string>
+    <string name="progress_period_empty">Sin series en este periodo. Prueba con «Todo el historial».</string>
+    <string name="progress_max_load">Carga máxima</string>
+    <string name="progress_best_volume">Mejor volumen</string>
+    <string name="progress_avg_load">Carga media por serie</string>
+    <string name="progress_no_load">Sin carga externa</string>
+    <string name="progress_reps_date">× %1$d · %2$s</string>
+    <plurals name="progress_sets_date">
+        <item quantity="one">%1$d serie · %2$s</item>
+        <item quantity="other">%1$d series · %2$s</item>
+    </plurals>
+    <plurals name="progress_sets">
+        <item quantity="one">%d serie con carga</item>
+        <item quantity="other">%d series con carga</item>
+    </plurals>
+    <plurals name="progress_summary">
+        <item quantity="one">%1$d sesión · %2$s</item>
+        <item quantity="other">%1$d sesiones · %2$s</item>
+    </plurals>
+    <plurals name="progress_work_sets">
+        <item quantity="one">%d serie de trabajo</item>
+        <item quantity="other">%d series de trabajo</item>
+    </plurals>
+    <string name="progress_chart_load">Evolución de carga</string>
+    <string name="progress_chart_load_sub">Carga máxima de cada sesión</string>
+    <string name="progress_chart_assist">Evolución de la asistencia</string>
+    <string name="progress_chart_assist_sub">Menor asistencia de cada sesión · menos ayuda puede indicar progreso</string>
+    <plurals name="progress_chart_description">
+        <item quantity="one">%1$s: %2$d sesión, de %3$s a %4$s.</item>
+        <item quantity="other">%1$s: %2$d sesiones, de %3$s a %4$s.</item>
+    </plurals>
+    <string name="progress_chart_single">Una sola sesión con carga: %1$s.</string>
+    <string name="progress_marks">Tus marcas</string>
+    <string name="progress_first">Primera práctica</string>
+    <string name="progress_last">Última práctica</string>
+    <string name="progress_global_note">Primera y última práctica cuentan todo el historial.</string>
+    <string name="progress_rules">Solo series de trabajo completadas en entrenamientos terminados. No cuentan calentamientos, series pendientes ni objetivos planificados. La carga máxima es la mayor registrada, no un 1RM estimado.</string>
+    <string name="progress_dumbbell_rule">Mancuernas: se compara la carga tal como la escribes en cada serie (sin multiplicar ni dividir). Anótala siempre igual, por ejemplo por mancuerna.</string>
+    <string name="progress_bodyweight_rule">Sin carga externa no se estima tu peso corporal ni un volumen levantado.</string>
+    <string name="progress_assist_rule">En la dominada asistida la carga es ayuda (máquina o banda). Como no se guarda la modalidad, no se calcula récord ni volumen; solo su evolución.</string>
+
+    <string name="history_empty">Aún no has completado este ejercicio en ningún entrenamiento.</string>
+    <string name="history_set">%1$s × %2$d</string>
+    <string name="history_set_assist">Asist. %1$s × %2$d</string>
+    <string name="history_set_no_load">Sin carga × %1$d</string>
+    <string name="history_warmup">C</string>
+    <string name="history_volume">Volumen %1$s</string>
+    <string name="history_best">Carga máxima</string>
+    <string name="history_open_summary">Ver resumen</string>
+    <string name="history_warmup_legend">C = calentamiento (no cuenta en las marcas).</string>
+</resources>

@@ -21,7 +21,6 @@ class ExerciseCatalogTest {
             assertTrue("${e.id}: 2–3 errores", e.mistakes.size in 2..3)
             assertTrue("${e.id}: equipo", e.equipment.isNotEmpty())
             assertTrue("${e.id}: principal fuera de secundarios", e.primary !in e.secondary)
-            assertTrue("${e.id}: sin medios inventados", e.media == null)
         }
         // Errores redactados por ejercicio: ninguno se repite literalmente en todo el catálogo.
         val mistakes = all.flatMap { it.mistakes }

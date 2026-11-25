@@ -32,13 +32,9 @@
     <string name="editor_create_custom">Crear ejercicio personalizado</string>
     <string name="editor_empty_hint">Pulsa «Añadir ejercicio» para elegir movimientos del catálogo por músculo o equipo.</string>
 
-    <string name="guide_primary">Músculo principal</string>
-    <string name="guide_secondary">También trabaja</string>
     <string name="guide_equipment">Equipo</string>
     <string name="guide_accessory">Apoyo: %1$s</string>
     <string name="guide_difficulty">Dificultad</string>
-    <string name="guide_text_only">Guía en texto</string>
-    <string name="guide_text_only_body">Sin demostración visual por ahora: sigue la preparación y los pasos escritos.</string>
     <string name="guide_preparation">Preparación</string>
     <string name="guide_steps">Ejecución</string>
     <string name="guide_breathing">Respiración</string>

@@ -9,8 +9,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,11 +24,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
@@ -53,15 +50,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.maikol.fitnessapp.R
-import com.maikol.fitnessapp.core.designsystem.component.FitnessCard
 import com.maikol.fitnessapp.core.designsystem.component.PrimaryButton
 import com.maikol.fitnessapp.core.designsystem.component.SecondaryButton
 import com.maikol.fitnessapp.core.designsystem.motion.LocalMotionEnabled
@@ -73,6 +69,7 @@ import com.maikol.fitnessapp.feature.training.catalog.CatalogExercise
 import com.maikol.fitnessapp.feature.training.catalog.Equipment
 import com.maikol.fitnessapp.feature.training.catalog.ExerciseCatalog
 import com.maikol.fitnessapp.feature.training.catalog.MuscleGroup
+import com.maikol.fitnessapp.feature.training.catalog.mediaAssets
 import com.maikol.fitnessapp.feature.training.catalog.search
 
 /*
@@ -255,7 +252,10 @@ private fun EmptyResults(onClear: () -> Unit, modifier: Modifier = Modifier) {
     }
 }
 
-/** Fila: zona de selección (casilla) y botón de ficha separados; tocar «i» nunca añade. */
+/**
+ * Fila: miniatura real del ejercicio a la izquierda (Fit sobre #121416, sin recortar barra ni pies), texto y
+ * casilla en la zona de selección, y botón de ficha aparte; tocar «i» nunca añade.
+ */
 @Composable
 private fun PickerRow(
     exercise: CatalogExercise,
@@ -277,6 +277,8 @@ private fun PickerRow(
             else -> R.string.picker_unselected_state
         },
     )
+    // Fuente grande: miniatura algo menor para dejar sitio al nombre.
+    val large = LocalDensity.current.fontScale >= 1.5f
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -289,11 +291,29 @@ private fun PickerRow(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .weight(1f)
-                .heightIn(min = 64.dp)
+                .heightIn(min = 88.dp)
                 .toggleable(value = selected || inRoutine, enabled = !inRoutine, role = Role.Checkbox, onValueChange = { onToggle() })
                 .semantics(mergeDescendants = true) { stateDescription = stateText }
-                .padding(start = Spacing.m, top = Spacing.s, bottom = Spacing.s),
+                .padding(start = Spacing.s, top = Spacing.s, bottom = Spacing.s),
         ) {
+            ExerciseAssetImage(
+                path = exercise.mediaAssets.thumbnail,
+                contentDescription = null,
+                opaque = true,
+                modifier = Modifier
+                    .size(if (large) 64.dp else 80.dp, if (large) 58.dp else 72.dp)
+                    .clip(RoundedCornerShape(12.dp)),
+            )
+            Spacer(Modifier.width(Spacing.m))
+            Column(Modifier.weight(1f)) {
+                Text(exercise.name, style = MaterialTheme.typography.titleMedium, maxLines = if (large) 4 else 2, overflow = TextOverflow.Ellipsis)
+                Text(
+                    if (inRoutine) "${exercise.metaLine()} · ${stringResource(R.string.picker_in_routine)}" else exercise.metaLine(),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = if (inRoutine) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            Spacer(Modifier.width(Spacing.s))
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
@@ -307,15 +327,6 @@ private fun PickerRow(
                     inRoutine -> Icon(painterResource(R.drawable.ic_check), contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(16.dp))
                 }
             }
-            Spacer(Modifier.width(Spacing.m))
-            Column(Modifier.weight(1f)) {
-                Text(exercise.name, style = MaterialTheme.typography.titleMedium)
-                Text(
-                    if (inRoutine) "${exercise.metaLine()} · ${stringResource(R.string.picker_in_routine)}" else exercise.metaLine(),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = if (inRoutine) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
         }
         IconButton(onClick = onInfo, modifier = Modifier.size(MinTouchTarget + Spacing.s)) {
             Icon(
@@ -324,127 +335,6 @@ private fun PickerRow(
                 tint = MaterialTheme.colorScheme.primary,
             )
         }
-    }
-}
-
-/** Acción de la ficha cuando se abre desde el selector. */
-internal data class GuideSelection(val selected: Boolean, val inRoutine: Boolean, val onToggle: () -> Unit)
-
-/** Ficha completa del ejercicio. Sin [selection] (sesión, editor) solo informa. */
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-internal fun ExerciseGuideScreen(exercise: CatalogExercise, onClose: () -> Unit, selection: GuideSelection? = null) {
-    BackHandler(onBack = onClose)
-    Surface(color = MaterialTheme.colorScheme.background, modifier = Modifier.fillMaxSize()) {
-        Column(Modifier.fillMaxSize()) {
-            TrainingTopBar(title = exercise.name, subtitle = exercise.metaLine(), onBack = onClose)
-            Column(
-                verticalArrangement = Arrangement.spacedBy(Spacing.cardGap),
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = Spacing.l)
-                    .padding(top = Spacing.s, bottom = Spacing.xl),
-            ) {
-                FitnessCard {
-                    Fact(stringResource(R.string.guide_primary), exercise.primary.label)
-                    if (exercise.secondary.isNotEmpty()) {
-                        Fact(stringResource(R.string.guide_secondary), exercise.secondary.joinToString(", ") { it.label })
-                    }
-                    val main = exercise.equipment.joinToString(" / ") { it.label }
-                    val accessory = stringResource(R.string.guide_accessory, exercise.accessories.joinToString(", ") { it.label.lowercase() })
-                    Fact(stringResource(R.string.guide_equipment), if (exercise.accessories.isEmpty()) main else "$main · $accessory")
-                    Fact(stringResource(R.string.guide_difficulty), "${exercise.difficulty.label}. ${exercise.difficulty.description}", last = true)
-                }
-                // Ausencia explícita de medios: nada de imágenes rotas ni vídeos prometidos.
-                Row(
-                    verticalAlignment = Alignment.Top,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(MaterialTheme.shapes.large)
-                        .background(champagneTint(0.10f))
-                        .padding(Spacing.m)
-                        .semantics(mergeDescendants = true) {},
-                ) {
-                    Icon(painterResource(R.drawable.ic_article), contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-                    Spacer(Modifier.width(Spacing.m))
-                    Column {
-                        Text(stringResource(R.string.guide_text_only), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-                        Text(stringResource(R.string.guide_text_only_body), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    }
-                }
-                GuideSection(stringResource(R.string.guide_preparation)) {
-                    Text(exercise.preparation, style = MaterialTheme.typography.bodyLarge)
-                }
-                GuideSection(stringResource(R.string.guide_steps)) {
-                    exercise.steps.forEachIndexed { i, step ->
-                        Row(Modifier.semantics(mergeDescendants = true) {}.padding(vertical = Spacing.xs)) {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier.size(28.dp).background(champagneTint(0.14f), CircleShape),
-                            ) {
-                                Text("${i + 1}", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
-                            }
-                            Spacer(Modifier.width(Spacing.m))
-                            Text(step, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
-                        }
-                    }
-                }
-                GuideSection(stringResource(R.string.guide_breathing)) {
-                    Text(exercise.breathing, style = MaterialTheme.typography.bodyLarge)
-                }
-                GuideSection(stringResource(R.string.guide_mistakes)) {
-                    exercise.mistakes.forEach { mistake ->
-                        Row(Modifier.padding(vertical = Spacing.xs).semantics(mergeDescendants = true) {}) {
-                            Icon(painterResource(R.drawable.ic_error), contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 2.dp).size(18.dp))
-                            Spacer(Modifier.width(Spacing.m))
-                            Text(mistake, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
-                        }
-                    }
-                }
-            }
-            if (selection != null) {
-                BottomActionBar {
-                    when {
-                        selection.inRoutine -> SecondaryButton(
-                            text = stringResource(R.string.picker_in_routine),
-                            onClick = {},
-                            enabled = false,
-                            modifier = Modifier.weight(1f),
-                        )
-                        selection.selected -> SecondaryButton(
-                            text = stringResource(R.string.guide_selected),
-                            onClick = selection.onToggle,
-                            iconRes = R.drawable.ic_check,
-                            modifier = Modifier.weight(1f),
-                        )
-                        else -> PrimaryButton(
-                            text = stringResource(R.string.guide_add),
-                            onClick = selection.onToggle,
-                            iconRes = R.drawable.ic_add,
-                            modifier = Modifier.weight(1f),
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun Fact(label: String, value: String, last: Boolean = false) {
-    Column(Modifier.padding(bottom = if (last) 0.dp else Spacing.m).semantics(mergeDescendants = true) {}) {
-        Text(label.uppercase(), style = OverlineStyle, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Spacer(Modifier.height(Spacing.xs))
-        Text(value, style = MaterialTheme.typography.bodyLarge)
-    }
-}
-
-@Composable
-private fun GuideSection(title: String, content: @Composable () -> Unit) {
-    FitnessCard {
-        Text(title, style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() }.padding(bottom = Spacing.s))
-        content()
     }
 }
 
@@ -460,10 +350,3 @@ private fun PickerPreview() {
     }
 }
 
-@Preview(name = "Ficha", showBackground = true, backgroundColor = 0xFF1D2023, widthDp = 400, heightDp = 860)
-@Composable
-private fun GuidePreview() {
-    FitnessTheme {
-        ExerciseGuideScreen(ExerciseCatalog.all.first(), onClose = {}, selection = GuideSelection(selected = false, inRoutine = false, onToggle = {}))
-    }
-}
