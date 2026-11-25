@@ -1,5 +1,8 @@
 # Instrucciones para Claude Code
 
+## Encargo vigente G1 — biblioteca guiada de ejercicios
+Prevalecen docs/13_EXERCISE_LIBRARY.md y docs/CLAUDE_NEXT.md para el nuevo encargo. Conservar el refinamiento visual ya terminado localmente y los datos. G1 añade catálogo y selección de ejercicios, fichas y guía de sesión sin regenerar Entrenar. Los encargos anteriores son antecedentes cuando contradigan el alcance actual. No push posterior de implementación sin autorización.
+
 ## Encargo vigente: refinamiento visual tras F1.1
 Prevalecen docs/12_VISUAL_REFINEMENT.md y docs/CLAUDE_NEXT.md. F1/F1.1 están completadas; integrar la propuesta de deliveries/2026-11-25-visual sin reconstruir fases ni perder datos. Los encargos anteriores se conservan como historia cuando no contradigan este. Mantener dos columnas, fotos existentes y primer Liquid Glass. Esta entrega documental no modifica app/ ni autoriza un push futuro del código integrado por Claude.
 

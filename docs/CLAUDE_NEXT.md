@@ -1,9 +1,11 @@
-# Encargo vigente — refinamiento visual después de F1.1
+# Encargo vigente — G1: catálogo de ejercicios y entrenamiento guiado
 
-F1/F1.1 ya están terminadas. Lee docs/12_VISUAL_REFINEMENT.md y deliveries/2026-11-25-visual/README.md. Conserva H2, F1, F1.1 y los datos. No reinicies las fases anteriores.
+El usuario quiere crear rutinas sin tener que saber nombres de ejercicios: elegir músculo, descubrir ejercicios con guía y entrenar con series y descansos controlados por la app.
 
-Sincroniza origin/fase/f1 conservando commits y cambios locales; no uses reset --hard ni clean. La entrega añade documentos y propuestas, no ha modificado app/. Revisa deliveries/2026-11-25-visual/visual.patch e integra sus ocho archivos de forma compatible con el trabajo actual. Si hay cambios posteriores, combina el diff en lugar de reemplazar archivos completos.
+Lee docs/13_EXERCISE_LIBRARY.md. Conserva los últimos cambios visuales locales ya terminados por Claude y todo H2/F1/F1.1. La entrega visual anterior es antecedente, no debe repetirse ni reemplazar tu versión más reciente. Sincroniza origin/fase/f1 conservando trabajo local, sin reset --hard ni clean.
 
-Objetivo: Inicio con anillo e indicadores claros de pasos/calorías activas/distancia/actividad; Perfil agrupado; cabeceras y filas de categorías más cuidadas. Mantén dos tarjetas por fila, fotografías existentes y el primer Liquid Glass. No inventes datos ni cambies persistencia, dependencias o arquitectura por este ajuste.
+Implementa G1 completo: catálogo local con al menos 50 ejercicios y todos los grupos especificados, búsqueda/filtros, ficha instructiva, selección múltiple, integración real en editor y acceso a la guía durante la sesión. Reutiliza persistencia y temporizadores; migración solo si es necesaria y sin borrar datos. Mantén personalizados, históricos y dos tarjetas por fila en Inicio, colores y Liquid Glass.
 
-Ejecuta el lote completo y una comprobación final proporcional según doc12. No gastes tiempo en reescribir documentación histórica, nuevas capas o pruebas repetidas por cada detalle visual. Entrega capturas reales y un resumen corto de validación y pendientes. No hagas push del código integrado sin autorización posterior.
+El catálogo empieza con ejercicios por repeticiones compatibles con el motor actual. No inventes soporte de series temporizadas ni recursos audiovisuales. Guía textual completa cuando falten demostraciones con licencia; declarar esa limitación. No copies datos ni medios de Hevy.
+
+Haz bloques completos y una secuencia final de comprobaciones según G1-01 a G1-09; sin infraestructura extra ni pruebas por cada detalle. Entrega una versión utilizable con capturas e informe corto. No hagas push posterior de implementación sin autorización del usuario.
