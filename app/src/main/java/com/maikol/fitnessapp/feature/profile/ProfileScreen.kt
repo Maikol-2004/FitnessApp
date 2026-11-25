@@ -51,7 +51,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.maikol.fitnessapp.R
@@ -110,13 +113,19 @@ fun ProfileScreen(
             .padding(top = Spacing.l, bottom = Spacing.xl + dockBottomPadding()),
         verticalArrangement = Arrangement.spacedBy(Spacing.cardGap),
     ) {
-        Text(
-            stringResource(R.string.profile_title),
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier
-                .padding(bottom = Spacing.m)
-                .semantics { heading() },
-        )
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = Spacing.m)) {
+            Box(Modifier.size(64.dp).clip(RoundedCornerShape(22.dp))
+                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
+                val initial = state.savedName?.trim()?.firstOrNull()?.uppercaseChar()
+                if (initial == null) Icon(painterResource(R.drawable.ic_person), null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(28.dp))
+                else Text(initial.toString(), style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.primary)
+            }
+            Spacer(Modifier.width(Spacing.m))
+            Column(Modifier.weight(1f)) {
+                Text(stringResource(R.string.profile_title), style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() })
+                Text(state.savedName ?: stringResource(R.string.visual_profile_subtitle), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        }
         NameCard(state, onNameChange, onSaveName)
         GoalsCard(state, onGoalChange, onSaveGoals)
         UnitsCard(state.unitSystem, state.failedSetting == FailedSetting.UNITS, onUnitSystemSelected)
@@ -126,14 +135,12 @@ fun ProfileScreen(
 }
 
 @Composable
-private fun CardTitle(text: String) {
-    Text(
-        text,
-        style = MaterialTheme.typography.titleMedium,
-        modifier = Modifier
-            .padding(bottom = Spacing.xs)
-            .semantics { heading() },
-    )
+private fun CardTitle(text: String, iconRes: Int = R.drawable.ic_person) {
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = Spacing.s)) {
+        Icon(painterResource(iconRes), contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
+        Spacer(Modifier.width(Spacing.s))
+        Text(text, style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+    }
 }
 
 @Composable
@@ -187,7 +194,7 @@ private fun NameCard(state: ProfileUiState.Ready, onNameChange: (String) -> Unit
 @Composable
 private fun GoalsCard(state: ProfileUiState.Ready, onGoalChange: (Goal, String) -> Unit, onSave: () -> Unit) {
     FitnessCard {
-        CardTitle(stringResource(R.string.profile_goals_title))
+        CardTitle(stringResource(R.string.profile_goals_title), R.drawable.ic_trending_up)
         Text(
             stringResource(R.string.profile_goals_body),
             style = MaterialTheme.typography.bodyMedium,
@@ -203,18 +210,29 @@ private fun GoalsCard(state: ProfileUiState.Ready, onGoalChange: (Goal, String) 
             Goal.FAT to R.string.goal_fat,
         )
         Column(verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
-            Goal.entries.chunked(2).forEach { pair ->
-                Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s)) {
-                    pair.forEach { goal ->
-                        FormField(
-                            value = state.goalDrafts[goal].orEmpty(),
-                            onValueChange = { onGoalChange(goal, it) },
-                            label = stringResource(labels.getValue(goal)),
-                            kind = FieldKind.INTEGER,
-                            suffix = goal.unit,
-                            error = if (goal in state.goalErrors) stringResource(R.string.goal_range, goal.min, goal.max) else null,
-                            modifier = Modifier.weight(1f),
-                        )
+            // Dos columnas; con fuente muy grande, una, para que valor y unidad no se solapen.
+            val columns = if (LocalDensity.current.fontScale >= 1.5f) 1 else 2
+            val groups = listOf(
+                R.string.visual_activity_goals to listOf(Goal.STEPS, Goal.WATER),
+                R.string.visual_nutrition_goals to listOf(Goal.KCAL, Goal.PROTEIN, Goal.CARBS, Goal.FAT),
+            )
+            groups.forEachIndexed { index, (title, goals) ->
+                Text(stringResource(title),
+                    style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(top = if (index == 0) 0.dp else Spacing.m, bottom = Spacing.xs))
+                goals.chunked(columns).forEach { row ->
+                    Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s)) {
+                        row.forEach { goal ->
+                            FormField(
+                                value = state.goalDrafts[goal].orEmpty(),
+                                onValueChange = { onGoalChange(goal, it) },
+                                label = stringResource(labels.getValue(goal)),
+                                kind = FieldKind.INTEGER,
+                                suffix = goal.unit,
+                                error = if (goal in state.goalErrors) stringResource(R.string.goal_range, goal.min, goal.max) else null,
+                                modifier = Modifier.weight(1f),
+                            )
+                        }
                     }
                 }
             }
@@ -240,7 +258,7 @@ private fun GoalsCard(state: ProfileUiState.Ready, onGoalChange: (Goal, String) 
 @Composable
 private fun UnitsCard(selected: UnitSystem, failed: Boolean, onSelected: (UnitSystem) -> Unit) {
     FitnessCard {
-        CardTitle(stringResource(R.string.profile_units_title))
+        CardTitle(stringResource(R.string.profile_units_title), R.drawable.ic_route)
         Text(
             stringResource(R.string.profile_units_body),
             style = MaterialTheme.typography.bodyMedium,
@@ -320,7 +338,7 @@ private fun MotionCard(reduceMotion: Boolean, failed: Boolean, onChange: (Boolea
 @Composable
 private fun AppearanceCard() {
     FitnessCard {
-        CardTitle(stringResource(R.string.profile_theme_title))
+        CardTitle(stringResource(R.string.profile_theme_title), R.drawable.ic_moon)
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
                 Modifier

@@ -21,11 +21,7 @@
     <string name="home_subtitle">Tu resumen de hoy</string>
     <string name="home_avatar_description">Abrir Perfil</string>
     <string name="home_activity_title">Actividad de hoy</string>
-    <string name="home_activity_no_data">Sin datos</string>
-    <string name="home_activity_empty_body">Tu actividad aparecerá aquí.</string>
     <string name="home_activity_cta">Ver salud</string>
-    <string name="home_activity_steps">pasos</string>
-    <string name="home_activity_kcal">%1$s kcal activas</string>
     <string name="home_activity_minutes">%1$s min</string>
     <string name="home_activity_ring_empty_description">Pasos de hoy: sin datos</string>
     <string name="home_next_title">Tu próximo entrenamiento</string>

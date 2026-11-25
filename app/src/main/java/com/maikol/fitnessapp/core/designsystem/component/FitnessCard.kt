@@ -1,5 +1,6 @@
 package com.maikol.fitnessapp.core.designsystem.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +26,7 @@ fun FitnessCard(
         shape = MaterialTheme.shapes.large,
         color = FitnessThemeExtras.colors.card,
         contentColor = MaterialTheme.colorScheme.onSurface,
+        border = BorderStroke(androidx.compose.ui.unit.Dp(1f), MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)),
     ) {
         Column(modifier = Modifier.padding(Spacing.l), content = content)
     }

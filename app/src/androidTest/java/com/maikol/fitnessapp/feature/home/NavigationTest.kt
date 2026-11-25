@@ -1,6 +1,7 @@
 package com.maikol.fitnessapp.feature.home
 
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.SemanticsNodeInteraction
@@ -11,6 +12,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.maikol.fitnessapp.MainActivity
@@ -38,6 +40,8 @@ class NavigationTest {
         runCatching { tab(label).assertIsSelected() }.isSuccess
     }
 
+    // Las tarjetas se activan por su acción de clic: tras performScrollTo pueden quedar bajo el dock superpuesto,
+    // donde un toque simulado caería en el menú (una persona desplaza antes de tocar).
     @Test
     fun secondaryCategories_openTheirScreenAndBackReturnsHome() {
         waitForText(homeMarker)
@@ -47,7 +51,7 @@ class NavigationTest {
             "Tu descanso y su evolución." to "Tus horas de descanso",
         )
         secondaries.forEach { (cardDescription, screenText) ->
-            rule.onNodeWithText(cardDescription).performScrollTo().performClick()
+            rule.onNodeWithText(cardDescription).performScrollTo().performSemanticsAction(SemanticsActions.OnClick)
             waitForText(screenText)
             assertTabSelected("Inicio")
             Espresso.pressBack()
@@ -64,7 +68,7 @@ class NavigationTest {
             Triple("Tus marcas, peso y evolución.", "Tu entrenamiento y tu peso", "Progreso"),
         )
         roots.forEach { (cardDescription, screenText, tabLabel) ->
-            rule.onNodeWithText(cardDescription).performScrollTo().performClick()
+            rule.onNodeWithText(cardDescription).performScrollTo().performSemanticsAction(SemanticsActions.OnClick)
             waitForText(screenText)
             assertTabSelected(tabLabel)
             Espresso.pressBack()

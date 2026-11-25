@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="visual_daily_subtitle">Tu actividad, de un vistazo</string>
+    <string name="visual_daily_empty">Aún no hay registros de hoy</string>
+    <string name="visual_step_goal">Objetivo de pasos</string>
+    <string name="visual_steps">Pasos</string>
+    <string name="visual_active_kcal">Calorías activas</string>
+    <string name="visual_distance">Distancia</string>
+    <string name="visual_active_minutes">Actividad</string>
+    <string name="visual_profile_subtitle">Tu espacio personal</string>
+    <string name="visual_activity_goals">Actividad y agua</string>
+    <string name="visual_nutrition_goals">Nutrición diaria</string>
+    <string name="visual_module_eyebrow">TU BIENESTAR</string>
+</resources>

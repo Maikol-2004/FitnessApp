@@ -1,6 +1,13 @@
 package com.maikol.fitnessapp.feature.tracking
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.ui.draw.clip
+import com.maikol.fitnessapp.core.designsystem.component.PhotoBackground
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -70,7 +77,6 @@ import com.maikol.fitnessapp.feature.training.ui.MenuAction
 import com.maikol.fitnessapp.feature.training.ui.OverflowMenu
 import com.maikol.fitnessapp.feature.training.ui.Pill
 import com.maikol.fitnessapp.feature.training.ui.StatusBarScrim
-import com.maikol.fitnessapp.feature.training.ui.TrainingHero
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
@@ -82,6 +88,8 @@ import java.time.format.DateTimeFormatter
  * día, campos de formulario con error junto al campo, filas de registro con editar/eliminar, fuente «Manual»,
  * guarda de descarte y selectores de fecha/hora. Se reutilizan los componentes de H2 (diálogo, mensajes).
  */
+
+private val LocalModuleIcon = staticCompositionLocalOf { R.drawable.ic_heart }
 
 private val DayFormatter = DateTimeFormatter.ofPattern("EEE d MMM", AppLocale)
 private val DayYearFormatter = DateTimeFormatter.ofPattern("EEE d MMM yyyy", AppLocale)
@@ -114,18 +122,43 @@ fun ModuleScreen(
     onBack: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    Box(modifier.fillMaxSize().imePadding()) {
-        Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
-            TrainingHero(title = title, subtitle = subtitle, photo = photo, onBack = onBack, minHeight = 196.dp)
-            Column(
-                verticalArrangement = Arrangement.spacedBy(Spacing.cardGap),
-                modifier = Modifier
-                    .padding(horizontal = Spacing.screenHorizontal)
-                    .padding(top = Spacing.s, bottom = Spacing.xl + dockBottomPadding()),
-                content = content,
-            )
+    val icon = when (photo) {
+        R.drawable.h1_health -> R.drawable.ic_heart
+        R.drawable.h1_nutrition -> R.drawable.ic_restaurant
+        R.drawable.h1_hydration -> R.drawable.ic_water_drop
+        R.drawable.h1_sleep -> R.drawable.ic_moon
+        else -> R.drawable.ic_trending_up
+    }
+    CompositionLocalProvider(LocalModuleIcon provides icon) {
+        Box(modifier.fillMaxSize().imePadding()) {
+            Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+                PhotoBackground(photo = photo, horizontalScrimEnd = 0.95f, bottomScrimAlpha = 0.75f,
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 196.dp)) {
+                    Column(Modifier.statusBarsPadding().padding(Spacing.l)) {
+                        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                            if (onBack != null) {
+                                IconButton(onClick = onBack) { Icon(painterResource(R.drawable.ic_arrow_back), stringResource(R.string.back)) }
+                            }
+                            Box(Modifier.size(44.dp).clip(RoundedCornerShape(14.dp))
+                                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                                Icon(painterResource(icon), null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(24.dp))
+                            }
+                            Spacer(Modifier.width(Spacing.m))
+                            Text(stringResource(R.string.visual_module_eyebrow), style = MaterialTheme.typography.labelLarge,
+                                color = MaterialTheme.colorScheme.primary)
+                        }
+                        Spacer(Modifier.height(Spacing.l))
+                        Text(title, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() })
+                        Spacer(Modifier.height(Spacing.xs))
+                        Text(subtitle, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+                Column(verticalArrangement = Arrangement.spacedBy(Spacing.l),
+                    modifier = Modifier.padding(horizontal = Spacing.screenHorizontal)
+                        .padding(top = Spacing.l, bottom = Spacing.xl + dockBottomPadding()), content = content)
+            }
+            StatusBarScrim()
         }
-        StatusBarScrim()
     }
 }
 
@@ -260,6 +293,11 @@ fun RecordRow(
             .heightIn(min = 64.dp)
             .padding(start = Spacing.l, top = Spacing.s, bottom = Spacing.s),
     ) {
+        Box(Modifier.size(34.dp).clip(RoundedCornerShape(11.dp))
+            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)), contentAlignment = Alignment.Center) {
+            Icon(painterResource(LocalModuleIcon.current), null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(17.dp))
+        }
+        Spacer(Modifier.width(Spacing.s))
         Column(Modifier.weight(1f).semantics(mergeDescendants = true) {}) {
             Text(title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
             if (detail != null) {

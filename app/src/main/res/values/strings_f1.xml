@@ -57,7 +57,6 @@
     <string name="health_goal_of">meta %1$s</string>
     <string name="health_no_goal_short">Sin meta de pasos</string>
     <string name="health_goal_missing">Configura tu meta de pasos para ver el progreso del día.</string>
-    <string name="health_goal_missing_short">Configura tu objetivo de pasos en Perfil.</string>
     <string name="health_distance">Distancia</string>
     <string name="health_minutes">Minutos activos</string>
     <string name="health_kcal">Calorías activas</string>

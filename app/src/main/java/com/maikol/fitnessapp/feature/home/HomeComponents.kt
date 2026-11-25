@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.border
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -59,6 +60,7 @@ import com.maikol.fitnessapp.core.designsystem.theme.Spacing
 import com.maikol.fitnessapp.core.preferences.UnitSystem
 import com.maikol.fitnessapp.core.tracking.formatDistance
 import com.maikol.fitnessapp.core.tracking.formatInteger
+import com.maikol.fitnessapp.core.tracking.formatKcal
 import com.maikol.fitnessapp.core.tracking.goalFraction
 
 private val CategoryTitleStyle = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 18.sp, lineHeight = 23.sp)
@@ -152,26 +154,43 @@ fun ActivitySummaryCard(
     modifier: Modifier = Modifier,
 ) {
     FitnessCard(modifier = modifier) {
-        Text(
-            stringResource(R.string.home_activity_title),
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.semantics { heading() },
-        )
-        Spacer(Modifier.height(Spacing.l))
-        val ring: @Composable () -> Unit = { ActivityRing(metrics) }
-        val details: @Composable (Modifier) -> Unit = { m ->
-            if (metrics == null) EmptyActivityDetails(onViewHealth, m) else ActivityDetails(metrics, onViewHealth, m)
-        }
-        if (compact) {
-            Column(verticalArrangement = Arrangement.spacedBy(Spacing.l)) {
-                ring()
-                details(Modifier.fillMaxWidth())
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f)) {
+                Text(stringResource(R.string.home_activity_title), style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.semantics { heading() })
+                Text(stringResource(R.string.visual_daily_subtitle), style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
+            TextButton(onClick = onViewHealth, modifier = Modifier.heightIn(min = MinTouchTarget)) {
+                Icon(painterResource(R.drawable.ic_calendar), contentDescription = null, modifier = Modifier.size(16.dp))
+                Spacer(Modifier.width(4.dp))
+                Text(stringResource(R.string.day_today))
+            }
+        }
+        Spacer(Modifier.height(Spacing.l))
+        if (compact) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) { ActivityRing(metrics) }
+            Spacer(Modifier.height(Spacing.l))
+            DailyMetricGrid(metrics, singleColumn = true, Modifier.fillMaxWidth())
         } else {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                ring()
-                Spacer(Modifier.width(Spacing.xl))
-                details(Modifier.weight(1f))
+                ActivityRing(metrics)
+                Spacer(Modifier.width(Spacing.l))
+                DailyMetricGrid(metrics, singleColumn = false, Modifier.weight(1f))
+            }
+        }
+        Spacer(Modifier.height(Spacing.m))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                stringResource(if (metrics == null) R.string.visual_daily_empty else R.string.home_activity_source),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.weight(1f),
+            )
+            TextButton(onClick = onViewHealth, modifier = Modifier.heightIn(min = MinTouchTarget)) {
+                Text(stringResource(R.string.home_activity_cta))
+                Spacer(Modifier.width(4.dp))
+                Icon(painterResource(R.drawable.ic_chevron_right), contentDescription = null, modifier = Modifier.size(16.dp))
             }
         }
     }
@@ -181,75 +200,75 @@ fun ActivitySummaryCard(
 private fun ActivityRing(metrics: ActivityMetrics?) {
     val track = FitnessThemeExtras.colors.surfaceRaised
     val fill = MaterialTheme.colorScheme.primary
-    val progress = metrics?.let { goalFraction(it.steps?.toDouble(), it.stepGoal?.toDouble()) }
-    val emptyDescription = stringResource(R.string.home_activity_ring_empty_description)
-    val stepsLabel = stringResource(R.string.home_activity_steps)
-    val formattedSteps = metrics?.steps?.let { formatInteger(it) }
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .size(112.dp)
-            .clearAndSetSemantics {
-                contentDescription = formattedSteps?.let { "$it $stepsLabel" } ?: emptyDescription
-            },
+    val fraction = metrics?.let { goalFraction(it.steps?.toDouble(), it.stepGoal?.toDouble()) }
+    val label = stringResource(R.string.visual_step_goal)
+    val percent = if (fraction != null && metrics?.steps != null && metrics.stepGoal != null) {
+        formatInteger(Math.round(metrics.steps * 100.0 / metrics.stepGoal)) + "%"
+    } else "—"
+    // TalkBack lee el aro como una sola frase: «Objetivo de pasos: 48 %» o sin meta/datos.
+    val description = when {
+        metrics?.steps == null -> stringResource(R.string.home_activity_ring_empty_description)
+        metrics.stepGoal == null -> stringResource(R.string.health_no_goal_short)
+        else -> "$label: $percent"
+    }
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.widthIn(min = 104.dp).clearAndSetSemantics { contentDescription = description },
     ) {
-        Canvas(Modifier.size(112.dp)) {
-            val stroke = 9.dp.toPx()
-            val inset = stroke / 2f
-            val arcSize = Size(size.width - stroke, size.height - stroke)
-            drawArc(track, 0f, 360f, false, Offset(inset, inset), arcSize, style = Stroke(stroke))
-            if (progress != null && progress > 0f) {
-                drawArc(fill, -90f, 360f * progress, false, Offset(inset, inset), arcSize, style = Stroke(stroke, cap = StrokeCap.Round))
+        Box(Modifier.size(104.dp), contentAlignment = Alignment.Center) {
+            Canvas(Modifier.size(104.dp)) {
+                val stroke = 8.dp.toPx()
+                val inset = stroke / 2
+                val arc = Size(size.width - stroke, size.height - stroke)
+                drawArc(track, 0f, 360f, false, Offset(inset, inset), arc, style = Stroke(stroke))
+                if (fraction != null && fraction > 0f) {
+                    drawArc(fill, -90f, 360f * fraction, false, Offset(inset, inset), arc,
+                        style = Stroke(stroke, cap = StrokeCap.Round))
+                }
+            }
+            Text(percent, style = MetricStyle.copy(fontSize = 26.sp), textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 12.dp), maxLines = 1, softWrap = false,
+                autoSize = TextAutoSize.StepBased(minFontSize = 16.sp, maxFontSize = 26.sp))
+        }
+        Spacer(Modifier.height(6.dp))
+        Text(label, style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+}
+
+private data class DailyMetric(val icon: Int, val label: Int, val value: String)
+
+@Composable
+private fun DailyMetricGrid(metrics: ActivityMetrics?, singleColumn: Boolean, modifier: Modifier) {
+    val cells = listOf(
+        DailyMetric(R.drawable.ic_steps, R.string.visual_steps, metrics?.steps?.let(::formatInteger) ?: "—"),
+        DailyMetric(R.drawable.ic_flame, R.string.visual_active_kcal, metrics?.activeKcal?.let(::formatKcal) ?: "—"),
+        DailyMetric(R.drawable.ic_route, R.string.visual_distance, metrics?.distanceMeters?.let { formatDistance(it, metrics.unit) } ?: "—"),
+        DailyMetric(R.drawable.ic_timer, R.string.visual_active_minutes, metrics?.activeMinutes?.let { stringResource(R.string.home_activity_minutes, formatInteger(it)) } ?: "—"),
+    )
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(14.dp)) {
+        if (singleColumn) {
+            cells.forEach { DailyMetricCell(it, Modifier.fillMaxWidth()) }
+        } else {
+            cells.chunked(2).forEach { pair ->
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    pair.forEach { DailyMetricCell(it, Modifier.weight(1f)) }
+                }
             }
         }
-        // La cifra se ajusta para no salirse del aro con fuente grande.
-        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(horizontal = 16.dp)) {
-            Text(
-                formattedSteps ?: "—",
-                style = MetricStyle,
-                textAlign = TextAlign.Center,
-                maxLines = 1,
-                softWrap = false,
-                autoSize = TextAutoSize.StepBased(minFontSize = 12.sp, maxFontSize = MetricStyle.fontSize),
-            )
-            Text(
-                if (formattedSteps == null) stringResource(R.string.home_activity_no_data) else stepsLabel,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1,
-                softWrap = false,
-                autoSize = TextAutoSize.StepBased(minFontSize = 9.sp, maxFontSize = MaterialTheme.typography.bodyMedium.fontSize),
-            )
-        }
     }
 }
 
 @Composable
-private fun EmptyActivityDetails(onViewHealth: () -> Unit, modifier: Modifier) {
-    Column(modifier = modifier) {
-        Text(
-            stringResource(R.string.home_activity_empty_body),
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Spacer(Modifier.height(Spacing.m))
-        PrimaryButton(text = stringResource(R.string.home_activity_cta), onClick = onViewHealth, iconRes = R.drawable.ic_chevron_right)
-    }
-}
-
-@Composable
-private fun ActivityDetails(metrics: ActivityMetrics, onViewHealth: () -> Unit, modifier: Modifier) {
-    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(Spacing.xs)) {
-        metrics.distanceMeters?.let { Text(formatDistance(it, metrics.unit), style = MaterialTheme.typography.bodyLarge) }
-        metrics.activeKcal?.let { Text(stringResource(R.string.home_activity_kcal, formatInteger(Math.round(it))), style = MaterialTheme.typography.bodyLarge) }
-        metrics.activeMinutes?.let { Text(stringResource(R.string.home_activity_minutes, formatInteger(it)), style = MaterialTheme.typography.bodyLarge) }
-        if (metrics.stepGoal == null && metrics.steps != null) {
-            Text(stringResource(R.string.health_goal_missing_short), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        }
-        Text(stringResource(R.string.home_activity_source), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        TextButton(onClick = onViewHealth, modifier = Modifier.heightIn(min = MinTouchTarget)) {
-            Text(stringResource(R.string.home_activity_cta), style = MaterialTheme.typography.labelLarge)
-        }
+private fun DailyMetricCell(metric: DailyMetric, modifier: Modifier) {
+    Column(modifier.semantics(mergeDescendants = true) {}) {
+        Icon(painterResource(metric.icon), contentDescription = null, tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(19.dp))
+        Spacer(Modifier.height(4.dp))
+        Text(stringResource(metric.label), style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(metric.value, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+            color = MaterialTheme.colorScheme.onSurface)
     }
 }
 
