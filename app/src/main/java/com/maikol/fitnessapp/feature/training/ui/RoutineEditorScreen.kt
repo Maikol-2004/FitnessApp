@@ -36,8 +36,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -59,6 +59,7 @@ import com.maikol.fitnessapp.core.designsystem.theme.FitnessThemeExtras
 import com.maikol.fitnessapp.core.designsystem.theme.MinTouchTarget
 import com.maikol.fitnessapp.core.designsystem.theme.Spacing
 import com.maikol.fitnessapp.core.preferences.UnitSystem
+import com.maikol.fitnessapp.feature.training.catalog.ExerciseCatalog
 import com.maikol.fitnessapp.feature.training.data.LoadText
 import com.maikol.fitnessapp.feature.training.data.loadUnit
 
@@ -74,6 +75,7 @@ fun RoutineEditorRoute(
     val attemptClose = { if (state.hasChanges && !state.saving) confirmDiscard = true else onClose() }
 
     BackHandler(enabled = state.hasChanges, onBack = attemptClose)
+    Box(Modifier.fillMaxSize()) {
     LaunchedEffect(state.savedRoutineId) {
         state.savedRoutineId?.let { id ->
             viewModel.onSavedHandled()
@@ -137,6 +139,37 @@ fun RoutineEditorRoute(
             destructive = true,
         )
     }
+
+    // Capas G1: el editor sigue compuesto debajo (conserva scroll y foco); su «atrás» tiene prioridad.
+    state.picker?.let { picker ->
+        ExercisePickerScreen(
+            picker = picker,
+            inRoutine = state.catalogIdsInForm,
+            onQuery = viewModel::onPickerQuery,
+            onMuscle = viewModel::onPickerMuscle,
+            onEquipment = viewModel::onPickerEquipment,
+            onClearFilters = viewModel::clearPickerFilters,
+            onToggle = viewModel::togglePicked,
+            onInfo = viewModel::openGuide,
+            onCancel = viewModel::closePicker,
+            onConfirm = viewModel::confirmPicker,
+        )
+    }
+    ExerciseCatalog.byId(state.guideId)?.let { exercise ->
+        val picker = state.picker
+        ExerciseGuideScreen(
+            exercise = exercise,
+            onClose = viewModel::closeGuide,
+            selection = picker?.let {
+                GuideSelection(
+                    selected = exercise.id in it.selected,
+                    inRoutine = exercise.id in state.catalogIdsInForm,
+                    onToggle = { viewModel.togglePicked(exercise.id) },
+                )
+            },
+        )
+    }
+    }
 }
 
 @Composable
@@ -182,12 +215,24 @@ private fun RoutineEditorContent(state: EditorUiState, form: RoutineForm, vm: Ro
             )
         }
 
+        if (form.exercises.isEmpty()) {
+            Text(
+                stringResource(R.string.editor_empty_hint),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
         SecondaryButton(
             text = stringResource(R.string.editor_add_exercise),
-            onClick = vm::addExercise,
+            onClick = vm::openPicker,
             iconRes = R.drawable.ic_add,
             modifier = Modifier.fillMaxWidth(),
         )
+        TextButton(onClick = vm::addExercise, modifier = Modifier.fillMaxWidth().heightIn(min = MinTouchTarget)) {
+            Icon(painterResource(R.drawable.ic_edit), contentDescription = null, modifier = Modifier.size(18.dp))
+            Spacer(Modifier.width(Spacing.xs))
+            Text(stringResource(R.string.editor_create_custom), style = MaterialTheme.typography.labelLarge)
+        }
     }
 }
 
@@ -233,13 +278,31 @@ private fun ExerciseEditorCard(
             )
         }
         Spacer(Modifier.height(Spacing.m))
-        EditorTextField(
-            value = exercise.name,
-            onValueChange = { vm.onExerciseNameChange(exercise.id, it) },
-            label = stringResource(R.string.editor_exercise_name_label),
-            error = if (exercise.id in errors.exerciseName) stringResource(R.string.editor_error_exercise_name) else null,
-            capitalization = KeyboardCapitalization.Sentences,
-        )
+        val catalog = ExerciseCatalog.byId(exercise.catalogId)
+        if (catalog != null) {
+            // Del catálogo: el nombre viene de la definición; no se vuelve a pedir.
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f).semantics(mergeDescendants = true) {}) {
+                    Text(exercise.name, style = MaterialTheme.typography.titleLarge)
+                    Text(catalog.metaLine(), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                IconButton(onClick = { vm.openGuide(catalog.id) }) {
+                    Icon(
+                        painterResource(R.drawable.ic_info),
+                        contentDescription = stringResource(R.string.picker_info, exercise.name),
+                        tint = MaterialTheme.colorScheme.primary,
+                    )
+                }
+            }
+        } else {
+            EditorTextField(
+                value = exercise.name,
+                onValueChange = { vm.onExerciseNameChange(exercise.id, it) },
+                label = stringResource(R.string.editor_exercise_name_label),
+                error = if (exercise.id in errors.exerciseName) stringResource(R.string.editor_error_exercise_name) else null,
+                capitalization = KeyboardCapitalization.Sentences,
+            )
+        }
         Spacer(Modifier.height(Spacing.s))
         EditorTextField(
             value = exercise.notes,

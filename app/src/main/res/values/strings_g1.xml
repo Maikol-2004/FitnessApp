@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- G1: biblioteca de ejercicios y guía -->
+    <string name="picker_title">Elegir ejercicios</string>
+    <string name="picker_search">Buscar por nombre o músculo</string>
+    <string name="picker_clear_search">Borrar búsqueda</string>
+    <string name="picker_filter_muscle">Músculo</string>
+    <string name="picker_filter_equipment">Equipo</string>
+    <string name="picker_all_muscles">Todos</string>
+    <string name="picker_all_equipment">Cualquiera</string>
+    <string name="picker_empty_title">Ningún ejercicio coincide</string>
+    <string name="picker_empty_body">Prueba otra palabra o quita algún filtro.</string>
+    <string name="picker_clear_filters">Limpiar filtros</string>
+    <string name="picker_in_routine">Ya en la rutina</string>
+    <string name="picker_info">Ver ficha de %1$s</string>
+    <string name="picker_select_state">Seleccionado</string>
+    <string name="picker_unselected_state">No seleccionado</string>
+    <string name="picker_none_selected">Marca uno o varios ejercicios</string>
+    <plurals name="picker_selected_count">
+        <item quantity="one">%d seleccionado</item>
+        <item quantity="other">%d seleccionados</item>
+    </plurals>
+    <plurals name="picker_add">
+        <item quantity="one">Añadir %d ejercicio</item>
+        <item quantity="other">Añadir %d ejercicios</item>
+    </plurals>
+    <plurals name="picker_results">
+        <item quantity="one">%d ejercicio</item>
+        <item quantity="other">%d ejercicios</item>
+    </plurals>
+    <string name="picker_add_none">Añadir ejercicios</string>
+    <string name="editor_create_custom">Crear ejercicio personalizado</string>
+    <string name="editor_empty_hint">Pulsa «Añadir ejercicio» para elegir movimientos del catálogo por músculo o equipo.</string>
+
+    <string name="guide_primary">Músculo principal</string>
+    <string name="guide_secondary">También trabaja</string>
+    <string name="guide_equipment">Equipo</string>
+    <string name="guide_accessory">Apoyo: %1$s</string>
+    <string name="guide_difficulty">Dificultad</string>
+    <string name="guide_text_only">Guía en texto</string>
+    <string name="guide_text_only_body">Sin demostración visual por ahora: sigue la preparación y los pasos escritos.</string>
+    <string name="guide_preparation">Preparación</string>
+    <string name="guide_steps">Ejecución</string>
+    <string name="guide_breathing">Respiración</string>
+    <string name="guide_mistakes">Errores comunes</string>
+    <string name="guide_add">Añadir a la selección</string>
+    <string name="guide_selected">Seleccionado · quitar</string>
+    <string name="session_open_guide">Ver guía de %1$s</string>
+</resources>

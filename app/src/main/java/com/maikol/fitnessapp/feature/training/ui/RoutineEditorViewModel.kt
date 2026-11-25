@@ -11,6 +11,11 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.maikol.fitnessapp.FitnessApplication
 import com.maikol.fitnessapp.core.preferences.UnitSystem
 import com.maikol.fitnessapp.core.preferences.UserPreferencesRepository
+import com.maikol.fitnessapp.feature.training.catalog.CatalogExercise
+import com.maikol.fitnessapp.feature.training.catalog.Equipment
+import com.maikol.fitnessapp.feature.training.catalog.ExerciseCatalog
+import com.maikol.fitnessapp.feature.training.catalog.MuscleGroup
+import com.maikol.fitnessapp.feature.training.catalog.template
 import com.maikol.fitnessapp.feature.training.data.LoadText
 import com.maikol.fitnessapp.feature.training.data.TrainingRepository
 import kotlinx.coroutines.CancellationException
@@ -34,7 +39,14 @@ data class EditorUiState(
     val saveFailed: Boolean = false,
     /** Evento: rutina guardada (se consume al navegar). */
     val savedRoutineId: String? = null,
+    /** Selector del catálogo abierto (null = cerrado). Cerrarlo sin confirmar no toca el borrador. */
+    val picker: PickerState? = null,
+    /** Ficha abierta encima del selector o del editor. */
+    val guideId: String? = null,
 ) {
+    /** Definiciones del catálogo ya presentes en el borrador. */
+    val catalogIdsInForm: Set<String> get() = form?.exercises?.mapNotNull { it.catalogId }?.toSet().orEmpty()
+
     val errors: FormErrors get() = (form?.validate(unit) as? FormResult.Invalid)?.errors ?: FormErrors()
     val visibleErrors: FormErrors get() = if (showErrors) errors else FormErrors()
     val hasChanges: Boolean get() = form != null && form != initialForm
@@ -62,7 +74,12 @@ class RoutineEditorViewModel(
             val restoredInitial = savedState.get<Bundle>(KEY_INITIAL)?.toRoutineForm()
             if (restoredForm != null && restoredInitial != null) {
                 _state.update {
-                    it.copy(loading = false, unit = unit, form = restoredForm, initialForm = restoredInitial, showErrors = savedState[KEY_SHOW_ERRORS] ?: false)
+                    it.copy(
+                        loading = false, unit = unit, form = restoredForm, initialForm = restoredInitial,
+                        showErrors = savedState[KEY_SHOW_ERRORS] ?: false,
+                        picker = savedState.get<Bundle>(KEY_PICKER)?.toPickerState(),
+                        guideId = savedState[KEY_GUIDE],
+                    )
                 }
                 return@launch
             }
@@ -80,7 +97,63 @@ class RoutineEditorViewModel(
     fun onNameChange(value: String) = edit { it.copy(name = value.take(80)) }
     fun onNotesChange(value: String) = edit { it.copy(notes = value.take(500)) }
 
+    /** «Crear ejercicio personalizado»: camino secundario con nombre libre (como antes de G1). */
     fun addExercise() = edit { it.copy(exercises = it.exercises + newExercise()) }
+
+    // ---- Selector del catálogo (G1) ----
+
+    fun openPicker() = updatePicker { PickerState() }
+    fun closePicker() = updatePicker { null }
+    fun onPickerQuery(value: String) = updatePicker { it?.copy(query = value.take(60)) }
+    fun onPickerMuscle(value: MuscleGroup?) = updatePicker { it?.copy(muscle = value) }
+    fun onPickerEquipment(value: Equipment?) = updatePicker { it?.copy(equipment = value) }
+    fun clearPickerFilters() = updatePicker { it?.copy(query = "", muscle = null, equipment = null) }
+
+    /** Marca o desmarca conservando el orden de selección. Lo ya presente en el borrador no se vuelve a añadir. */
+    fun togglePicked(catalogId: String) = updatePicker { p ->
+        if (p == null || catalogId in _state.value.catalogIdsInForm || ExerciseCatalog.byId(catalogId) == null) p
+        else p.copy(selected = if (catalogId in p.selected) p.selected - catalogId else p.selected + catalogId)
+    }
+
+    /** Inserta lo elegido, en el orden de selección, con plantilla de series editable y carga vacía. */
+    fun confirmPicker() {
+        val picker = _state.value.picker ?: return
+        val present = _state.value.catalogIdsInForm
+        val added = picker.selected.distinct().filterNot { it in present }.mapNotNull { ExerciseCatalog.byId(it) }.map { catalogExercise(it) }
+        _state.update { it.copy(picker = null, guideId = null) }
+        savedState[KEY_PICKER] = null
+        savedState[KEY_GUIDE] = null
+        if (added.isNotEmpty()) edit { it.copy(exercises = it.exercises + added) }
+    }
+
+    fun openGuide(catalogId: String) {
+        if (ExerciseCatalog.byId(catalogId) == null) return
+        savedState[KEY_GUIDE] = catalogId
+        _state.update { it.copy(guideId = catalogId) }
+    }
+
+    fun closeGuide() {
+        savedState[KEY_GUIDE] = null
+        _state.update { it.copy(guideId = null) }
+    }
+
+    private fun updatePicker(transform: (PickerState?) -> PickerState?) {
+        val next = transform(_state.value.picker)
+        savedState[KEY_PICKER] = next?.toBundle()
+        _state.update { it.copy(picker = next) }
+    }
+
+    private fun catalogExercise(def: CatalogExercise): ExerciseForm {
+        val t = def.template()
+        return ExerciseForm(
+            id = repository.newId(),
+            key = repository.newId(),
+            name = def.name,
+            notes = "",
+            sets = List(t.sets) { SetForm(repository.newId(), t.reps.toString(), LoadText("", null, ""), t.restSeconds.toString(), false) },
+            catalogId = def.id,
+        )
+    }
 
     fun removeExercise(id: String) = edit { f -> f.copy(exercises = f.exercises.filterNot { it.id == id }) }
 
@@ -146,7 +219,8 @@ class RoutineEditorViewModel(
 
     fun onSavedHandled() = _state.update { it.copy(savedRoutineId = null) }
 
-    private fun emptyForm() = RoutineForm(repository.newId(), "", "", listOf(newExercise()))
+    /** Sin ejercicios: el camino principal es «Añadir ejercicio» desde el catálogo. */
+    private fun emptyForm() = RoutineForm(repository.newId(), "", "", emptyList())
 
     private fun newExercise() = ExerciseForm(
         id = repository.newId(),
@@ -178,6 +252,8 @@ class RoutineEditorViewModel(
         private const val KEY_INITIAL = "editor_initial"
         private const val KEY_UNIT = "editor_unit"
         private const val KEY_SHOW_ERRORS = "editor_show_errors"
+        private const val KEY_PICKER = "editor_picker"
+        private const val KEY_GUIDE = "editor_guide"
         private const val DEFAULT_REST = "90"
 
         val Factory = viewModelFactory {

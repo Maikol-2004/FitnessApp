@@ -38,7 +38,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -80,6 +82,7 @@ import com.maikol.fitnessapp.core.designsystem.theme.FitnessThemeExtras
 import com.maikol.fitnessapp.core.designsystem.theme.MinTouchTarget
 import com.maikol.fitnessapp.core.designsystem.theme.Spacing
 import com.maikol.fitnessapp.core.preferences.UnitSystem
+import com.maikol.fitnessapp.feature.training.catalog.ExerciseCatalog
 import com.maikol.fitnessapp.feature.training.data.ClockReading
 import com.maikol.fitnessapp.feature.training.data.PerformedSet
 import com.maikol.fitnessapp.feature.training.data.Session
@@ -147,7 +150,10 @@ private fun SessionScreen(state: SessionUiState, session: Session, vm: SessionVi
     val uncertain = remember(session.timer) { SessionTiming.delta(session.timer, vm.now()).uncertain }
     // Poca altura (horizontal): el descanso pasa al contenido desplazable para no tapar la tabla de series.
     val compactHeight = LocalConfiguration.current.screenHeightDp < 520
+    // G1: ficha del ejercicio como capa local (sobrevive a la rotación); el temporizador sigue en el ViewModel.
+    var guideId by rememberSaveable { mutableStateOf<String?>(null) }
 
+    Box(Modifier.fillMaxSize()) {
     Column(Modifier.fillMaxSize().imePadding()) {
         TrainingTopBar(
             title = stringResource(R.string.session_title),
@@ -192,6 +198,7 @@ private fun SessionScreen(state: SessionUiState, session: Session, vm: SessionVi
                     count = session.exercises.size,
                     state = state,
                     vm = vm,
+                    onOpenGuide = { guideId = it },
                 )
             }
         }
@@ -210,6 +217,8 @@ private fun SessionScreen(state: SessionUiState, session: Session, vm: SessionVi
                 modifier = Modifier.weight(1f),
             )
         }
+    }
+    ExerciseCatalog.byId(guideId)?.let { ExerciseGuideScreen(it, onClose = { guideId = null }) }
     }
 }
 
@@ -279,7 +288,14 @@ private fun rememberTicker(
 }
 
 @Composable
-private fun ExerciseSection(exercise: SessionExercise, index: Int, count: Int, state: SessionUiState, vm: SessionViewModel) {
+private fun ExerciseSection(
+    exercise: SessionExercise,
+    index: Int,
+    count: Int,
+    state: SessionUiState,
+    vm: SessionViewModel,
+    onOpenGuide: (String) -> Unit,
+) {
     Column(verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = Spacing.s)) {
             Text(
@@ -295,7 +311,23 @@ private fun ExerciseSection(exercise: SessionExercise, index: Int, count: Int, s
                 Icon(painterResource(R.drawable.ic_chevron_right), contentDescription = stringResource(R.string.session_next_exercise))
             }
         }
-        Text(exercise.name, style = MaterialTheme.typography.headlineMedium)
+        val guide = ExerciseCatalog.byId(exercise.catalogId)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(exercise.name, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.weight(1f))
+            // La ficha es una capa local: no toca el temporizador ni el descanso del ViewModel.
+            if (guide != null) {
+                IconButton(onClick = { onOpenGuide(guide.id) }) {
+                    Icon(
+                        painterResource(R.drawable.ic_info),
+                        contentDescription = stringResource(R.string.session_open_guide, exercise.name),
+                        tint = MaterialTheme.colorScheme.primary,
+                    )
+                }
+            }
+        }
+        if (guide != null) {
+            Text(guide.metaLine(), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
         if (exercise.notes.isNotBlank()) {
             Text(exercise.notes, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }

@@ -56,6 +56,8 @@ class TrainingFlowTest {
         // H2-02: guardar vacío marca los campos, no navega.
         rule.onNodeWithText("Guardar rutina").performClick()
         waitForText("Ponle un nombre a la rutina.")
+        // G1: el borrador empieza sin ejercicios; aquí se cubre el camino secundario «personalizado».
+        rule.onNodeWithText("Crear ejercicio personalizado").performScrollTo().performClick()
         waitForText("Escribe el nombre del ejercicio.")
 
         rule.onNode(hasSetTextAction() and hasText("Nombre de la rutina")).performTextReplacement("Prueba UI")

@@ -2,6 +2,8 @@ package com.maikol.fitnessapp.feature.training.ui
 
 import android.os.Bundle
 import com.maikol.fitnessapp.core.preferences.UnitSystem
+import com.maikol.fitnessapp.feature.training.catalog.Equipment
+import com.maikol.fitnessapp.feature.training.catalog.MuscleGroup
 import com.maikol.fitnessapp.feature.training.data.LoadText
 import com.maikol.fitnessapp.feature.training.data.Parsed
 import com.maikol.fitnessapp.feature.training.data.PlannedSet
@@ -13,7 +15,15 @@ import com.maikol.fitnessapp.feature.training.data.parseRestSeconds
 /** Formulario del editor: texto tal como lo escribe la persona (incluidos valores aún no válidos). */
 data class SetForm(val id: String, val reps: String, val load: LoadText, val rest: String, val warmup: Boolean)
 
-data class ExerciseForm(val id: String, val key: String, val name: String, val notes: String, val sets: List<SetForm>)
+/** [catalogId] != null: ejercicio del catálogo (nombre fijo, ficha disponible). null: personalizado. */
+data class ExerciseForm(
+    val id: String,
+    val key: String,
+    val name: String,
+    val notes: String,
+    val sets: List<SetForm>,
+    val catalogId: String? = null,
+)
 
 data class RoutineForm(val id: String, val name: String, val notes: String, val exercises: List<ExerciseForm>)
 
@@ -50,7 +60,7 @@ fun RoutineForm.validate(unit: UnitSystem): FormResult {
         if (e.name.isBlank()) exerciseName += e.id
         if (e.sets.isEmpty()) noSets += e.id
         RoutineExercise(
-            id = e.id, key = e.key, name = e.name.trim(), notes = e.notes.trim(),
+            id = e.id, key = e.key, name = e.name.trim(), notes = e.notes.trim(), catalogId = e.catalogId,
             sets = e.sets.mapNotNull { s ->
                 val r = parseReps(s.reps)
                 val kg = s.load.resolveKg(unit)
@@ -78,7 +88,7 @@ fun Routine.toForm(unit: UnitSystem) = RoutineForm(
     notes = notes,
     exercises = exercises.map { e ->
         ExerciseForm(
-            id = e.id, key = e.key, name = e.name, notes = e.notes,
+            id = e.id, key = e.key, name = e.name, notes = e.notes, catalogId = e.catalogId,
             sets = e.sets.map { s -> SetForm(s.id, s.reps.toString(), LoadText.of(s.loadKg, unit), s.restSeconds.toString(), s.warmup) },
         )
     },
@@ -99,6 +109,7 @@ fun RoutineForm.toBundle(): Bundle = Bundle().apply {
                     putString("key", e.key)
                     putString("name", e.name)
                     putString("notes", e.notes)
+                    e.catalogId?.let { putString("catalogId", it) }
                     putParcelableArrayList(
                         "sets",
                         ArrayList(
@@ -132,6 +143,7 @@ fun Bundle.toRoutineForm(): RoutineForm = RoutineForm(
             key = e.getString("key").orEmpty(),
             name = e.getString("name").orEmpty(),
             notes = e.getString("notes").orEmpty(),
+            catalogId = e.getString("catalogId"),
             sets = e.getParcelableArrayList<Bundle>("sets").orEmpty().map { s ->
                 SetForm(
                     id = s.getString("id").orEmpty(),
@@ -147,4 +159,28 @@ fun Bundle.toRoutineForm(): RoutineForm = RoutineForm(
             },
         )
     },
+)
+
+// ---- Selector del catálogo (G1): consulta, filtros y selección ordenada ----
+
+data class PickerState(
+    val query: String = "",
+    val muscle: MuscleGroup? = null,
+    val equipment: Equipment? = null,
+    /** IDs del catálogo en el orden en que se marcaron. */
+    val selected: List<String> = emptyList(),
+)
+
+fun PickerState.toBundle(): Bundle = Bundle().apply {
+    putString("query", query)
+    muscle?.let { putString("muscle", it.name) }
+    equipment?.let { putString("equipment", it.name) }
+    putStringArrayList("selected", ArrayList(selected))
+}
+
+fun Bundle.toPickerState(): PickerState = PickerState(
+    query = getString("query").orEmpty(),
+    muscle = getString("muscle")?.let { n -> MuscleGroup.entries.firstOrNull { it.name == n } },
+    equipment = getString("equipment")?.let { n -> Equipment.entries.firstOrNull { it.name == n } },
+    selected = getStringArrayList("selected").orEmpty(),
 )

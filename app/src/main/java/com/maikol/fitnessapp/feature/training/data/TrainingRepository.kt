@@ -28,7 +28,14 @@ data class RoutineSummary(
 
 data class PlannedSet(val id: String, val reps: Int, val loadKg: Double?, val restSeconds: Int, val warmup: Boolean)
 
-data class RoutineExercise(val id: String, val key: String, val name: String, val notes: String, val sets: List<PlannedSet>)
+data class RoutineExercise(
+    val id: String,
+    val key: String,
+    val name: String,
+    val notes: String,
+    val sets: List<PlannedSet>,
+    val catalogId: String? = null,
+)
 
 data class Routine(
     val id: String,
@@ -52,7 +59,14 @@ data class PerformedSet(
     val completed: Boolean,
 )
 
-data class SessionExercise(val id: String, val key: String, val name: String, val notes: String, val sets: List<PerformedSet>)
+data class SessionExercise(
+    val id: String,
+    val key: String,
+    val name: String,
+    val notes: String,
+    val sets: List<PerformedSet>,
+    val catalogId: String? = null,
+)
 
 data class Session(
     val id: String,
@@ -140,7 +154,7 @@ open class TrainingRepository(
             dao.deleteRoutineExercises(routine.id)
             dao.insertRoutineExercises(
                 routine.exercises.mapIndexed { i, e ->
-                    RoutineExerciseEntity(e.id, routine.id, e.key, i, e.name.trim(), e.notes.trim())
+                    RoutineExerciseEntity(e.id, routine.id, e.key, i, e.name.trim(), e.notes.trim(), e.catalogId)
                 },
             )
             dao.insertPlannedSets(
@@ -202,7 +216,7 @@ open class TrainingRepository(
                 currentExercise = 0,
             ),
         )
-        val exercises = routine.exercises.mapIndexed { i, e -> SessionExerciseEntity(newId(), sessionId, e.key, i, e.name, e.notes) }
+        val exercises = routine.exercises.mapIndexed { i, e -> SessionExerciseEntity(newId(), sessionId, e.key, i, e.name, e.notes, e.catalogId) }
         dao.insertSessionExercises(exercises)
         dao.insertPerformedSets(
             routine.exercises.zip(exercises).flatMap { (planned, copy) ->
@@ -334,6 +348,7 @@ private fun RoutineWithExercises.toDomain() = Routine(
     exercises = exercises.sortedBy { it.exercise.position }.map { e ->
         RoutineExercise(
             id = e.exercise.id, key = e.exercise.exerciseKey, name = e.exercise.name, notes = e.exercise.notes,
+            catalogId = e.exercise.catalogId,
             sets = e.sets.sortedBy { it.position }.map { PlannedSet(it.id, it.reps, it.loadKg, it.restSeconds, it.warmup) },
         )
     },
@@ -351,6 +366,7 @@ private fun SessionWithExercises.toDomain() = Session(
     exercises = exercises.sortedBy { it.exercise.position }.map { e ->
         SessionExercise(
             id = e.exercise.id, key = e.exercise.exerciseKey, name = e.exercise.name, notes = e.exercise.notes,
+            catalogId = e.exercise.catalogId,
             sets = e.sets.sortedBy { it.position }.map {
                 PerformedSet(it.id, it.position, it.targetReps, it.targetLoadKg, it.restSeconds, it.warmup, it.reps, it.loadKg, it.completedAt != null)
             },

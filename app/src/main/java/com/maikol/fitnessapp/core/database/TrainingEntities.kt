@@ -1,5 +1,6 @@
 package com.maikol.fitnessapp.core.database
 
+import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -39,6 +40,8 @@ data class RoutineExerciseEntity(
     val position: Int,
     val name: String,
     val notes: String,
+    /** G1: definición del catálogo local (null = ejercicio personalizado o anterior a G1). No sustituye a exerciseKey. */
+    @ColumnInfo(defaultValue = "NULL") val catalogId: String? = null,
 )
 
 @Entity(
@@ -107,6 +110,8 @@ data class SessionExerciseEntity(
     val position: Int,
     val name: String,
     val notes: String,
+    /** G1: definición del catálogo local (null = ejercicio personalizado o anterior a G1). No sustituye a exerciseKey. */
+    @ColumnInfo(defaultValue = "NULL") val catalogId: String? = null,
 )
 
 @Entity(
