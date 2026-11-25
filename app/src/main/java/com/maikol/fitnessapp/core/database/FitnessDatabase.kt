@@ -31,8 +31,9 @@ interface AppMetadataDao {
 }
 
 /**
- * v1 (H0): app_metadata. v2 (H2): rutinas y sesiones. La migración 1→2 solo crea tablas nuevas
- * (AutoMigration generada desde los esquemas exportados) y conserva app_metadata.
+ * v1 (H0): app_metadata. v2 (H2): rutinas y sesiones. v3 (F1): registros manuales de actividad, comidas,
+ * agua, sueño y peso. Cada migración solo crea tablas nuevas (AutoMigration desde los esquemas exportados)
+ * y conserva todo lo anterior.
  */
 @Database(
     entities = [
@@ -43,14 +44,20 @@ interface AppMetadataDao {
         WorkoutSessionEntity::class,
         SessionExerciseEntity::class,
         PerformedSetEntity::class,
+        DailyActivityEntity::class,
+        MealEntryEntity::class,
+        WaterEntryEntity::class,
+        SleepEntryEntity::class,
+        BodyWeightEntity::class,
     ],
-    version = 2,
+    version = 3,
     exportSchema = true,
-    autoMigrations = [AutoMigration(from = 1, to = 2)],
+    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3)],
 )
 abstract class FitnessDatabase : RoomDatabase() {
     abstract fun appMetadataDao(): AppMetadataDao
     abstract fun trainingDao(): TrainingDao
+    abstract fun trackingDao(): TrackingDao
 
     companion object {
         const val FILE_NAME = "fitness.db"

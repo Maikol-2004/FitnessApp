@@ -1,5 +1,6 @@
 package com.maikol.fitnessapp.feature.training.ui
 
+import com.maikol.fitnessapp.core.navigation.dockBottomPadding
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -111,7 +112,7 @@ fun TrainingScreen(
     var showArchived by rememberSaveable { mutableStateOf(false) }
     Box(modifier.fillMaxSize()) {
         LazyColumn(
-            contentPadding = PaddingValues(bottom = Spacing.xl),
+            contentPadding = PaddingValues(bottom = Spacing.xl + dockBottomPadding()),
             modifier = Modifier.fillMaxSize(),
         ) {
             item(key = "hero") {

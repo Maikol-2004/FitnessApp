@@ -46,13 +46,13 @@ class MigrationTest {
     }
 
     @Test
-    fun v1To2_keepsMetadata_andTrainingTablesWork() = runBlocking {
+    fun v1ToCurrent_keepsMetadata_andTrainingTablesWork() = runBlocking {
         createV1()
         val db = Room.databaseBuilder(context, FitnessDatabase::class.java, name).build()
         try {
             assertEquals("1700000000000", db.appMetadataDao().observeValue(FitnessDatabase.KEY_CREATED_AT).first())
             assertEquals("conservado", db.appMetadataDao().observeValue("prueba").first())
-            assertEquals(2, db.openHelper.readableDatabase.version)
+            assertEquals(3, db.openHelper.readableDatabase.version)
 
             val repo = TrainingRepository(db, SystemTrainingClock)
             val routine = Routine("r", "Prueba", "", false, listOf(RoutineExercise("e", "k", "Remo", "", listOf(PlannedSet("s", 10, 20.0, 90, false)))))

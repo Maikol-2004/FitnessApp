@@ -9,7 +9,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.ui.res.painterResource
 import com.maikol.fitnessapp.core.designsystem.theme.FitnessThemeExtras
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import com.maikol.fitnessapp.core.designsystem.theme.TitaniumChampagneTokens
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -36,11 +41,18 @@ import com.maikol.fitnessapp.R
 import com.maikol.fitnessapp.core.designsystem.motion.LocalMotionEnabled
 import com.maikol.fitnessapp.core.designsystem.motion.pressScale
 import com.maikol.fitnessapp.core.designsystem.theme.FitnessTheme
-import com.maikol.fitnessapp.core.designsystem.theme.MinTouchTarget
 import com.maikol.fitnessapp.core.designsystem.theme.Spacing
 
+private val ButtonShape = RoundedCornerShape(14.dp)
+private val ButtonHeight = 50.dp
+private val PrimaryRim = Brush.verticalGradient(0f to Color.White.copy(alpha = 0.38f), 0.45f to Color.Transparent)
+private val SecondaryRim = Brush.verticalGradient(
+    0f to Color.White.copy(alpha = 0.16f),
+    1f to Color(TitaniumChampagneTokens.PRIMARY).copy(alpha = 0.10f),
+)
+
 /**
- * Acción principal en champán, altura mínima 48 dp.
+ * Acción principal en champán mate, radio 14 dp y altura mínima 50 dp.
  * [busy]: operación real en curso; bloquea repeticiones y, si supera 200 ms, muestra carga dentro
  * del botón sin cambiar su ancho y anunciando la etiqueta + «Cargando».
  */
@@ -60,11 +72,13 @@ fun PrimaryButton(
     Button(
         onClick = { if (!busy) onClick() },
         enabled = enabled,
-        shape = MaterialTheme.shapes.medium,
+        shape = ButtonShape,
         interactionSource = interactionSource,
         modifier = modifier
-            .heightIn(min = MinTouchTarget)
+            .heightIn(min = ButtonHeight)
             .pressScale(interactionSource, LocalMotionEnabled.current)
+            // Reflejo superior muy tenue sobre el champán mate (docs/11_LIQUID_GLASS.md).
+            .then(if (enabled) Modifier.border(1.dp, PrimaryRim, ButtonShape) else Modifier)
             .then(if (showSpinner) Modifier.semantics { contentDescription = "$text, $loadingLabel" } else Modifier),
     ) {
         Box(contentAlignment = Alignment.Center) {
@@ -96,14 +110,16 @@ fun SecondaryButton(
     Button(
         onClick = onClick,
         enabled = enabled,
-        shape = MaterialTheme.shapes.medium,
+        shape = ButtonShape,
         interactionSource = interactionSource,
         colors = ButtonDefaults.buttonColors(
-            containerColor = FitnessThemeExtras.colors.surfaceRaised,
+            // Carbón translúcido con el mismo borde que el dock de cristal, sin blur propio.
+            containerColor = FitnessThemeExtras.colors.surfaceRaised.copy(alpha = 0.86f),
             contentColor = MaterialTheme.colorScheme.onSurface,
         ),
         modifier = modifier
-            .heightIn(min = MinTouchTarget)
+            .heightIn(min = ButtonHeight)
+            .border(1.dp, SecondaryRim, ButtonShape)
             .pressScale(interactionSource, LocalMotionEnabled.current),
     ) {
         ButtonLabel(text, iconRes)

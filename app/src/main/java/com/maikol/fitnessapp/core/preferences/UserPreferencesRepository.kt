@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -15,6 +16,22 @@ import java.io.IOException
 /** Sistema de unidades preferido. Los valores se almacenan siempre en kg/m; esto solo afecta a la presentación. */
 enum class UnitSystem { METRIC, IMPERIAL }
 
+/**
+ * Metas diarias opcionales que introduce el usuario (no son una prescripción). Una sola definición de
+ * rango y unidad para Perfil y para los accesos desde cada módulo.
+ */
+enum class Goal(val unit: String, val min: Int, val max: Int) {
+    STEPS("pasos", 100, 100_000),
+    WATER("ml", 250, 10_000),
+    KCAL("kcal", 500, 10_000),
+    PROTEIN("g", 1, 1_000),
+    CARBS("g", 1, 1_000),
+    FAT("g", 1, 1_000),
+    ;
+
+    fun isValid(value: Int) = value in min..max
+}
+
 data class UserPreferences(
     /** Nombre local opcional; null cuando no se ha guardado ninguno (saludo «Hola»). */
     val displayName: String? = null,
@@ -23,6 +40,8 @@ data class UserPreferences(
     val reduceMotion: Boolean = false,
     /** Rutina elegida como «Próximo entrenamiento» (ID local). Sin calendario: solo una selección. */
     val nextRoutineId: String? = null,
+    /** Metas configuradas; una meta ausente no existe en el mapa. */
+    val goals: Map<Goal, Int> = emptyMap(),
 )
 
 /**
@@ -41,6 +60,7 @@ class UserPreferencesRepository(
                 unitSystem = prefs[Keys.UNIT_SYSTEM].toUnitSystem(),
                 reduceMotion = prefs[Keys.REDUCE_MOTION] ?: false,
                 nextRoutineId = prefs[Keys.NEXT_ROUTINE_ID],
+                goals = Goal.entries.mapNotNull { goal -> prefs[goalKey(goal)]?.takeIf(goal::isValid)?.let { goal to it } }.toMap(),
             )
         }
         .distinctUntilChanged()
@@ -67,6 +87,18 @@ class UserPreferencesRepository(
             if (routineId == null) prefs.remove(Keys.NEXT_ROUTINE_ID) else prefs[Keys.NEXT_ROUTINE_ID] = routineId
         }
     }
+
+    /** Guarda todas las metas a la vez: null elimina la meta. Valores fuera de rango se rechazan antes. */
+    suspend fun setGoals(goals: Map<Goal, Int?>) {
+        require(goals.all { (goal, value) -> value == null || goal.isValid(value) })
+        dataStore.edit { prefs ->
+            goals.forEach { (goal, value) ->
+                if (value == null) prefs.remove(goalKey(goal)) else prefs[goalKey(goal)] = value
+            }
+        }
+    }
+
+    private fun goalKey(goal: Goal) = intPreferencesKey("goal_${goal.name.lowercase()}")
 
     private fun String?.toUnitSystem(): UnitSystem =
         UnitSystem.entries.firstOrNull { it.name == this } ?: UnitSystem.METRIC

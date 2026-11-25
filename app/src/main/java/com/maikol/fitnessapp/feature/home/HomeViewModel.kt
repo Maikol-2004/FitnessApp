@@ -6,7 +6,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.maikol.fitnessapp.FitnessApplication
+import com.maikol.fitnessapp.core.preferences.Goal
 import com.maikol.fitnessapp.core.preferences.UserPreferencesRepository
+import com.maikol.fitnessapp.core.tracking.TrackingRepository
 import com.maikol.fitnessapp.feature.training.data.OpenSession
 import com.maikol.fitnessapp.feature.training.data.RoutineSummary
 import com.maikol.fitnessapp.feature.training.data.StartResult
@@ -16,6 +18,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -35,10 +39,11 @@ sealed interface NextWorkout {
 sealed interface HomeUiState {
     data object Loading : HomeUiState
 
-    /** Actividad sigue en su estado vacío real (sin fuentes hasta fases posteriores). */
     data class Ready(
         val displayName: String?,
         val next: NextWorkout,
+        /** Registro manual de hoy; null si no hay. */
+        val activity: ActivityMetrics? = null,
         val starting: Boolean = false,
         val startFailed: Boolean = false,
         /** Evento: sesión que abrir tras iniciar. */
@@ -51,6 +56,7 @@ private data class StartState(val starting: Boolean = false, val failed: Boolean
 class HomeViewModel(
     preferencesRepository: UserPreferencesRepository,
     private val trainingRepository: TrainingRepository,
+    trackingRepository: TrackingRepository,
 ) : ViewModel() {
 
     private val start = MutableStateFlow(StartState())
@@ -60,7 +66,9 @@ class HomeViewModel(
         trainingRepository.observeRoutines(),
         trainingRepository.observeOpenSession(),
         start,
-    ) { prefs, routines, open, s ->
+        // «Hoy» se resuelve al suscribirse: al volver a Inicio otro día se lee el registro del día nuevo.
+        flow { emitAll(trackingRepository.observeActivity(trackingRepository.today())) },
+    ) { prefs, routines, open, s, today ->
         val active = routines.filterNot { it.archived }
         val selected = active.firstOrNull { it.id == prefs.nextRoutineId }
         val next = when {
@@ -69,7 +77,10 @@ class HomeViewModel(
             active.isNotEmpty() -> NextWorkout.Planned(active.first(), selected = false)
             else -> NextWorkout.None
         }
-        HomeUiState.Ready(prefs.displayName, next, s.starting, s.failed, s.sessionToOpen)
+        val activity = today?.let {
+            ActivityMetrics(it.steps, prefs.goals[Goal.STEPS], it.distanceMeters, it.activeKcal, it.activeMinutes, prefs.unitSystem)
+        }
+        HomeUiState.Ready(prefs.displayName, next, activity, s.starting, s.failed, s.sessionToOpen)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HomeUiState.Loading)
 
     /** Doble toque: ignorado mientras se inicia; el repositorio garantiza además una sola sesión abierta. */
@@ -97,7 +108,7 @@ class HomeViewModel(
         val Factory = viewModelFactory {
             initializer {
                 val container = (this[APPLICATION_KEY] as FitnessApplication).container
-                HomeViewModel(container.userPreferencesRepository, container.trainingRepository)
+                HomeViewModel(container.userPreferencesRepository, container.trainingRepository, container.trackingRepository)
             }
         }
     }

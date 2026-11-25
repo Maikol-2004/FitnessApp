@@ -17,6 +17,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.maikol.fitnessapp.FitnessApplication
 import com.maikol.fitnessapp.MainActivity
 import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -37,6 +38,8 @@ class TrainingFlowTest {
         runCatching { rule.onNodeWithText(text, substring = true).assertExists() }.isSuccess
     }
 
+    // Prueba destructiva: parte de una base vacía y la deja vacía (solo en emulador de pruebas).
+    @Before
     @After
     fun cleanUp() {
         ApplicationProvider.getApplicationContext<FitnessApplication>().container.database.clearAllTables()

@@ -19,32 +19,32 @@ enum class HomeCategory(
     @param:StringRes val descriptionRes: Int,
     @param:DrawableRes val iconRes: Int,
     @param:DrawableRes val photoRes: Int,
-    /** Encuadre por foto para que el sujeto quede visible a la derecha. */
+    /** Encuadre: las fotos v2 ya llevan el sujeto completo en el tercio derecho (design/polish-v2). */
     val photoAlignment: Alignment,
     val target: CategoryTarget,
 ) {
     TRAINING(
         R.string.category_training, R.string.category_training_desc, R.drawable.ic_dumbbell,
-        R.drawable.h1_training, Alignment.CenterEnd, CategoryTarget.Root(TopLevelDestination.TRAINING),
+        R.drawable.category_training_right_v2, Alignment.Center, CategoryTarget.Root(TopLevelDestination.TRAINING),
     ),
     HEALTH(
         R.string.category_health, R.string.category_health_desc, R.drawable.ic_heart,
-        R.drawable.h1_health, Alignment.CenterEnd, CategoryTarget.Root(TopLevelDestination.HEALTH),
+        R.drawable.category_health_right_v2, Alignment.Center, CategoryTarget.Root(TopLevelDestination.HEALTH),
     ),
     NUTRITION(
         R.string.category_nutrition, R.string.category_nutrition_desc, R.drawable.ic_restaurant,
-        R.drawable.h1_nutrition, Alignment.CenterEnd, CategoryTarget.Secondary(SecondaryDestination.NUTRITION),
+        R.drawable.category_nutrition_right_v2, Alignment.Center, CategoryTarget.Secondary(SecondaryDestination.NUTRITION),
     ),
     HYDRATION(
         R.string.category_hydration, R.string.category_hydration_desc, R.drawable.ic_water_drop,
-        R.drawable.h1_hydration, Alignment.CenterEnd, CategoryTarget.Secondary(SecondaryDestination.HYDRATION),
+        R.drawable.category_hydration_right_v2, Alignment.Center, CategoryTarget.Secondary(SecondaryDestination.HYDRATION),
     ),
     SLEEP(
         R.string.category_sleep, R.string.category_sleep_desc, R.drawable.ic_moon,
-        R.drawable.h1_sleep, Alignment.CenterEnd, CategoryTarget.Secondary(SecondaryDestination.SLEEP),
+        R.drawable.category_sleep_right_v2, Alignment.Center, CategoryTarget.Secondary(SecondaryDestination.SLEEP),
     ),
     PROGRESS(
         R.string.category_progress, R.string.category_progress_desc, R.drawable.ic_trending_up,
-        R.drawable.h1_progress, Alignment.CenterEnd, CategoryTarget.Root(TopLevelDestination.PROGRESS),
+        R.drawable.category_progress_right_v2, Alignment.Center, CategoryTarget.Root(TopLevelDestination.PROGRESS),
     ),
 }

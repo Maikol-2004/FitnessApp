@@ -91,13 +91,14 @@ internal val OverlineStyle = TextStyle(fontWeight = FontWeight.Medium, fontSize 
 internal fun champagneTint(alpha: Float = 0.08f): Color = MaterialTheme.colorScheme.primary.copy(alpha = alpha)
 
 /**
- * Cabecera fotográfica del gimnasio (foto completa, degradado y título real). [onBack]/[actions] van sobre
+ * Cabecera fotográfica (gimnasio por defecto; cada módulo pasa su foto) con foto completa, degradado y título real). [onBack]/[actions] van sobre
  * la foto dentro de los insets de la barra de estado; [below] añade subtítulo o metadatos bajo el título.
  */
 @Composable
 internal fun TrainingHero(
     title: String,
     modifier: Modifier = Modifier,
+    @DrawableRes photo: Int = R.drawable.training_gym_hero,
     subtitle: String? = null,
     onBack: (() -> Unit)? = null,
     minHeight: Dp = 200.dp,
@@ -105,7 +106,7 @@ internal fun TrainingHero(
     below: @Composable () -> Unit = {},
 ) {
     PhotoBackground(
-        photo = R.drawable.training_gym_hero,
+        photo = photo,
         photoAlignment = Alignment.Center,
         horizontalScrimEnd = 1f,
         bottomScrimAlpha = 0.92f,

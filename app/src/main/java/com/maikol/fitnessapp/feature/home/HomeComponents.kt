@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.border
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -54,16 +56,21 @@ import com.maikol.fitnessapp.core.designsystem.motion.pressScale
 import com.maikol.fitnessapp.core.designsystem.theme.FitnessThemeExtras
 import com.maikol.fitnessapp.core.designsystem.theme.MinTouchTarget
 import com.maikol.fitnessapp.core.designsystem.theme.Spacing
-import java.text.NumberFormat
+import com.maikol.fitnessapp.core.preferences.UnitSystem
+import com.maikol.fitnessapp.core.tracking.formatDistance
+import com.maikol.fitnessapp.core.tracking.formatInteger
+import com.maikol.fitnessapp.core.tracking.goalFraction
 
-private val CategoryTitleStyle = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 18.sp, lineHeight = 24.sp)
-private val CategoryDescriptionStyle = TextStyle(fontWeight = FontWeight.Normal, fontSize = 14.sp, lineHeight = 19.sp)
+private val CategoryTitleStyle = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 18.sp, lineHeight = 23.sp)
+private val CategoryDescriptionStyle = TextStyle(fontWeight = FontWeight.Normal, fontSize = 13.sp, lineHeight = 18.sp)
 private val MetricStyle = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 32.sp, lineHeight = 38.sp, fontFeatureSettings = "tnum")
 private val CategoryMinHeight = 148.dp
+private val AvatarShape = RoundedCornerShape(16.dp)
 
 /**
- * Tarjeta de categoría: foto a sangre completa recortada por el radio, icono champán, título y
- * descripción reales. Toda la tarjeta es un único botón (sin controles anidados).
+ * Tarjeta de categoría (docs/09_VISUAL_POLISH.md): foto v2 a sangre con el sujeto completo en el tercio
+ * derecho; icono, título y descripción a la izquierda (≈55 % del ancho) sobre un degradado local que se
+ * apaga antes del objeto. Sin protección inferior. Toda la tarjeta es un único botón.
  */
 @Composable
 fun CategoryPhotoCard(
@@ -71,14 +78,14 @@ fun CategoryPhotoCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     /** Fracción del ancho para la descripción; el título usa todo el ancho para no partir palabras. */
-    descriptionWidthFraction: Float = 0.8f,
+    descriptionWidthFraction: Float = 0.56f,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val shape = MaterialTheme.shapes.large
     PhotoBackground(
         photo = category.photoRes,
         photoAlignment = category.photoAlignment,
-        bottomScrimAlpha = 0.7f,
+        horizontalScrimEnd = 0.62f,
         modifier = modifier
             .pressScale(interactionSource, LocalMotionEnabled.current)
             .heightIn(min = CategoryMinHeight)
@@ -100,7 +107,7 @@ fun CategoryPhotoCard(
                 painter = painterResource(category.iconRes),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(22.dp),
+                modifier = Modifier.size(20.dp),
             )
             Spacer(Modifier.height(Spacing.s))
             Text(
@@ -119,19 +126,23 @@ fun CategoryPhotoCard(
     }
 }
 
-/** Métricas de actividad de un día. En H1 solo existen en previews DEMO; H3 aporta la fuente real. */
+/**
+ * Registro real de hoy (manual en F1). Cada valor es opcional y solo se muestra si existe; el aro usa
+ * pasos/meta únicamente si ambos son válidos.
+ */
 @Immutable
 data class ActivityMetrics(
-    val steps: Long,
-    val stepGoal: Long,
-    val distanceKm: Double,
-    val activeKcal: Long,
-    val activeMinutes: Long,
+    val steps: Int?,
+    val stepGoal: Int?,
+    val distanceMeters: Double?,
+    val activeKcal: Double?,
+    val activeMinutes: Int?,
+    val unit: UnitSystem = UnitSystem.METRIC,
 )
 
 /**
- * Resumen «Actividad de hoy». Sin fuente ([metrics] null) muestra un aro neutro con guion y
- * «Sin datos», nunca ceros ni porcentajes inventados.
+ * Resumen «Actividad de hoy» desde el registro manual de hoy. Sin registro ([metrics] null) muestra un aro
+ * neutro con guion y «Sin datos», nunca ceros ni porcentajes inventados.
  */
 @Composable
 fun ActivitySummaryCard(
@@ -149,7 +160,7 @@ fun ActivitySummaryCard(
         Spacer(Modifier.height(Spacing.l))
         val ring: @Composable () -> Unit = { ActivityRing(metrics) }
         val details: @Composable (Modifier) -> Unit = { m ->
-            if (metrics == null) EmptyActivityDetails(onViewHealth, m) else ActivityDetails(metrics, m)
+            if (metrics == null) EmptyActivityDetails(onViewHealth, m) else ActivityDetails(metrics, onViewHealth, m)
         }
         if (compact) {
             Column(verticalArrangement = Arrangement.spacedBy(Spacing.l)) {
@@ -170,10 +181,10 @@ fun ActivitySummaryCard(
 private fun ActivityRing(metrics: ActivityMetrics?) {
     val track = FitnessThemeExtras.colors.surfaceRaised
     val fill = MaterialTheme.colorScheme.primary
-    val progress = metrics?.let { (it.steps.toFloat() / it.stepGoal).coerceIn(0f, 1f) }
+    val progress = metrics?.let { goalFraction(it.steps?.toDouble(), it.stepGoal?.toDouble()) }
     val emptyDescription = stringResource(R.string.home_activity_ring_empty_description)
     val stepsLabel = stringResource(R.string.home_activity_steps)
-    val formattedSteps = metrics?.let { NumberFormat.getIntegerInstance().format(it.steps) }
+    val formattedSteps = metrics?.steps?.let { formatInteger(it) }
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
@@ -191,12 +202,23 @@ private fun ActivityRing(metrics: ActivityMetrics?) {
                 drawArc(fill, -90f, 360f * progress, false, Offset(inset, inset), arcSize, style = Stroke(stroke, cap = StrokeCap.Round))
             }
         }
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(formattedSteps ?: "—", style = MetricStyle, textAlign = TextAlign.Center)
+        // La cifra se ajusta para no salirse del aro con fuente grande.
+        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(horizontal = 16.dp)) {
             Text(
-                if (metrics == null) stringResource(R.string.home_activity_no_data) else stepsLabel,
+                formattedSteps ?: "—",
+                style = MetricStyle,
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                softWrap = false,
+                autoSize = TextAutoSize.StepBased(minFontSize = 12.sp, maxFontSize = MetricStyle.fontSize),
+            )
+            Text(
+                if (formattedSteps == null) stringResource(R.string.home_activity_no_data) else stepsLabel,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                softWrap = false,
+                autoSize = TextAutoSize.StepBased(minFontSize = 9.sp, maxFontSize = MaterialTheme.typography.bodyMedium.fontSize),
             )
         }
     }
@@ -211,18 +233,23 @@ private fun EmptyActivityDetails(onViewHealth: () -> Unit, modifier: Modifier) {
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Spacer(Modifier.height(Spacing.m))
-        PrimaryButton(text = stringResource(R.string.home_activity_cta), onClick = onViewHealth)
+        PrimaryButton(text = stringResource(R.string.home_activity_cta), onClick = onViewHealth, iconRes = R.drawable.ic_chevron_right)
     }
 }
 
 @Composable
-private fun ActivityDetails(metrics: ActivityMetrics, modifier: Modifier) {
-    val decimal = remember { NumberFormat.getNumberInstance().apply { maximumFractionDigits = 1 } }
-    val integer = remember { NumberFormat.getIntegerInstance() }
-    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
-        Text(stringResource(R.string.home_activity_distance, decimal.format(metrics.distanceKm)), style = MaterialTheme.typography.bodyLarge)
-        Text(stringResource(R.string.home_activity_kcal, integer.format(metrics.activeKcal)), style = MaterialTheme.typography.bodyLarge)
-        Text(stringResource(R.string.home_activity_minutes, integer.format(metrics.activeMinutes)), style = MaterialTheme.typography.bodyLarge)
+private fun ActivityDetails(metrics: ActivityMetrics, onViewHealth: () -> Unit, modifier: Modifier) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(Spacing.xs)) {
+        metrics.distanceMeters?.let { Text(formatDistance(it, metrics.unit), style = MaterialTheme.typography.bodyLarge) }
+        metrics.activeKcal?.let { Text(stringResource(R.string.home_activity_kcal, formatInteger(Math.round(it))), style = MaterialTheme.typography.bodyLarge) }
+        metrics.activeMinutes?.let { Text(stringResource(R.string.home_activity_minutes, formatInteger(it)), style = MaterialTheme.typography.bodyLarge) }
+        if (metrics.stepGoal == null && metrics.steps != null) {
+            Text(stringResource(R.string.health_goal_missing_short), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        Text(stringResource(R.string.home_activity_source), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        TextButton(onClick = onViewHealth, modifier = Modifier.heightIn(min = MinTouchTarget)) {
+            Text(stringResource(R.string.home_activity_cta), style = MaterialTheme.typography.labelLarge)
+        }
     }
 }
 
@@ -333,7 +360,7 @@ private fun NextRoutineText(overline: String, name: String, detail: String?) {
     }
 }
 
-/** Avatar genérico: iniciales del nombre guardado o icono de persona; nunca un rostro ficticio. */
+/** Control de Perfil: cuadrado redondeado 48 dp, iniciales o icono champán; nunca un rostro ficticio. */
 @Composable
 fun ProfileAvatar(displayName: String?, onClick: () -> Unit, modifier: Modifier = Modifier) {
     val description = stringResource(R.string.home_avatar_description)
@@ -341,8 +368,9 @@ fun ProfileAvatar(displayName: String?, onClick: () -> Unit, modifier: Modifier 
         contentAlignment = Alignment.Center,
         modifier = modifier
             .size(MinTouchTarget)
-            .clip(CircleShape)
+            .clip(AvatarShape)
             .background(FitnessThemeExtras.colors.surfaceRaised)
+            .border(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.28f), AvatarShape)
             .clickable(role = Role.Button, onClick = onClick)
             .clearAndSetSemantics { contentDescription = description },
     ) {

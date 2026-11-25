@@ -1,5 +1,6 @@
 package com.maikol.fitnessapp.feature.home
 
+import com.maikol.fitnessapp.core.navigation.dockBottomPadding
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
@@ -71,7 +72,7 @@ fun HomeRoute(
         val ready = uiState as? HomeUiState.Ready ?: return@LoadingRegion
         HomeScreen(
             displayName = ready.displayName,
-            activity = null,
+            activity = ready.activity,
             onOpenCategory = onOpenCategory,
             onOpenHealth = onOpenHealth,
             onOpenTraining = onOpenTraining,
@@ -116,7 +117,7 @@ fun HomeScreen(
                 .statusBarsPadding()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = Spacing.screenHorizontal)
-                .padding(top = Spacing.l, bottom = Spacing.xl)
+                .padding(top = Spacing.l, bottom = Spacing.xl + dockBottomPadding())
                 .graphicsLayer {
                     alpha = entrance.value
                     translationY = (1f - entrance.value) * offsetPx
@@ -189,7 +190,7 @@ private fun CategoryGrid(singleColumn: Boolean, onOpenCategory: (HomeCategory) -
                 CategoryPhotoCard(
                     category = category,
                     onClick = { onOpenCategory(category) },
-                    descriptionWidthFraction = 0.7f,
+                    descriptionWidthFraction = 0.62f,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
@@ -241,7 +242,7 @@ private fun HomeDemoPreview() {
     FitnessTheme {
         HomeScreen(
             displayName = "Demo",
-            activity = ActivityMetrics(steps = 6240, stepGoal = 8000, distanceKm = 4.2, activeKcal = 320, activeMinutes = 28),
+            activity = ActivityMetrics(steps = 6240, stepGoal = 8000, distanceMeters = 4_200.0, activeKcal = 320.0, activeMinutes = 28),
             onOpenCategory = {}, onOpenHealth = {}, onOpenTraining = {}, onOpenProfile = {},
             demoLabel = true,
         )

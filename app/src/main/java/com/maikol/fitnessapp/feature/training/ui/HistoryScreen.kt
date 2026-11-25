@@ -1,5 +1,6 @@
 package com.maikol.fitnessapp.feature.training.ui
 
+import com.maikol.fitnessapp.core.navigation.dockBottomPadding
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -70,7 +71,7 @@ fun HistoryRoute(
                 )
             } else {
                 LazyColumn(
-                    contentPadding = PaddingValues(start = Spacing.l, end = Spacing.l, top = Spacing.xs, bottom = Spacing.xl),
+                    contentPadding = PaddingValues(start = Spacing.l, end = Spacing.l, top = Spacing.xs, bottom = Spacing.xl + dockBottomPadding()),
                     verticalArrangement = Arrangement.spacedBy(Spacing.s),
                     modifier = Modifier.fillMaxSize(),
                 ) {

@@ -8,24 +8,16 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.Scaffold
-import androidx.compose.foundation.text.TextAutoSize
-import androidx.compose.material3.Text
-import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
@@ -40,7 +32,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.maikol.fitnessapp.core.designsystem.motion.LocalMotionEnabled
 import com.maikol.fitnessapp.core.designsystem.motion.MotionTokens
-import com.maikol.fitnessapp.core.designsystem.theme.FitnessThemeExtras
 import com.maikol.fitnessapp.feature.home.CategoryTarget
 import com.maikol.fitnessapp.feature.home.HomeRoute
 import com.maikol.fitnessapp.feature.profile.ProfileRoute
@@ -55,10 +46,17 @@ import com.maikol.fitnessapp.feature.training.ui.SummaryRoute
 import com.maikol.fitnessapp.feature.training.ui.SummaryViewModel
 import com.maikol.fitnessapp.feature.training.ui.TrainingNavigation
 import com.maikol.fitnessapp.feature.training.ui.TrainingRoute
-import com.maikol.fitnessapp.feature.upcoming.UpcomingFeature
-import com.maikol.fitnessapp.feature.upcoming.UpcomingFeatureScreen
+import com.maikol.fitnessapp.feature.health.HealthRoute
+import com.maikol.fitnessapp.feature.hydration.HydrationRoute
+import com.maikol.fitnessapp.feature.nutrition.NutritionRoute
+import com.maikol.fitnessapp.feature.progress.ProgressRoute
+import com.maikol.fitnessapp.feature.sleep.SleepRoute
 
-/** Raíz de la app: barra inferior fija (fuera del scroll) y los cinco destinos raíz + secundarios. */
+/**
+ * Raíz de la app: dock Liquid Glass flotante sobre el contenido (fuera del scroll) y los cinco destinos
+ * raíz + secundarios. El contenido se desplaza por detrás del cristal; cada pantalla con dock reserva
+ * [LocalDockInset] al final de su scroll para que nada quede tapado.
+ */
 @Composable
 fun FitnessApp() {
     val navController = rememberNavController()
@@ -66,50 +64,23 @@ fun FitnessApp() {
     // Los secundarios de Inicio pertenecen a su pila; el flujo de entrenamiento, a Entrenar.
     val route = backStackEntry?.destination?.route
     val selected = tabOf(route)
+    // Editor, detalle, sesión y resumen ocupan la pantalla: su acción principal va abajo.
+    val showDock = !TrainingRoutes.isImmersive(route)
 
-    Scaffold(
-        contentWindowInsets = WindowInsets(0),
-        bottomBar = {
-            // Editor, detalle, sesión y resumen ocupan la pantalla: su acción principal va abajo.
-            if (!TrainingRoutes.isImmersive(route)) {
-                FitnessNavigationBar(selected = selected, onSelect = { navController.navigateToTopLevel(it) })
-            }
-        },
-    ) { innerPadding ->
-        FitnessNavHost(navController = navController, modifier = Modifier.padding(innerPadding))
-    }
-}
-
-@Composable
-private fun FitnessNavigationBar(selected: TopLevelDestination, onSelect: (TopLevelDestination) -> Unit) {
-    NavigationBar(containerColor = FitnessThemeExtras.colors.card, tonalElevation = 0.dp) {
-        TopLevelDestination.entries.forEach { destination ->
-            NavigationBarItem(
-                selected = destination == selected,
-                onClick = { onSelect(destination) },
-                icon = { Icon(painterResource(destination.iconRes), contentDescription = null) },
-                label = {
-                    // Una línea: con fuente grande o pantalla estrecha se reduce en vez de partir la palabra.
-                    Text(
-                        stringResource(destination.labelRes),
-                        maxLines = 1,
-                        softWrap = false,
-                        autoSize = TextAutoSize.StepBased(
-                            minFontSize = 8.sp,
-                            maxFontSize = MaterialTheme.typography.labelMedium.fontSize,
-                        ),
-                    )
-                },
-                alwaysShowLabel = true,
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = MaterialTheme.colorScheme.primary,
-                    selectedTextColor = MaterialTheme.colorScheme.primary,
-                    indicatorColor = Color.Transparent,
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                ),
+    // Surface aporta el color de contenido (texto claro) que antes ponía Scaffold.
+    Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+    Box(Modifier.fillMaxSize()) {
+        CompositionLocalProvider(LocalDockInset provides if (showDock) DockTotalInset else 0.dp) {
+            FitnessNavHost(navController = navController, modifier = Modifier.fillMaxSize())
+        }
+        if (showDock) {
+            LiquidGlassDock(
+                selected = selected,
+                onSelect = { navController.navigateToTopLevel(it) },
+                modifier = Modifier.align(Alignment.BottomCenter),
             )
         }
+    }
     }
 }
 
@@ -197,17 +168,33 @@ private fun FitnessNavHost(navController: NavHostController, modifier: Modifier 
             )
         }
         trainingGraph(navController)
-        composable(TopLevelDestination.PROGRESS.route) { UpcomingFeatureScreen(UpcomingFeature.PROGRESS) }
-        composable(TopLevelDestination.HEALTH.route) { UpcomingFeatureScreen(UpcomingFeature.HEALTH) }
+        composable(TopLevelDestination.PROGRESS.route) {
+            ProgressRoute(
+                onOpenHistory = {
+                    // El historial vive en la pila de Entrenar (mismo origen de datos que H2).
+                    navController.navigateToTopLevel(TopLevelDestination.TRAINING)
+                    navController.navigate(TrainingRoutes.HISTORY) { launchSingleTop = true }
+                },
+            )
+        }
+        composable(TopLevelDestination.HEALTH.route) {
+            HealthRoute(onOpenGoals = { navController.navigateToTopLevel(TopLevelDestination.PROFILE) })
+        }
         composable(TopLevelDestination.PROFILE.route) { ProfileRoute() }
         composable(SecondaryDestination.NUTRITION.route) {
-            UpcomingFeatureScreen(UpcomingFeature.NUTRITION, onBack = { navController.popSecondary(SecondaryDestination.NUTRITION) })
+            NutritionRoute(
+                onBack = { navController.popSecondary(SecondaryDestination.NUTRITION) },
+                onOpenGoals = { navController.navigateToTopLevel(TopLevelDestination.PROFILE) },
+            )
         }
         composable(SecondaryDestination.HYDRATION.route) {
-            UpcomingFeatureScreen(UpcomingFeature.HYDRATION, onBack = { navController.popSecondary(SecondaryDestination.HYDRATION) })
+            HydrationRoute(
+                onBack = { navController.popSecondary(SecondaryDestination.HYDRATION) },
+                onOpenGoals = { navController.navigateToTopLevel(TopLevelDestination.PROFILE) },
+            )
         }
         composable(SecondaryDestination.SLEEP.route) {
-            UpcomingFeatureScreen(UpcomingFeature.SLEEP, onBack = { navController.popSecondary(SecondaryDestination.SLEEP) })
+            SleepRoute(onBack = { navController.popSecondary(SecondaryDestination.SLEEP) })
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.maikol.fitnessapp.feature.profile
 
+import com.maikol.fitnessapp.core.navigation.dockBottomPadding
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -62,7 +63,10 @@ import com.maikol.fitnessapp.core.designsystem.theme.FitnessTheme
 import com.maikol.fitnessapp.core.designsystem.theme.FitnessThemeExtras
 import com.maikol.fitnessapp.core.designsystem.theme.MinTouchTarget
 import com.maikol.fitnessapp.core.designsystem.theme.Spacing
+import com.maikol.fitnessapp.core.preferences.Goal
 import com.maikol.fitnessapp.core.preferences.UnitSystem
+import com.maikol.fitnessapp.feature.tracking.FieldKind
+import com.maikol.fitnessapp.feature.tracking.FormField
 
 @Composable
 fun ProfileRoute(viewModel: ProfileViewModel = viewModel(factory = ProfileViewModel.Factory)) {
@@ -79,6 +83,8 @@ fun ProfileRoute(viewModel: ProfileViewModel = viewModel(factory = ProfileViewMo
             onSaveName = viewModel::saveName,
             onUnitSystemSelected = viewModel::onUnitSystemSelected,
             onReduceMotionChange = viewModel::onReduceMotionChange,
+            onGoalChange = viewModel::onGoalChange,
+            onSaveGoals = viewModel::saveGoals,
         )
     }
 }
@@ -91,6 +97,8 @@ fun ProfileScreen(
     onUnitSystemSelected: (UnitSystem) -> Unit,
     onReduceMotionChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    onGoalChange: (Goal, String) -> Unit = { _, _ -> },
+    onSaveGoals: () -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -99,7 +107,7 @@ fun ProfileScreen(
             .statusBarsPadding()
             .verticalScroll(rememberScrollState())
             .padding(horizontal = Spacing.screenHorizontal)
-            .padding(top = Spacing.l, bottom = Spacing.xl),
+            .padding(top = Spacing.l, bottom = Spacing.xl + dockBottomPadding()),
         verticalArrangement = Arrangement.spacedBy(Spacing.cardGap),
     ) {
         Text(
@@ -110,6 +118,7 @@ fun ProfileScreen(
                 .semantics { heading() },
         )
         NameCard(state, onNameChange, onSaveName)
+        GoalsCard(state, onGoalChange, onSaveGoals)
         UnitsCard(state.unitSystem, state.failedSetting == FailedSetting.UNITS, onUnitSystemSelected)
         MotionCard(state.reduceMotion, state.failedSetting == FailedSetting.MOTION, onReduceMotionChange)
         AppearanceCard()
@@ -169,6 +178,59 @@ private fun NameCard(state: ProfileUiState.Ready, onNameChange: (String) -> Unit
                 StatusRow(R.drawable.ic_check_circle, FitnessThemeExtras.colors.success, stringResource(R.string.profile_name_saved))
             }
             FeedbackVisibility(visible = state.nameStatus == NameSaveStatus.FAILED) {
+                StatusRow(R.drawable.ic_error, MaterialTheme.colorScheme.error, stringResource(R.string.profile_save_error))
+            }
+        }
+    }
+}
+
+@Composable
+private fun GoalsCard(state: ProfileUiState.Ready, onGoalChange: (Goal, String) -> Unit, onSave: () -> Unit) {
+    FitnessCard {
+        CardTitle(stringResource(R.string.profile_goals_title))
+        Text(
+            stringResource(R.string.profile_goals_body),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Spacer(Modifier.height(Spacing.m))
+        val labels = mapOf(
+            Goal.STEPS to R.string.goal_steps,
+            Goal.WATER to R.string.goal_water,
+            Goal.KCAL to R.string.goal_kcal,
+            Goal.PROTEIN to R.string.goal_protein,
+            Goal.CARBS to R.string.goal_carbs,
+            Goal.FAT to R.string.goal_fat,
+        )
+        Column(verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
+            Goal.entries.chunked(2).forEach { pair ->
+                Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s)) {
+                    pair.forEach { goal ->
+                        FormField(
+                            value = state.goalDrafts[goal].orEmpty(),
+                            onValueChange = { onGoalChange(goal, it) },
+                            label = stringResource(labels.getValue(goal)),
+                            kind = FieldKind.INTEGER,
+                            suffix = goal.unit,
+                            error = if (goal in state.goalErrors) stringResource(R.string.goal_range, goal.min, goal.max) else null,
+                            modifier = Modifier.weight(1f),
+                        )
+                    }
+                }
+            }
+        }
+        Spacer(Modifier.height(Spacing.m))
+        PrimaryButton(
+            text = stringResource(R.string.profile_goals_save),
+            onClick = onSave,
+            busy = state.goalStatus == NameSaveStatus.SAVING,
+            iconRes = R.drawable.ic_check,
+        )
+        Box(Modifier.padding(top = Spacing.s).heightIn(min = 24.dp)) {
+            FeedbackVisibility(visible = state.goalStatus == NameSaveStatus.SAVED) {
+                StatusRow(R.drawable.ic_check_circle, FitnessThemeExtras.colors.success, stringResource(R.string.profile_goals_saved))
+            }
+            FeedbackVisibility(visible = state.goalStatus == NameSaveStatus.FAILED) {
                 StatusRow(R.drawable.ic_error, MaterialTheme.colorScheme.error, stringResource(R.string.profile_save_error))
             }
         }

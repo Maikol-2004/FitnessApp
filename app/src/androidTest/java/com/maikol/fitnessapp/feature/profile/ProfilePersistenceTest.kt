@@ -37,7 +37,7 @@ class ProfilePersistenceTest {
         rule.onNode(hasText("Perfil") and isTab).performClick()
         rule.waitUntil(5_000) { exists("Reducir animaciones") }
 
-        rule.onNode(hasSetTextAction()).performTextReplacement("Prueba H1")
+        rule.onNode(hasSetTextAction() and hasText("Tu nombre (opcional)")).performTextReplacement("Prueba H1")
         rule.onNodeWithText("Guardar").performClick()
         rule.waitUntil(5_000) { exists("Guardado") }
         rule.onNodeWithText("lb · mi").performClick()
@@ -51,7 +51,7 @@ class ProfilePersistenceTest {
         // Limpieza: nombre vacío vuelve a «Hola» y unidades métricas.
         rule.onNode(hasText("Perfil") and isTab).performClick()
         rule.waitUntil(5_000) { exists("Reducir animaciones") }
-        rule.onNode(hasSetTextAction()).performTextReplacement("")
+        rule.onNode(hasSetTextAction() and hasText("Tu nombre (opcional)")).performTextReplacement("")
         rule.onNodeWithText("Guardar").performClick()
         rule.waitUntil(5_000) { exists("Guardado") }
         rule.onNodeWithText("kg · km").performClick()
