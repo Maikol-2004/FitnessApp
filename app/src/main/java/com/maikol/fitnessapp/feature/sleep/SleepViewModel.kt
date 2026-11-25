@@ -43,10 +43,10 @@ private data class SleepEdit(
 )
 
 class SleepViewModel(private val repository: TrackingRepository) : ViewModel() {
-    private val today = repository.today()
     private val edit = MutableStateFlow(SleepEdit())
 
-    val state: StateFlow<SleepUiState> = combine(repository.observeRecentSleep(), edit) { entries, e ->
+    // «Hoy» vivo: el resumen de 7 días avanza a medianoche; un formulario abierto conserva sus fechas.
+    val state: StateFlow<SleepUiState> = combine(repository.observeToday(), repository.observeRecentSleep(), edit) { today, entries, e ->
         val from = today.minusDays(6)
         SleepUiState(
             loading = false,
@@ -60,10 +60,10 @@ class SleepViewModel(private val repository: TrackingRepository) : ViewModel() {
             overlap = e.overlap,
             deleteFailed = e.deleteFailed,
         )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), SleepUiState(today = today))
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), SleepUiState(today = repository.today()))
 
     fun add() {
-        edit.value = SleepEdit(form = SleepForm.new(today))
+        edit.value = SleepEdit(form = SleepForm.new(state.value.today))
     }
 
     fun edit(entry: SleepEntryEntity) {

@@ -8,33 +8,39 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
-import androidx.navigation.navArgument
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.maikol.fitnessapp.core.designsystem.motion.LocalMotionEnabled
 import com.maikol.fitnessapp.core.designsystem.motion.MotionTokens
+import com.maikol.fitnessapp.feature.health.HealthRoute
 import com.maikol.fitnessapp.feature.home.CategoryTarget
 import com.maikol.fitnessapp.feature.home.HomeRoute
+import com.maikol.fitnessapp.feature.hydration.HydrationRoute
+import com.maikol.fitnessapp.feature.nutrition.NutritionRoute
 import com.maikol.fitnessapp.feature.profile.ProfileRoute
+import com.maikol.fitnessapp.feature.progress.ProgressRoute
+import com.maikol.fitnessapp.feature.sleep.SleepRoute
 import com.maikol.fitnessapp.feature.training.ui.HistoryRoute
 import com.maikol.fitnessapp.feature.training.ui.RoutineDetailRoute
 import com.maikol.fitnessapp.feature.training.ui.RoutineDetailViewModel
@@ -46,11 +52,6 @@ import com.maikol.fitnessapp.feature.training.ui.SummaryRoute
 import com.maikol.fitnessapp.feature.training.ui.SummaryViewModel
 import com.maikol.fitnessapp.feature.training.ui.TrainingNavigation
 import com.maikol.fitnessapp.feature.training.ui.TrainingRoute
-import com.maikol.fitnessapp.feature.health.HealthRoute
-import com.maikol.fitnessapp.feature.hydration.HydrationRoute
-import com.maikol.fitnessapp.feature.nutrition.NutritionRoute
-import com.maikol.fitnessapp.feature.progress.ProgressRoute
-import com.maikol.fitnessapp.feature.sleep.SleepRoute
 
 /**
  * Raíz de la app: dock Liquid Glass flotante sobre el contenido (fuera del scroll) y los cinco destinos
@@ -70,14 +71,23 @@ fun FitnessApp() {
     // Surface aporta el color de contenido (texto claro) que antes ponía Scaffold.
     Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
     Box(Modifier.fillMaxSize()) {
+        val backdrop = rememberDockBackdrop()
         CompositionLocalProvider(LocalDockInset provides if (showDock) DockTotalInset else 0.dp) {
-            FitnessNavHost(navController = navController, modifier = Modifier.fillMaxSize())
+            FitnessNavHost(
+                navController = navController,
+                modifier = Modifier
+                    .fillMaxSize()
+                    // Fondo dentro de la capa grabada: el desenfoque nunca muestra zonas transparentes.
+                    .dockBackdropSource(backdrop)
+                    .background(MaterialTheme.colorScheme.background),
+            )
         }
         if (showDock) {
             LiquidGlassDock(
                 selected = selected,
                 onSelect = { navController.navigateToTopLevel(it) },
                 modifier = Modifier.align(Alignment.BottomCenter),
+                backdrop = backdrop,
             )
         }
     }

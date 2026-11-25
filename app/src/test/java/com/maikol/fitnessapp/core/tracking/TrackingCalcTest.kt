@@ -125,6 +125,35 @@ class TrackingCalcTest {
     }
 
     @Test
+    fun weekTraining_boundaries_inZone_excludeFuture() {
+        val today = LocalDate.of(2026, 11, 25)
+        fun at(date: LocalDate, h: Int, m: Int = 0) = date.atTime(h, m).atZone(madrid).toInstant().toEpochMilli()
+        fun entry(id: String, endedAt: Long) = HistoryEntry(id, "Prueba", endedAt, 0, 1, 1, 100.0)
+        val history = listOf(
+            entry("inicio", at(today.minusDays(6), 0, 0)), // primer instante del periodo: cuenta
+            entry("antes", at(today.minusDays(6), 0, 0) - 1), // un ms antes: fuera
+            entry("fin", at(today, 23, 59)), // hoy al final del día: cuenta
+            entry("manana", at(today.plusDays(1), 0, 0)), // mañana 00:00: fuera
+            entry("futuro", at(today.plusDays(3), 12)), // fecha posterior (reloj adelantado): fuera
+        )
+        assertEquals(WeekTraining(2, 200.0), weekTraining(history, today, madrid))
+        // La misma sesión a las 23:30 de Madrid ya es «mañana» en Tokio: la zona decide el día.
+        val late = listOf(entry("tarde", at(today, 23, 30)))
+        assertEquals(1, weekTraining(late, today, madrid).sessions)
+        assertEquals(0, weekTraining(late, today, ZoneId.of("Asia/Tokyo")).sessions)
+    }
+
+    @Test
+    fun visibleDay_followsToday_keepsChosenPast_andPinnedForm() {
+        val today = LocalDate.of(2026, 11, 26)
+        assertEquals(today, visibleDay(today, chosen = null, pinned = null))
+        assertEquals(today.minusDays(2), visibleDay(today, chosen = today.minusDays(2), pinned = null))
+        // Elegir «Hoy» se guarda como null: al cambiar de día sigue al nuevo hoy.
+        assertEquals(today, visibleDay(today, chosen = today, pinned = null))
+        assertEquals(today.minusDays(1), visibleDay(today, chosen = null, pinned = today.minusDays(1)))
+    }
+
+    @Test
     fun activity_emptyIsUnknown_zeroIsValue() {
         val empty = validateActivity(ActivityForm(), UnitSystem.METRIC) as ActivityValidation.Invalid
         assertTrue(empty.form.noValues)

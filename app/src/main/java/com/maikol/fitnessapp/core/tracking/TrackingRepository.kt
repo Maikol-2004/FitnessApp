@@ -8,7 +8,10 @@ import com.maikol.fitnessapp.core.database.MealEntryEntity
 import com.maikol.fitnessapp.core.database.RecordSource
 import com.maikol.fitnessapp.core.database.SleepEntryEntity
 import com.maikol.fitnessapp.core.database.WaterEntryEntity
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
@@ -32,12 +35,28 @@ open class TrackingRepository(
     private val now: () -> Long = System::currentTimeMillis,
     private val zone: () -> ZoneId = ZoneId::systemDefault,
     private val newId: () -> String = { UUID.randomUUID().toString() },
+    private val todayRecheckMs: Long = TODAY_RECHECK_MS,
 ) {
     private val dao = db.trackingDao()
 
     fun today(): LocalDate = localDateOf(now(), zone())
 
     fun zone(): ZoneId = zone.invoke()
+
+    /**
+     * «Hoy» vivo: emite al suscribirse (al volver a la app la pantalla se resuscribe) y otra vez al pasar la
+     * medianoche local. Revisa al menos cada minuto para seguir cambios manuales de reloj o de zona.
+     */
+    open fun observeToday(): Flow<LocalDate> = flow {
+        while (true) {
+            val z = zone()
+            val nowMs = now()
+            val day = localDateOf(nowMs, z)
+            emit(day)
+            val nextMidnight = day.plusDays(1).atStartOfDay(z).toInstant().toEpochMilli()
+            delay((nextMidnight - nowMs).coerceIn(1L, todayRecheckMs))
+        }
+    }.distinctUntilChanged()
 
     /** Instante para un registro hecho «ahora» en [date]: la hora actual de ese día. */
     private fun instantOn(date: LocalDate, time: LocalTime = LocalTime.now(zone())): Long =
@@ -174,6 +193,8 @@ open class TrackingRepository(
     }
 
     companion object {
+        const val TODAY_RECHECK_MS = 60_000L
+
         fun epochOf(date: LocalDate, time: LocalTime, zone: ZoneId): Long = date.atTime(time).atZone(zone).toInstant().toEpochMilli()
 
         fun timeOf(epochMs: Long, zone: ZoneId): LocalTime = Instant.ofEpochMilli(epochMs).atZone(zone).toLocalTime()

@@ -62,15 +62,16 @@ class ProgressViewModel(
     training: TrainingRepository,
     preferences: UserPreferencesRepository,
 ) : ViewModel() {
-    private val today = tracking.today()
     private val edit = MutableStateFlow(WeightEdit())
 
+    // «Hoy» vivo: la semana de entrenamiento avanza a medianoche; el formulario abierto conserva su fecha.
     val state: StateFlow<ProgressUiState> = combine(
+        tracking.observeToday(),
         training.observeHistory(),
         tracking.observeWeights(),
         preferences.userPreferences,
         edit,
-    ) { history, weights, prefs, e ->
+    ) { today, history, weights, prefs, e ->
         ProgressUiState(
             loading = false,
             today = today,
@@ -83,10 +84,10 @@ class ProgressViewModel(
             failed = e.failed,
             deleteFailed = e.deleteFailed,
         )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ProgressUiState(today = today))
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ProgressUiState(today = tracking.today()))
 
     fun add() {
-        edit.value = WeightEdit(form = WeightForm(null, today, LoadText.of(null, state.value.unit), ""))
+        edit.value = WeightEdit(form = WeightForm(null, state.value.today, LoadText.of(null, state.value.unit), ""))
     }
 
     fun edit(entry: BodyWeightEntity) {

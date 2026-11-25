@@ -114,3 +114,23 @@ Rama `fase/f1` (desde `fase/h2` integrada con `origin/main`). Fecha 25-11-2026. 
 - **Reloj.** La integración del reloj queda para una fase posterior; todo es entrada manual.
 
 APK Debug: `app/build/outputs/apk/debug/app-debug.apk`.
+
+---
+
+## Correcciones tras la revisión (F1.1)
+
+| # | Corrección | Implementación |
+|---|---|---|
+| 1 | Cambio de día | `TrackingRepository.observeToday()` emite al suscribirse (volver a la app) y de nuevo a medianoche local; revisa cada 60 s cambios de reloj o zona. Salud, Nutrición, Hidratación, Sueño, Progreso e Inicio lo usan. `visibleDay()`: formulario abierto fija su día > fecha anterior elegida > hoy. |
+| 2 | Agua personalizada | El texto se conserva mientras guarda y si falla; se limpia solo tras el éxito (y si no se cambió). Se mantiene el bloqueo de doble toque. |
+| 3 | Resumen semanal | `weekTraining`: sesiones COMPLETED con fin en [hoy−6 00:00, mañana 00:00) de la zona indicada; excluye fechas posteriores. |
+| 4 | Liquid Glass | API 31+: desenfoque real localizado (`GraphicsLayer` + `BlurEffect` 28 dp) del contenido bajo la cápsula y tinte grafito 0,80. API 28–30: fallback grafito 0,95. Sin dependencias nuevas; diseño, cinco destinos y dos columnas intactos. |
+
+**Verificación conjunta (solo lo afectado)**
+
+- `gradlew :app:assembleDebug :app:testDebugUnitTest :app:lintDebug :app:assembleDebugAndroidTest`: BUILD SUCCESSFUL. Unitarias 57/57 OK. Las nuevas cubren los límites del periodo semanal: inicio incluido, 1 ms antes excluido, mañana y fechas futuras excluidas, zona Madrid frente a Tokio. También cubren `visibleDay`. Lint: 0 errores, los mismos 8 avisos previos.
+- Instrumentadas, solo las afectadas: `DayChangeAndWaterTest` y `NavigationTest` dieron **OK (6 tests)**. La prueba de día usa un reloj controlado, una base en memoria y preferencias temporales: «Hoy» avanza a medianoche, la fecha elegida se conserva y el formulario abierto guarda en su día. El fallo de escritura del agua conserva «330», ignora el doble toque y limpia el campo tras el éxito. No se ejecutó `TrainingFlowTest`, que es destructiva.
+- **Dispositivo.** Se añadieron 250 ml hoy y la app pasó a segundo plano. La zona se cambió a Pacific/Kiritimati, donde ya era el 26-11. Al volver, «Hoy» mostraba 0 ml y «Ayer» los 250 ml (capturas f1b/04–06). Tras restaurar GMT, la pantalla volvió a «Hoy» con 250 ml en unos 30 s.
+- **Desenfoque.** Se comprobó con el tinte bajado temporalmente al 30 %: el contenido aparece difuminado, no nítido, y después se restauró a 0,80. Las capturas del menú están en f1b/02, 07 y 08.
+
+**No ejecutado.** El desenfoque en API 28–30 (fallback) no se probó en dispositivo. TalkBack, como en F1.

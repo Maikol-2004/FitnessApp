@@ -14,12 +14,12 @@ import com.maikol.fitnessapp.feature.training.data.RoutineSummary
 import com.maikol.fitnessapp.feature.training.data.StartResult
 import com.maikol.fitnessapp.feature.training.data.TrainingRepository
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -53,6 +53,7 @@ sealed interface HomeUiState {
 
 private data class StartState(val starting: Boolean = false, val failed: Boolean = false, val sessionToOpen: String? = null)
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModel(
     preferencesRepository: UserPreferencesRepository,
     private val trainingRepository: TrainingRepository,
@@ -66,8 +67,8 @@ class HomeViewModel(
         trainingRepository.observeRoutines(),
         trainingRepository.observeOpenSession(),
         start,
-        // «Hoy» se resuelve al suscribirse: al volver a Inicio otro día se lee el registro del día nuevo.
-        flow { emitAll(trackingRepository.observeActivity(trackingRepository.today())) },
+        // «Hoy» vivo: cambia a medianoche y al volver a la app se lee el registro del día nuevo.
+        trackingRepository.observeToday().flatMapLatest { trackingRepository.observeActivity(it) },
     ) { prefs, routines, open, s, today ->
         val active = routines.filterNot { it.archived }
         val selected = active.firstOrNull { it.id == prefs.nextRoutineId }

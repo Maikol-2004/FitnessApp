@@ -11,6 +11,7 @@ import com.maikol.fitnessapp.core.preferences.Goal
 import com.maikol.fitnessapp.core.preferences.UserPreferencesRepository
 import com.maikol.fitnessapp.core.tracking.MAX_WATER_ML
 import com.maikol.fitnessapp.core.tracking.TrackingRepository
+import com.maikol.fitnessapp.core.tracking.visibleDay
 import com.maikol.fitnessapp.core.tracking.waterTotalMl
 import com.maikol.fitnessapp.feature.training.data.Parsed
 import com.maikol.fitnessapp.feature.training.data.parseInt
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -52,6 +54,8 @@ data class HydrationUiState(
 )
 
 private data class Local(
+    /** Día fijado mientras se edita una entrada. */
+    val pinned: LocalDate? = null,
     val custom: String = "",
     val customError: Boolean = false,
     val adding: Boolean = false,
@@ -67,18 +71,20 @@ class HydrationViewModel(
     private val repository: TrackingRepository,
     preferences: UserPreferencesRepository,
 ) : ViewModel() {
-    private val today = repository.today()
-    private val date = MutableStateFlow(today)
+    /** null = sigue a «hoy»; una fecha anterior elegida se conserva al cambiar de día. */
+    private val chosen = MutableStateFlow<LocalDate?>(null)
     private val local = MutableStateFlow(Local())
 
     val state: StateFlow<HydrationUiState> = combine(
-        date.flatMapLatest { d -> repository.observeWater(d).map { d to it } },
+        combine(repository.observeToday(), chosen, local.map { it.pinned }.distinctUntilChanged()) { t, c, p -> t to visibleDay(t, c, p) }
+            .distinctUntilChanged()
+            .flatMapLatest { (t, d) -> repository.observeWater(d).map { Triple(t, d, it) } },
         preferences.userPreferences,
         local,
-    ) { (d, entries), prefs, l ->
+    ) { (t, d, entries), prefs, l ->
         HydrationUiState(
             loading = false,
-            today = today,
+            today = t,
             date = d,
             entries = entries,
             totalMl = waterTotalMl(entries),
@@ -92,27 +98,39 @@ class HydrationViewModel(
             saving = l.saving,
             failed = l.failed,
         )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HydrationUiState(today = today, date = today))
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), repository.today().let { HydrationUiState(today = it, date = it) })
 
     fun selectDate(value: LocalDate) {
+        val today = state.value.today
         if (value <= today && local.value.edit == null) {
-            date.value = value
+            chosen.value = value.takeIf { it < today }
             local.update { it.copy(lastAddedId = null, lastAddedMl = null) }
         }
     }
 
-    /** Una única alta por toque aceptado; error no suma ni rellena. */
-    fun add(ml: Int) {
+    /**
+     * Una única alta por toque aceptado; error no suma ni rellena. [customText]: texto de «Otra cantidad»
+     * que se limpia solo tras guardar con éxito (y si no se ha cambiado mientras tanto).
+     */
+    fun add(ml: Int, customText: String? = null) {
         if (local.value.adding || ml !in 1..MAX_WATER_ML) return
         local.update { it.copy(adding = true, failed = false) }
-        val day = date.value
+        val day = state.value.date
         viewModelScope.launch {
             try {
                 val id = repository.addWater(day, ml)
-                local.update { it.copy(adding = false, lastAddedId = id, lastAddedMl = ml) }
+                local.update {
+                    it.copy(
+                        adding = false,
+                        lastAddedId = id,
+                        lastAddedMl = ml,
+                        custom = if (customText != null && it.custom == customText) "" else it.custom,
+                    )
+                }
             } catch (c: CancellationException) {
                 throw c
             } catch (_: Exception) {
+                // La cantidad escrita se conserva para reintentar.
                 local.update { it.copy(adding = false, failed = true) }
             }
         }
@@ -121,13 +139,13 @@ class HydrationViewModel(
     fun onCustom(text: String) = local.update { it.copy(custom = text, customError = false) }
 
     fun addCustom() {
-        val ml = (parseInt(local.value.custom) as? Parsed.Value)?.value?.takeIf { it in 1..MAX_WATER_ML }
+        val text = local.value.custom
+        val ml = (parseInt(text) as? Parsed.Value)?.value?.takeIf { it in 1..MAX_WATER_ML }
         if (ml == null) {
             local.update { it.copy(customError = true) }
             return
         }
-        local.update { it.copy(custom = "") }
-        add(ml)
+        add(ml, customText = text)
     }
 
     /** Deshace solo la alta indicada por su ID (no la última fila de la lista). */
@@ -139,12 +157,13 @@ class HydrationViewModel(
 
     fun dismissUndo() = local.update { it.copy(lastAddedId = null, lastAddedMl = null) }
 
-    fun startEdit(entry: WaterEntryEntity) = local.update { it.copy(edit = WaterEdit(entry, entry.ml.toString()), failed = false) }
+    fun startEdit(entry: WaterEntryEntity) =
+        local.update { it.copy(pinned = state.value.date, edit = WaterEdit(entry, entry.ml.toString()), failed = false) }
 
     fun onEditText(text: String) = local.update { l -> l.copy(edit = l.edit?.copy(text = text, error = false), failed = false) }
 
     fun closeEdit() {
-        if (!local.value.saving) local.update { it.copy(edit = null, failed = false) }
+        if (!local.value.saving) local.update { it.copy(pinned = null, edit = null, failed = false) }
     }
 
     fun saveEdit() {
@@ -160,7 +179,7 @@ class HydrationViewModel(
         viewModelScope.launch {
             try {
                 repository.updateWater(edit.entry.id, ml)
-                local.update { it.copy(saving = false, edit = null) }
+                local.update { it.copy(saving = false, pinned = null, edit = null) }
             } catch (c: CancellationException) {
                 throw c
             } catch (_: Exception) {

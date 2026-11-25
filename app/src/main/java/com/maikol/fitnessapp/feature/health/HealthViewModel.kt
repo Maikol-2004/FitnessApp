@@ -11,12 +11,14 @@ import com.maikol.fitnessapp.core.preferences.Goal
 import com.maikol.fitnessapp.core.preferences.UnitSystem
 import com.maikol.fitnessapp.core.preferences.UserPreferencesRepository
 import com.maikol.fitnessapp.core.tracking.TrackingRepository
+import com.maikol.fitnessapp.core.tracking.visibleDay
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -37,7 +39,7 @@ data class HealthUiState(
     val deleteFailed: Boolean = false,
 )
 
-private data class Edit(val form: ActivityForm? = null, val saving: Boolean = false, val failed: Boolean = false, val deleteFailed: Boolean = false)
+private data class Edit(val day: LocalDate? = null, val form: ActivityForm? = null, val saving: Boolean = false, val failed: Boolean = false, val deleteFailed: Boolean = false)
 
 /** Registro diario manual: un registro por fecha; editar sustituye, eliminar borra solo ese día. */
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -45,18 +47,20 @@ class HealthViewModel(
     private val repository: TrackingRepository,
     preferences: UserPreferencesRepository,
 ) : ViewModel() {
-    private val today = repository.today()
-    private val date = MutableStateFlow(today)
+    /** null = sigue a «hoy»; una fecha anterior elegida se conserva al cambiar de día. */
+    private val chosen = MutableStateFlow<LocalDate?>(null)
     private val edit = MutableStateFlow(Edit())
 
     val state: StateFlow<HealthUiState> = combine(
-        date.flatMapLatest { d -> repository.observeActivity(d).map { d to it } },
+        combine(repository.observeToday(), chosen, edit.map { it.day }.distinctUntilChanged()) { t, c, p -> t to visibleDay(t, c, p) }
+            .distinctUntilChanged()
+            .flatMapLatest { (t, d) -> repository.observeActivity(d).map { Triple(t, d, it) } },
         preferences.userPreferences,
         edit,
-    ) { (d, activity), prefs, e ->
+    ) { (t, d, activity), prefs, e ->
         HealthUiState(
             loading = false,
-            today = today,
+            today = t,
             date = d,
             activity = activity,
             unit = prefs.unitSystem,
@@ -66,15 +70,17 @@ class HealthViewModel(
             failed = e.failed,
             deleteFailed = e.deleteFailed,
         )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HealthUiState(today = today, date = today))
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), repository.today().let { HealthUiState(today = it, date = it) })
 
     fun selectDate(value: LocalDate) {
-        if (value <= today && edit.value.form == null) date.value = value
+        val today = state.value.today
+        if (value <= today && edit.value.form == null) chosen.value = value.takeIf { it < today }
     }
 
+    /** El formulario fija su día: si pasa la medianoche con él abierto, guarda en el día que se abrió. */
     fun openForm() {
         val s = state.value
-        edit.value = Edit(form = ActivityForm.of(s.activity, s.unit))
+        edit.value = Edit(day = s.date, form = ActivityForm.of(s.activity, s.unit))
     }
 
     fun closeForm() {
@@ -95,7 +101,7 @@ class HealthViewModel(
             is ActivityValidation.Invalid -> edit.value = e.copy(form = v.form)
             is ActivityValidation.Valid -> {
                 edit.value = e.copy(saving = true, failed = false)
-                val day = date.value
+                val day = e.day ?: state.value.date
                 viewModelScope.launch {
                     try {
                         repository.saveActivity(day, v.values.steps, v.values.distanceMeters, v.values.minutes, v.values.kcal)
@@ -112,7 +118,7 @@ class HealthViewModel(
     }
 
     fun delete() {
-        val day = date.value
+        val day = state.value.date
         viewModelScope.launch {
             try {
                 repository.deleteActivity(day)

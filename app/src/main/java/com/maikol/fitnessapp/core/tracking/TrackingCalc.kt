@@ -72,6 +72,13 @@ fun goalFraction(value: Double?, goal: Double?): Float? {
     return (value / goal).toFloat().coerceIn(0f, 1f)
 }
 
+/**
+ * Día que muestra una pantalla con selector: el fijado por un formulario abierto ([pinned], nunca cambia en
+ * silencio); si no, la fecha anterior elegida a propósito ([chosen]); si no, hoy, que avanza a medianoche.
+ */
+fun visibleDay(today: LocalDate, chosen: LocalDate?, pinned: LocalDate?): LocalDate =
+    pinned ?: chosen?.takeIf { it < today } ?: today
+
 fun localDateOf(epochMs: Long, zone: ZoneId): LocalDate = Instant.ofEpochMilli(epochMs).atZone(zone).toLocalDate()
 
 /** Duración real entre instantes: cruce de medianoche y cambio de hora incluidos. */
@@ -86,12 +93,13 @@ fun sleepWeekTotalMs(entries: List<SleepEntryEntity>, today: LocalDate): Long {
 data class WeekTraining(val sessions: Int, val volumeKg: Double)
 
 /**
- * Sesiones COMPLETED (el historial H2 ya excluye las descartadas) terminadas en los últimos 7 días
- * naturales, hoy incluido, y su volumen con el mismo cálculo de H2.
+ * Sesiones COMPLETED (el historial H2 ya excluye descartadas y abiertas) terminadas en los 7 días naturales
+ * que acaban hoy, en la zona indicada: [hoy − 6 a las 00:00, mañana a las 00:00). Las posteriores se excluyen.
  */
 fun weekTraining(history: List<HistoryEntry>, today: LocalDate, zone: ZoneId): WeekTraining {
     val fromMs = today.minusDays(6).atStartOfDay(zone).toInstant().toEpochMilli()
-    val inWeek = history.filter { it.endedAt >= fromMs }
+    val untilMs = today.plusDays(1).atStartOfDay(zone).toInstant().toEpochMilli()
+    val inWeek = history.filter { it.endedAt in fromMs until untilMs }
     return WeekTraining(inWeek.size, inWeek.sumOf { it.volumeKg })
 }
 

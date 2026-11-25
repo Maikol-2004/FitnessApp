@@ -12,12 +12,14 @@ import com.maikol.fitnessapp.core.preferences.UserPreferencesRepository
 import com.maikol.fitnessapp.core.tracking.NutritionTotals
 import com.maikol.fitnessapp.core.tracking.TrackingRepository
 import com.maikol.fitnessapp.core.tracking.nutritionTotals
+import com.maikol.fitnessapp.core.tracking.visibleDay
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -39,7 +41,7 @@ data class NutritionUiState(
     val deleteFailed: Boolean = false,
 )
 
-private data class MealEdit(val form: MealForm? = null, val saving: Boolean = false, val failed: Boolean = false, val deleteFailed: Boolean = false)
+private data class MealEdit(val day: LocalDate? = null, val form: MealForm? = null, val saving: Boolean = false, val failed: Boolean = false, val deleteFailed: Boolean = false)
 
 /** Comidas del día con totales recalculados desde Room (editar/eliminar nunca acumula). */
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -47,18 +49,20 @@ class NutritionViewModel(
     private val repository: TrackingRepository,
     preferences: UserPreferencesRepository,
 ) : ViewModel() {
-    private val today = repository.today()
-    private val date = MutableStateFlow(today)
+    /** null = sigue a «hoy»; una fecha anterior elegida se conserva al cambiar de día. */
+    private val chosen = MutableStateFlow<LocalDate?>(null)
     private val edit = MutableStateFlow(MealEdit())
 
     val state: StateFlow<NutritionUiState> = combine(
-        date.flatMapLatest { d -> repository.observeMeals(d).map { d to it } },
+        combine(repository.observeToday(), chosen, edit.map { it.day }.distinctUntilChanged()) { t, c, p -> t to visibleDay(t, c, p) }
+            .distinctUntilChanged()
+            .flatMapLatest { (t, d) -> repository.observeMeals(d).map { Triple(t, d, it) } },
         preferences.userPreferences,
         edit,
-    ) { (d, meals), prefs, e ->
+    ) { (t, d, meals), prefs, e ->
         NutritionUiState(
             loading = false,
-            today = today,
+            today = t,
             date = d,
             meals = meals,
             totals = nutritionTotals(meals),
@@ -68,18 +72,20 @@ class NutritionViewModel(
             failed = e.failed,
             deleteFailed = e.deleteFailed,
         )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), NutritionUiState(today = today, date = today))
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), repository.today().let { NutritionUiState(today = it, date = it) })
 
     fun selectDate(value: LocalDate) {
-        if (value <= today && edit.value.form == null) date.value = value
+        val today = state.value.today
+        if (value <= today && edit.value.form == null) chosen.value = value.takeIf { it < today }
     }
 
+    /** El formulario fija su día: si pasa la medianoche con él abierto, guarda en el día que se abrió. */
     fun add() {
-        edit.value = MealEdit(form = MealForm.new(LocalTime.now(repository.zone())))
+        edit.value = MealEdit(day = state.value.date, form = MealForm.new(LocalTime.now(repository.zone())))
     }
 
     fun edit(meal: MealEntryEntity) {
-        edit.value = MealEdit(form = MealForm.of(meal))
+        edit.value = MealEdit(day = LocalDate.parse(meal.localDate), form = MealForm.of(meal))
     }
 
     fun closeForm() {
@@ -98,7 +104,7 @@ class NutritionViewModel(
             is MealValidation.Invalid -> edit.value = e.copy(form = v.form)
             is MealValidation.Valid -> {
                 edit.value = e.copy(saving = true, failed = false)
-                val day = date.value
+                val day = e.day ?: state.value.date
                 viewModelScope.launch {
                     try {
                         val x = v.values

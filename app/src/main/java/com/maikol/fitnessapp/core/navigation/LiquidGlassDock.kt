@@ -1,5 +1,6 @@
 package com.maikol.fitnessapp.core.navigation
 
+import android.os.Build
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -32,34 +33,50 @@ import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.layout
-import androidx.compose.ui.unit.Constraints
-import kotlin.math.roundToInt
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.BlurEffect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.layer.GraphicsLayer
+import androidx.compose.ui.graphics.layer.drawLayer
+import androidx.compose.ui.graphics.rememberGraphicsLayer
+import androidx.compose.ui.layout.layout
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.maikol.fitnessapp.core.designsystem.motion.LocalMotionEnabled
 import com.maikol.fitnessapp.core.designsystem.motion.MotionTokens
 import com.maikol.fitnessapp.core.designsystem.theme.TitaniumChampagneTokens
+import kotlin.math.roundToInt
 
 /*
  * Menú Liquid Glass elegido (docs/11_LIQUID_GLASS.md, design/liquid-glass/tokens.json): cápsula de cristal
- * ahumado flotante con lente champán que sigue al destino activo. Material de bajo coste sin blur del fondo
- * (fallback documentado): grafito translúcido, reflejo superior y borde champán. Iconos y etiquetas se dibujan
- * siempre nítidos encima.
+ * ahumado flotante con lente champán que sigue al destino activo.
+ * - API 31+: desenfoque real localizado. La raíz graba el contenido en [rememberDockBackdrop]; la cápsula
+ *   dibuja solo su recorte, desenfocado, bajo un tinte grafito que mantiene el texto de detrás ilegible.
+ * - API 28–30 (sin RenderEffect): fallback grafito casi opaco; nada del contenido compite con los iconos.
+ * Iconos y etiquetas se dibujan siempre nítidos encima.
  */
 
 private val DockShape = RoundedCornerShape(32.dp)
@@ -79,6 +96,39 @@ private val OffWhite = Color(TitaniumChampagneTokens.ON_SURFACE)
 private val WarmGrey = Color(TitaniumChampagneTokens.ON_SURFACE_VARIANT)
 
 private const val MaxLabelScale = 1.15f
+
+/** Desenfoque real solo donde existe RenderEffect (API 31+). */
+private val BackdropBlurSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+private val BlurRadius = 28.dp
+private const val TINT_OVER_BLUR = 0.80f
+private const val TINT_FALLBACK = 0.95f
+
+/** Capa con el contenido que pasa por detrás del dock; null si el dispositivo no puede desenfocarlo. */
+@Composable
+fun rememberDockBackdrop(): GraphicsLayer? =
+    if (BackdropBlurSupported) rememberGraphicsLayer() else null
+
+/** Graba el contenido en [backdrop] y lo dibuja igual que antes (sin coste visual). */
+fun Modifier.dockBackdropSource(backdrop: GraphicsLayer?): Modifier =
+    if (backdrop == null) this else drawWithContent {
+        backdrop.record { this@drawWithContent.drawContent() }
+        drawLayer(backdrop)
+    }
+
+/** Recorte desenfocado de [backdrop] bajo la cápsula; la capa se actualiza sola al desplazarse el contenido. */
+@Composable
+private fun Modifier.backdropBlur(backdrop: GraphicsLayer?): Modifier {
+    if (backdrop == null) return this
+    val blurred = rememberGraphicsLayer()
+    var origin by remember { mutableStateOf(Offset.Zero) }
+    return onGloballyPositioned { origin = it.positionInRoot() }
+        .drawBehind {
+            val radius = BlurRadius.toPx()
+            blurred.renderEffect = BlurEffect(radius, radius, TileMode.Clamp)
+            blurred.record { translate(-origin.x, -origin.y) { drawLayer(backdrop) } }
+            drawLayer(blurred)
+        }
+}
 
 private val LabelStyle = TextStyle(fontWeight = FontWeight.Medium, fontSize = 13.sp, lineHeight = 16.sp)
 
@@ -103,6 +153,7 @@ fun LiquidGlassDock(
     selected: TopLevelDestination,
     onSelect: (TopLevelDestination) -> Unit,
     modifier: Modifier = Modifier,
+    backdrop: GraphicsLayer? = null,
 ) {
     val motion = LocalMotionEnabled.current
     val destinations = TopLevelDestination.entries
@@ -113,8 +164,9 @@ fun LiquidGlassDock(
             .padding(start = DockSideMargin, end = DockSideMargin, bottom = DockBottomMargin)
             .shadow(28.dp, DockShape, ambientColor = Color.Black, spotColor = Color.Black)
             .clip(DockShape)
-            // Cristal ahumado: grafito al 74 % sobre lo que se desplaza detrás, con reflejo superior.
-            .background(Graphite.copy(alpha = 0.74f))
+            // Cristal ahumado: contenido desenfocado (si se puede) bajo grafito, con reflejo superior.
+            .backdropBlur(backdrop)
+            .background(Graphite.copy(alpha = if (backdrop != null) TINT_OVER_BLUR else TINT_FALLBACK))
             .background(
                 Brush.verticalGradient(
                     0f to Color.White.copy(alpha = 0.10f),
