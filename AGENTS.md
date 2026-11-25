@@ -1,5 +1,11 @@
 # Reglas para agentes en FitnessApp
 
+## Encargo actual F1 y Liquid Glass
+Prevalecen docs/10_FUNCTIONAL_MVP.md, docs/11_LIQUID_GLASS.md y docs/CLAUDE_NEXT.md. El usuario solicita conservar H2, mantener dos columnas y ejecutar un lote funcional completo: todas las tarjetas con registro local real, primer Liquid Glass y pruebas conjuntas al final. No parar entre antiguos H3–H6 para ese mínimo; no rehacer H0/H2. Las restricciones antiguas de solo ajuste visual o solo H1 son históricas para este encargo. Seguir los límites de F1, no inventar datos ni borrar trabajo; no push de implementación sin autorización posterior.
+
+## Antecedente visual del 25 de noviembre de 2026
+Para el encargo actual leer docs/09_VISUAL_POLISH.md y docs/CLAUDE_NEXT.md. H2 está en su rama y se conserva. Mantener DOS tarjetas por fila, imágenes v2 pequeñas/completas a la derecha y texto a la izquierda. Ajustar dock/botones usando componentes existentes. No comenzar H3, regenerar H0/H2 ni crear infraestructura sin uso. La entrega de estas instrucciones no implementa el cambio de Kotlin. Las reglas anteriores de fases quedan como contexto histórico cuando no contradigan este encargo.
+
 ## Actualización H1 y H2 del 24 de noviembre de 2026
 Leer primero docs/07_H1_H2_DELIVERY.md, docs/08_MOTION.md y docs/CLAUDE_NEXT.md. Actualizan alcance visual, movimiento y cierre de H1/H2 sobre las propuestas antiguas. La subida de estos documentos no implementa ni autoriza automáticamente código de todas las fases. Al recibir el encargo H1 del usuario, avanzar H1; H2 requiere aprobación posterior. Mantener reglas de no push para implementación salvo autorización explícita. Reutilizar la base H0, no regenerarla. Colores exactos ya aprobados; foto completa, icono, título mayor y descripción obligatorios. No posponer el movimiento requerido de cada fase. No crear código, módulos ni documentación sin utilidad actual.
 
@@ -16,4 +22,5 @@ Usar repositorios como frontera de persistencia, estado observable y composables
 Cada corrección debe incluir validación acorde al riesgo; priorizar cálculos, integridad, recuperación y permisos. No crear tests vacíos para alcanzar cobertura. Documentar comandos no disponibles y fallos sin ocultarlos. Capturas de demo deben decir Demo.
 
 No publicar ni hacer push sin instrucción explícita. No avanzar H0→H1 ni entre fases sin aprobación. No cambiar estructura de cinco pestañas ni añadir Bienestar. No afirmar integración de reloj sin registros observables del proveedor.
+
 

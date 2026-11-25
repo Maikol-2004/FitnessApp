@@ -1,5 +1,13 @@
 # FitnessApp
 
+## Encargo vigente F1
+[Versión utilizable después de H2](docs/10_FUNCTIONAL_MVP.md), [Liquid Glass elegido](docs/11_LIQUID_GLASS.md) y [mensaje para Claude](docs/CLAUDE_NEXT.md). El usuario pide todos los apartados básicos operativos con registros manuales locales, conservar entrenamiento H2, dos tarjetas por fila y una secuencia final conjunta de verificación. El código H2 está en fase/h2; no volver a empezar desde la app H0 de main.
+
+Imagen del [menú elegido](design/liquid-glass/approved-menu.webp) y [seis fotos v2](design/polish-v2/manifest.json). Las referencias no son interfaces bitmap. Este commit entrega instrucciones y recursos; la implementación y sus pruebas corresponden al siguiente trabajo de Claude.
+
+## Encargo visual actual
+[Corrección visual después de H2](docs/09_VISUAL_POLISH.md) y [mensaje para Claude](docs/CLAUDE_NEXT.md). Dos tarjetas por fila, objetos completos a la derecha y texto a la izquierda; dock y botones afinados sin rehacer lógica. El código H2 está en la rama [fase/h2](https://github.com/Maikol-2004/FitnessApp/tree/fase/h2); no trabajar sobre la base H0 de main por error. Recursos de encuadre en design/polish-v2/.
+
 Aplicación Android local-first con Kotlin, Jetpack Compose, Material 3, Room y DataStore. Tema oscuro Titanium Champagne, applicationId com.maikol.fitnessapp y minSdk 28. Repositorio con base H0; este cambio entrega planificación y recursos de H1/H2, no su código.
 
 ## Siguiente trabajo
