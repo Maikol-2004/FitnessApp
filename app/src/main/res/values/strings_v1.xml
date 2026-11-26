@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- V1: editor de rutinas abierto con Liquid Glass (docs/15_OPEN_GLASS_ROUTINE_EDITOR.md) -->
+    <string name="v1_add_notes">Añadir notas</string>
+    <string name="v1_show_notes">Ver notas</string>
+    <string name="v1_hide_notes">Ocultar notas</string>
+    <string name="v1_exercise_notes">Notas</string>
+    <string name="v1_planned_sets">Series planificadas</string>
+    <plurals name="v1_working_sets">
+        <item quantity="one">%d de trabajo</item>
+        <item quantity="other">%d de trabajo</item>
+    </plurals>
+    <string name="v1_col_type">Tipo</string>
+    <string name="v1_col_rest">Descanso</string>
+    <string name="v1_set_type_description">Tipo de la serie %1$d</string>
+    <string name="v1_set_type_work">Trabajo</string>
+    <string name="v1_set_type_warmup" tools:ignore="TypographyOther">Calentamiento (C)</string>
+    <string name="v1_type_hint" tools:ignore="TypographyOther">Tipo: trabajo o calentamiento (C). El calentamiento cuenta como serie, pero no suma volumen.</string>
+    <string name="v1_set_actions">Acciones de la serie %1$d</string>
+    <string name="v1_delete_set">Eliminar serie</string>
+    <string name="v1_rest_edit">Editar descanso</string>
+    <string name="v1_rest_dialog_title">Descanso en segundos</string>
+    <string name="v1_rest_preview">De 0 a 3600 s. Se mostrará como %1$s.</string>
+    <string name="v1_rest_confirm">Aplicar</string>
+    <string name="v1_cancel">Cancelar</string>
+    <string name="v1_custom_no_image">Ejercicio personalizado: sin imagen</string>
+</resources>

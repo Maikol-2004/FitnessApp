@@ -55,7 +55,7 @@ class ProfilePersistenceTest {
         rule.onNode(hasSetTextAction() and hasText("Tu nombre (opcional)")).performTextReplacement("")
         rule.onNodeWithText("Guardar").performClick()
         rule.waitUntil(5_000) { exists("Guardado") }
-        rule.onNodeWithText("kg · km").performClick()
+        rule.onNodeWithText("kg · km").performScrollTo().performClick()
         rule.waitUntil(5_000) { selected("kg · km") }
         rule.onNode(hasText("Inicio") and isTab).performClick()
         rule.waitUntil(5_000) { exists("Hola") && !exists("Hola, Prueba H1") }

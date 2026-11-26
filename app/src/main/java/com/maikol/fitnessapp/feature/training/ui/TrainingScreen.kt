@@ -336,11 +336,15 @@ internal fun countsLabel(exercises: Int, sets: Int): String = stringResource(
 )
 
 @Composable
-internal fun OverflowMenu(description: String, actions: List<MenuAction>, modifier: Modifier = Modifier) {
+internal fun OverflowMenu(description: String, actions: List<MenuAction>, modifier: Modifier = Modifier, enabled: Boolean = true) {
     var expanded by remember { mutableStateOf(false) }
     Box(modifier) {
-        IconButton(onClick = { expanded = true }, modifier = Modifier.semantics { this.contentDescription = description }) {
-            Icon(painterResource(R.drawable.ic_more_vert), contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
+        IconButton(onClick = { expanded = true }, enabled = enabled, modifier = Modifier.semantics { this.contentDescription = description }) {
+            Icon(
+                painterResource(R.drawable.ic_more_vert),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = if (enabled) 1f else 0.38f),
+            )
         }
         DropdownMenu(
             expanded = expanded,

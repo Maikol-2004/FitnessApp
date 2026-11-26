@@ -60,13 +60,17 @@ class TrainingFlowTest {
         rule.onNodeWithText("Crear ejercicio personalizado").performScrollTo().performClick()
         waitForText("Escribe el nombre del ejercicio.")
 
-        rule.onNode(hasSetTextAction() and hasText("Nombre de la rutina")).performTextReplacement("Prueba UI")
-        rule.onNode(hasSetTextAction() and hasText("Nombre del ejercicio")).performTextReplacement("Remo")
+        rule.onNode(hasSetTextAction() and hasContentDescription("Nombre de la rutina")).performTextReplacement("Prueba UI")
+        rule.onNode(hasSetTextAction() and hasContentDescription("Nombre del ejercicio")).performTextReplacement("Remo")
         rule.onNode(hasContentDescription("Serie 1, kg")).performTextReplacement("20")
         rule.onNode(hasContentDescription("Serie 1, Reps")).performTextReplacement("10")
         // Sin descanso: el aro M08 se redibuja en cada fotograma y Compose nunca quedaría en reposo para la
         // prueba. El descanso se verifica en TrainingRepositoryTest y en el dispositivo (capturas 07–08).
-        rule.onNode(hasContentDescription("Serie 1, Desc. (s)")).performTextReplacement("0")
+        // V1: el descanso se ve «m:ss» y se edita en segundos en un diálogo.
+        rule.onNode(hasContentDescription("Serie 1, Descanso, 1:30")).performScrollTo().performClick()
+        rule.onNode(hasSetTextAction() and hasContentDescription("Descanso en segundos")).performTextReplacement("0")
+        rule.onNodeWithText("Aplicar").performClick()
+        waitForText("0:00")
         rule.onNodeWithText("Añadir serie").performScrollTo().performClick()
         rule.onNodeWithText("Guardar rutina").performClick()
 

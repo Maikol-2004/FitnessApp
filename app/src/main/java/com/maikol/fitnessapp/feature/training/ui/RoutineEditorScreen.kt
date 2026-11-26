@@ -1,8 +1,6 @@
 package com.maikol.fitnessapp.feature.training.ui
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -12,48 +10,46 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.toggleable
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.maikol.fitnessapp.R
-import com.maikol.fitnessapp.core.designsystem.component.FitnessCard
 import com.maikol.fitnessapp.core.designsystem.component.LoadingRegion
 import com.maikol.fitnessapp.core.designsystem.component.PrimaryButton
-import com.maikol.fitnessapp.core.designsystem.component.SecondaryButton
 import com.maikol.fitnessapp.core.designsystem.theme.FitnessTheme
 import com.maikol.fitnessapp.core.designsystem.theme.FitnessThemeExtras
 import com.maikol.fitnessapp.core.designsystem.theme.MinTouchTarget
@@ -62,6 +58,7 @@ import com.maikol.fitnessapp.core.preferences.UnitSystem
 import com.maikol.fitnessapp.feature.training.catalog.ExerciseCatalog
 import com.maikol.fitnessapp.feature.training.catalog.LoadSemantics
 import com.maikol.fitnessapp.feature.training.catalog.loadSemantics
+import com.maikol.fitnessapp.feature.training.catalog.mediaAssets
 import com.maikol.fitnessapp.feature.training.data.LoadText
 import com.maikol.fitnessapp.feature.training.data.loadUnit
 
@@ -104,26 +101,32 @@ fun RoutineEditorRoute(
             RoutineEditorContent(state, form, viewModel)
         }
         if (state.form != null) {
-            BottomActionBar {
-                Column(Modifier.weight(1f)) {
-                    InlineMessage(visible = state.saveFailed, text = stringResource(R.string.editor_save_failed), modifier = Modifier.padding(bottom = Spacing.s))
-                    InlineMessage(
-                        visible = !state.saveFailed && state.showErrors && !state.errors.isEmpty,
-                        text = stringResource(R.string.editor_fix_errors),
-                        modifier = Modifier.padding(bottom = Spacing.s),
-                    )
-                    PrimaryButton(
-                        text = stringResource(R.string.editor_save),
-                        onClick = {
-                            // El teclado no debe seguir abierto en la pantalla siguiente (tapaba las series).
-                            focus.clearFocus()
-                            viewModel.save()
-                        },
-                        busy = state.saving,
-                        iconRes = R.drawable.ic_check,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                }
+            // V1: «Guardar rutina» flota sobre el fondo con su inset inferior, sin barra ni tarjeta detrás. Queda
+            // fuera del scroll (encima del teclado con imePadding), así que nunca tapa campos ni errores.
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding()
+                    .padding(horizontal = Spacing.l)
+                    .padding(top = Spacing.s, bottom = Spacing.m),
+            ) {
+                InlineMessage(visible = state.saveFailed, text = stringResource(R.string.editor_save_failed), modifier = Modifier.padding(bottom = Spacing.s))
+                InlineMessage(
+                    visible = !state.saveFailed && state.showErrors && !state.errors.isEmpty,
+                    text = stringResource(R.string.editor_fix_errors),
+                    modifier = Modifier.padding(bottom = Spacing.s),
+                )
+                PrimaryButton(
+                    text = stringResource(R.string.editor_save),
+                    onClick = {
+                        // El teclado no debe seguir abierto en la pantalla siguiente (tapaba las series).
+                        focus.clearFocus()
+                        viewModel.save()
+                    },
+                    busy = state.saving,
+                    iconRes = R.drawable.ic_check,
+                    modifier = Modifier.fillMaxWidth(),
+                )
             }
         }
     }
@@ -182,44 +185,40 @@ fun RoutineEditorRoute(
 @Composable
 private fun RoutineEditorContent(state: EditorUiState, form: RoutineForm, vm: RoutineEditorViewModel) {
     val errors = state.visibleErrors
+    // V1: todo al aire sobre el fondo; solo los campos y botones llevan cristal.
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(horizontal = Spacing.l)
             .padding(top = Spacing.s, bottom = Spacing.xl),
-        verticalArrangement = Arrangement.spacedBy(Spacing.cardGap),
     ) {
-        FitnessCard {
-            EditorTextField(
-                value = form.name,
-                onValueChange = vm::onNameChange,
-                label = stringResource(R.string.editor_name_label),
-                error = if (errors.name) stringResource(R.string.editor_error_name) else null,
-                capitalization = KeyboardCapitalization.Sentences,
-            )
-            Spacer(Modifier.height(Spacing.m))
-            EditorTextField(
-                value = form.notes,
-                onValueChange = vm::onNotesChange,
-                label = stringResource(R.string.editor_notes_label),
-                singleLine = false,
-                capitalization = KeyboardCapitalization.Sentences,
-            )
-        }
+        GlassTextField(
+            value = form.name,
+            onValueChange = vm::onNameChange,
+            label = stringResource(R.string.editor_name_label),
+            error = if (errors.name) stringResource(R.string.editor_error_name) else null,
+            capitalization = KeyboardCapitalization.Sentences,
+        )
+        RoutineNotes(form.notes, vm::onNotesChange)
 
-        SectionHeader(title = stringResource(R.string.editor_exercises_title), modifier = Modifier.padding(top = Spacing.m))
-        InlineMessage(visible = errors.noExercises, text = stringResource(R.string.editor_error_no_exercises))
+        OpenSectionTitle(
+            title = stringResource(R.string.editor_exercises_title),
+            count = form.exercises.size.takeIf { it > 0 }?.let { pluralStringResource(R.plurals.exercise_count, it, it) },
+            modifier = Modifier.padding(top = Spacing.xl),
+        )
+        InlineMessage(visible = errors.noExercises, text = stringResource(R.string.editor_error_no_exercises), modifier = Modifier.padding(top = Spacing.s))
 
         form.exercises.forEachIndexed { index, exercise ->
-            ExerciseEditorCard(
-                index = index,
-                count = form.exercises.size,
-                exercise = exercise,
-                unit = state.unit,
-                errors = errors,
-                vm = vm,
-            )
+            // Clave estable: notas abiertas y diálogos siguen al ejercicio al reordenar.
+            key(exercise.id) {
+                if (index > 0) {
+                    HorizontalDivider(Modifier.padding(vertical = Spacing.xl), color = FitnessThemeExtras.colors.surfaceRaised)
+                } else {
+                    Spacer(Modifier.height(Spacing.l))
+                }
+                OpenExerciseEditor(index = index, count = form.exercises.size, exercise = exercise, unit = state.unit, errors = errors, vm = vm)
+            }
         }
 
         if (form.exercises.isEmpty()) {
@@ -227,24 +226,68 @@ private fun RoutineEditorContent(state: EditorUiState, form: RoutineForm, vm: Ro
                 stringResource(R.string.editor_empty_hint),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(top = Spacing.m),
             )
         }
-        SecondaryButton(
+        GlassButton(
             text = stringResource(R.string.editor_add_exercise),
-            onClick = vm::openPicker,
             iconRes = R.drawable.ic_add,
-            modifier = Modifier.fillMaxWidth(),
+            onClick = vm::openPicker,
+            modifier = Modifier.padding(top = Spacing.xl),
         )
-        TextButton(onClick = vm::addExercise, modifier = Modifier.fillMaxWidth().heightIn(min = MinTouchTarget)) {
-            Icon(painterResource(R.drawable.ic_edit), contentDescription = null, modifier = Modifier.size(18.dp))
-            Spacer(Modifier.width(Spacing.xs))
-            Text(stringResource(R.string.editor_create_custom), style = MaterialTheme.typography.labelLarge)
+        PlainAction(
+            text = stringResource(R.string.editor_create_custom),
+            iconRes = R.drawable.ic_edit,
+            onClick = vm::addExercise,
+            modifier = Modifier.padding(top = Spacing.s),
+        )
+    }
+}
+
+/** «Añadir notas» de la rutina: plegable; con notas empieza abierto y plegar nunca borra el texto. */
+@Composable
+private fun RoutineNotes(notes: String, onChange: (String) -> Unit) {
+    var open by rememberSaveable { mutableStateOf(notes.isNotBlank()) }
+    val focus = remember { FocusRequester() }
+    var focusOnOpen by remember { mutableStateOf(false) }
+    PlainAction(
+        text = stringResource(notesToggleLabel(open, notes)),
+        iconRes = if (open) null else R.drawable.ic_add,
+        onClick = {
+            open = !open
+            focusOnOpen = open && notes.isBlank()
+        },
+        modifier = Modifier.padding(top = Spacing.xs),
+    )
+    if (open) {
+        GlassTextField(
+            value = notes,
+            onValueChange = onChange,
+            label = stringResource(R.string.editor_notes_label),
+            singleLine = false,
+            capitalization = KeyboardCapitalization.Sentences,
+            focusRequester = focus,
+        )
+        LaunchedEffect(focusOnOpen) {
+            if (focusOnOpen) {
+                focus.requestFocus()
+                focusOnOpen = false
+            }
         }
     }
 }
 
+private fun notesToggleLabel(open: Boolean, notes: String): Int = when {
+    open -> R.string.v1_hide_notes
+    notes.isBlank() -> R.string.v1_add_notes
+    else -> R.string.v1_show_notes
+}
+
+private val ThumbnailSize = 72.dp
+private val ThumbnailShape = RoundedCornerShape(16.dp)
+
 @Composable
-private fun ExerciseEditorCard(
+private fun OpenExerciseEditor(
     index: Int,
     count: Int,
     exercise: ExerciseForm,
@@ -253,29 +296,36 @@ private fun ExerciseEditorCard(
     vm: RoutineEditorViewModel,
 ) {
     val label = exercise.name.ifBlank { stringResource(R.string.editor_exercise_label, index + 1) }
-    FitnessCard {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .size(32.dp)
-                    .background(champagneTint(0.14f), MaterialTheme.shapes.small),
-            ) {
-                Text("${index + 1}", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-            }
-            Spacer(Modifier.width(Spacing.m))
-            Text(
-                stringResource(R.string.editor_exercise_label, index + 1).uppercase(),
-                style = OverlineStyle,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.weight(1f),
+    val catalog = ExerciseCatalog.byId(exercise.catalogId)
+    var notesOpen by rememberSaveable { mutableStateOf(exercise.notes.isNotBlank()) }
+    val notesFocus = remember { FocusRequester() }
+    var focusNotes by remember { mutableStateOf(false) }
+    val largeFont = LocalDensity.current.fontScale >= 1.3f
+
+    // Subir, bajar, notas y menú, sin barra contenedora.
+    val actions: @Composable () -> Unit = {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s)) {
+            GlassIconButton(
+                R.drawable.ic_arrow_up,
+                stringResource(R.string.editor_move_up, label),
+                onClick = { vm.moveExercise(exercise.id, -1) },
+                enabled = index > 0,
             )
-            IconButton(onClick = { vm.moveExercise(exercise.id, -1) }, enabled = index > 0) {
-                Icon(painterResource(R.drawable.ic_arrow_up), contentDescription = stringResource(R.string.editor_move_up, label))
-            }
-            IconButton(onClick = { vm.moveExercise(exercise.id, 1) }, enabled = index < count - 1) {
-                Icon(painterResource(R.drawable.ic_arrow_down), contentDescription = stringResource(R.string.editor_move_down, label))
-            }
+            GlassIconButton(
+                R.drawable.ic_arrow_down,
+                stringResource(R.string.editor_move_down, label),
+                onClick = { vm.moveExercise(exercise.id, 1) },
+                enabled = index < count - 1,
+            )
+            PlainAction(
+                text = stringResource(if (notesOpen) R.string.v1_hide_notes else R.string.v1_exercise_notes),
+                iconRes = if (notesOpen) null else R.drawable.ic_add,
+                onClick = {
+                    notesOpen = !notesOpen
+                    focusNotes = notesOpen && exercise.notes.isBlank()
+                },
+            )
+            Spacer(Modifier.weight(1f))
             OverflowMenu(
                 description = stringResource(R.string.training_routine_actions, label),
                 actions = listOf(
@@ -284,65 +334,114 @@ private fun ExerciseEditorCard(
                 ),
             )
         }
-        Spacer(Modifier.height(Spacing.m))
-        val catalog = ExerciseCatalog.byId(exercise.catalogId)
+    }
+
+    Row(verticalAlignment = Alignment.Top) {
         if (catalog != null) {
-            // Del catálogo: el nombre viene de la definición; no se vuelve a pedir.
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Column(Modifier.weight(1f).semantics(mergeDescendants = true) {}) {
-                    Text(exercise.name, style = MaterialTheme.typography.titleLarge)
-                    Text(catalog.metaLine(), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
-                IconButton(onClick = { vm.openGuide(catalog.id) }) {
-                    Icon(
-                        painterResource(R.drawable.ic_info),
-                        contentDescription = stringResource(R.string.picker_info, exercise.name),
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                }
-            }
-            if (catalog.loadSemantics == LoadSemantics.ASSISTANCE) {
-                Spacer(Modifier.height(Spacing.s))
-                AssistModeSelector(exercise.assistMode, onChange = { vm.onAssistModeChange(exercise.id, it) })
-            }
+            ExerciseAssetImage(
+                path = catalog.mediaAssets.thumbnail,
+                contentDescription = null,
+                opaque = true,
+                modifier = Modifier.size(ThumbnailSize).clip(ThumbnailShape),
+            )
         } else {
-            // Personalizado: nombre libre y, con nombre, acceso a su ficha (progreso e historial por exerciseKey).
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                EditorTextField(
-                    value = exercise.name,
-                    onValueChange = { vm.onExerciseNameChange(exercise.id, it) },
-                    label = stringResource(R.string.editor_exercise_name_label),
-                    error = if (exercise.id in errors.exerciseName) stringResource(R.string.editor_error_exercise_name) else null,
-                    capitalization = KeyboardCapitalization.Sentences,
-                    modifier = Modifier.weight(1f),
+            // Personalizado: sin foto de otro ejercicio.
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.size(ThumbnailSize).editorGlass(ThumbnailShape)) {
+                Icon(
+                    painterResource(R.drawable.ic_edit),
+                    contentDescription = stringResource(R.string.v1_custom_no_image),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(24.dp),
                 )
-                if (exercise.name.isNotBlank()) {
-                    IconButton(onClick = { vm.openCustomGuide(exercise.key) }) {
+            }
+        }
+        Spacer(Modifier.width(Spacing.m))
+        Column(Modifier.weight(1f)) {
+            if (catalog != null) {
+                Row(verticalAlignment = Alignment.Top) {
+                    Column(Modifier.weight(1f).padding(top = Spacing.xs).semantics(mergeDescendants = true) {}) {
+                        Text(exercise.name, style = MaterialTheme.typography.titleLarge)
+                        Text(catalog.metaLine(), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    IconButton(onClick = { vm.openGuide(catalog.id) }) {
                         Icon(
                             painterResource(R.drawable.ic_info),
-                            contentDescription = stringResource(R.string.custom_open_detail, exercise.name),
+                            contentDescription = stringResource(R.string.picker_info, exercise.name),
                             tint = MaterialTheme.colorScheme.primary,
                         )
                     }
                 }
+            } else {
+                // Personalizado: nombre libre y, con nombre, acceso a su ficha (progreso e historial por exerciseKey).
+                Row(verticalAlignment = Alignment.Top) {
+                    GlassTextField(
+                        value = exercise.name,
+                        onValueChange = { vm.onExerciseNameChange(exercise.id, it) },
+                        label = stringResource(R.string.editor_exercise_name_label),
+                        error = if (exercise.id in errors.exerciseName) stringResource(R.string.editor_error_exercise_name) else null,
+                        capitalization = KeyboardCapitalization.Sentences,
+                        modifier = Modifier.weight(1f),
+                    )
+                    if (exercise.name.isNotBlank()) {
+                        IconButton(onClick = { vm.openCustomGuide(exercise.key) }, modifier = Modifier.padding(top = Spacing.xs)) {
+                            Icon(
+                                painterResource(R.drawable.ic_info),
+                                contentDescription = stringResource(R.string.custom_open_detail, exercise.name),
+                                tint = MaterialTheme.colorScheme.primary,
+                            )
+                        }
+                    }
+                }
+            }
+            if (!largeFont) {
+                Spacer(Modifier.height(Spacing.s))
+                actions()
             }
         }
+    }
+    if (largeFont) {
+        // Fuente grande: las acciones bajan a todo el ancho para no comprimirse junto a la miniatura.
         Spacer(Modifier.height(Spacing.s))
-        EditorTextField(
+        actions()
+    }
+    if (catalog?.loadSemantics == LoadSemantics.ASSISTANCE) {
+        Spacer(Modifier.height(Spacing.m))
+        AssistModeSelector(exercise.assistMode, onChange = { vm.onAssistModeChange(exercise.id, it) })
+    }
+    if (notesOpen) {
+        GlassTextField(
             value = exercise.notes,
             onValueChange = { vm.onExerciseNotesChange(exercise.id, it) },
             label = stringResource(R.string.editor_exercise_notes_label),
             singleLine = false,
             capitalization = KeyboardCapitalization.Sentences,
+            focusRequester = notesFocus,
+            modifier = Modifier.padding(top = Spacing.m),
         )
-        Spacer(Modifier.height(Spacing.l))
+        LaunchedEffect(focusNotes) {
+            if (focusNotes) {
+                notesFocus.requestFocus()
+                focusNotes = false
+            }
+        }
+    }
 
-        BoxWithConstraints {
-            // Cuatro columnas si caben cómodamente; con fuente grande o pantalla estrecha, cada serie en bloque.
-            val stacked = maxWidth / LocalDensity.current.fontScale < 300.dp
-            Column(verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
-                if (!stacked) SetHeaderRow(unit)
-                exercise.sets.forEachIndexed { setIndex, set ->
+    val working = exercise.sets.count { !it.warmup }
+    OpenSectionTitle(
+        title = stringResource(R.string.v1_planned_sets),
+        count = pluralStringResource(R.plurals.v1_working_sets, working, working),
+        style = MaterialTheme.typography.titleMedium,
+        modifier = Modifier.padding(top = Spacing.xl),
+    )
+    HorizontalDivider(Modifier.padding(top = Spacing.s, bottom = Spacing.m), color = FitnessThemeExtras.colors.surfaceRaised)
+
+    BoxWithConstraints {
+        // Una fila por serie si caben los controles a 48 dp; con fuente grande o pantalla estrecha, dos líneas con etiquetas.
+        val stacked = maxWidth / LocalDensity.current.fontScale < 300.dp
+        Column(verticalArrangement = Arrangement.spacedBy(if (stacked) Spacing.l else Spacing.s)) {
+            if (!stacked) SetHeaderRow(unit)
+            exercise.sets.forEachIndexed { setIndex, set ->
+                key(set.id) {
                     SetEditorRow(
                         number = setIndex + 1,
                         set = set,
@@ -361,34 +460,35 @@ private fun ExerciseEditorCard(
                 }
             }
         }
-        Text(
-            stringResource(R.string.editor_warmup_hint),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(top = Spacing.s),
-        )
-        val setIds = exercise.sets.map { it.id }.toSet()
-        InlineMessage(visible = exercise.id in errors.noSets, text = stringResource(R.string.editor_error_no_sets), modifier = Modifier.padding(top = Spacing.s))
-        InlineMessage(visible = errors.reps.any { it in setIds }, text = stringResource(R.string.error_reps), modifier = Modifier.padding(top = Spacing.s))
-        InlineMessage(visible = errors.load.any { it in setIds }, text = stringResource(R.string.error_load), modifier = Modifier.padding(top = Spacing.s))
-        InlineMessage(visible = errors.rest.any { it in setIds }, text = stringResource(R.string.error_rest), modifier = Modifier.padding(top = Spacing.s))
-        TextButton(onClick = { vm.addSet(exercise.id) }, modifier = Modifier.heightIn(min = MinTouchTarget)) {
-            Icon(painterResource(R.drawable.ic_add), contentDescription = null, modifier = Modifier.size(18.dp))
-            Spacer(Modifier.width(Spacing.xs))
-            Text(stringResource(R.string.editor_add_set), style = MaterialTheme.typography.labelLarge)
-        }
     }
+    Text(
+        stringResource(R.string.v1_type_hint),
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(top = Spacing.m),
+    )
+    val setIds = exercise.sets.map { it.id }.toSet()
+    InlineMessage(visible = exercise.id in errors.noSets, text = stringResource(R.string.editor_error_no_sets), modifier = Modifier.padding(top = Spacing.s))
+    InlineMessage(visible = errors.reps.any { it in setIds }, text = stringResource(R.string.error_reps), modifier = Modifier.padding(top = Spacing.s))
+    InlineMessage(visible = errors.load.any { it in setIds }, text = stringResource(R.string.error_load), modifier = Modifier.padding(top = Spacing.s))
+    InlineMessage(visible = errors.rest.any { it in setIds }, text = stringResource(R.string.error_rest), modifier = Modifier.padding(top = Spacing.s))
+    GlassButton(
+        text = stringResource(R.string.editor_add_set),
+        iconRes = R.drawable.ic_add,
+        onClick = { vm.addSet(exercise.id) },
+        modifier = Modifier.padding(top = Spacing.m),
+    )
 }
 
-private val SetNumberWidth = 44.dp
+private val SetTypeWidth = 72.dp
 
 @Composable
 private fun SetHeaderRow(unit: UnitSystem) {
     Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s), modifier = Modifier.semantics(mergeDescendants = true) {}) {
-        HeaderLabel(stringResource(R.string.editor_col_set), Modifier.width(SetNumberWidth))
+        HeaderLabel(stringResource(R.string.v1_col_type), Modifier.width(SetTypeWidth))
         HeaderLabel(unit.loadUnit(), Modifier.weight(1f))
         HeaderLabel(stringResource(R.string.editor_col_reps), Modifier.weight(1f))
-        HeaderLabel(stringResource(R.string.editor_col_rest), Modifier.weight(1f))
+        HeaderLabel(stringResource(R.string.v1_col_rest), Modifier.weight(1f))
         Spacer(Modifier.width(MinTouchTarget))
     }
 }
@@ -405,6 +505,7 @@ internal fun HeaderLabel(text: String, modifier: Modifier = Modifier) {
     )
 }
 
+/** Fila de serie: campos de cristal independientes, sin nada detrás que englobe la fila. */
 @Composable
 private fun SetEditorRow(
     number: Int,
@@ -423,116 +524,75 @@ private fun SetEditorRow(
 ) {
     val loadDesc = stringResource(R.string.editor_field_description, number, unit.loadUnit())
     val repsDesc = stringResource(R.string.editor_field_description, number, stringResource(R.string.editor_col_reps))
-    val restDesc = stringResource(R.string.editor_field_description, number, stringResource(R.string.editor_col_rest))
-    val numberSlot: @Composable () -> Unit = { WarmupToggle(number, set.warmup, onWarmup) }
-    val delete: @Composable () -> Unit = {
-        IconButton(onClick = onDelete, enabled = canDelete) {
-            Icon(
-                painterResource(R.drawable.ic_close),
-                contentDescription = stringResource(R.string.editor_delete_set, number),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
+    val restDesc = stringResource(R.string.editor_field_description, number, stringResource(R.string.v1_col_rest))
+    val type: @Composable (Modifier) -> Unit = { m ->
+        SetTypeSelector(number, set.warmup, onSelect = { if (it != set.warmup) onWarmup() }, modifier = m)
+    }
+    val load: @Composable (Modifier) -> Unit = { m ->
+        NumberCell(
+            set.load.text, onLoad, loadDesc, m.editorGlass(),
+            decimal = true, isError = loadError, placeholder = "—", background = Color.Transparent, shape = GlassShape,
+        )
+    }
+    val reps: @Composable (Modifier) -> Unit = { m ->
+        NumberCell(set.reps, onReps, repsDesc, m.editorGlass(), isError = repsError, background = Color.Transparent, shape = GlassShape)
+    }
+    val rest: @Composable (Modifier) -> Unit = { m -> RestCell(set.rest, restDesc, restError, onRest, m) }
+    val menu: @Composable () -> Unit = {
+        // Eliminar queda dentro de un menú (menos borrados accidentales) y respeta el mínimo de una serie.
+        OverflowMenu(
+            description = stringResource(R.string.v1_set_actions, number),
+            actions = listOf(MenuAction(R.string.v1_delete_set, R.drawable.ic_delete, onDelete)),
+            enabled = canDelete,
+        )
     }
     if (!stacked) {
         Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s), verticalAlignment = Alignment.CenterVertically) {
-            numberSlot()
-            NumberCell(set.load.text, onLoad, loadDesc, Modifier.weight(1f), decimal = true, isError = loadError, placeholder = "—")
-            NumberCell(set.reps, onReps, repsDesc, Modifier.weight(1f), isError = repsError)
-            NumberCell(set.rest, onRest, restDesc, Modifier.weight(1f), isError = restError, placeholder = "0")
-            delete()
+            type(Modifier.width(SetTypeWidth))
+            load(Modifier.weight(1f))
+            reps(Modifier.weight(1f))
+            rest(Modifier.weight(1f))
+            menu()
         }
     } else {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(Spacing.s),
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(1.dp, FitnessThemeExtras.colors.surfaceRaised, MaterialTheme.shapes.medium)
-                .padding(Spacing.s),
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                numberSlot()
-                Spacer(Modifier.weight(1f))
-                delete()
+        Column(verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s), verticalAlignment = Alignment.Bottom) {
+                LabeledCell(stringResource(R.string.v1_col_type), Modifier.width(SetTypeWidth)) { type(Modifier.fillMaxWidth()) }
+                LabeledCell(unit.loadUnit(), Modifier.weight(1f)) { load(Modifier.fillMaxWidth()) }
+                menu()
             }
-            LabeledCell(unit.loadUnit()) { NumberCell(set.load.text, onLoad, loadDesc, Modifier.fillMaxWidth(), decimal = true, isError = loadError, placeholder = "—") }
-            LabeledCell(stringResource(R.string.editor_col_reps)) { NumberCell(set.reps, onReps, repsDesc, Modifier.fillMaxWidth(), isError = repsError) }
-            LabeledCell(stringResource(R.string.editor_col_rest)) { NumberCell(set.rest, onRest, restDesc, Modifier.fillMaxWidth(), isError = restError, placeholder = "0") }
+            Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s), verticalAlignment = Alignment.Bottom) {
+                LabeledCell(stringResource(R.string.editor_col_reps), Modifier.weight(1f)) { reps(Modifier.fillMaxWidth()) }
+                LabeledCell(stringResource(R.string.v1_col_rest), Modifier.weight(1f)) { rest(Modifier.fillMaxWidth()) }
+                Spacer(Modifier.width(MinTouchTarget))
+            }
         }
     }
 }
 
 @Composable
-private fun LabeledCell(label: String, content: @Composable () -> Unit) {
-    Column {
-        Text(label.uppercase(), style = OverlineStyle, color = MaterialTheme.colorScheme.onSurfaceVariant)
+private fun LabeledCell(label: String, modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    Column(modifier) {
+        Text(label.uppercase(), style = OverlineStyle, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
         Spacer(Modifier.height(Spacing.xs))
         content()
     }
 }
 
-/** Número de serie que alterna calentamiento («C»). Casilla accesible con su estado. */
-@Composable
-private fun WarmupToggle(number: Int, warmup: Boolean, onToggle: () -> Unit) {
-    val description = stringResource(R.string.editor_warmup_toggle, number)
-    val state = stringResource(if (warmup) R.string.editor_warmup else R.string.editor_working_set)
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .size(SetNumberWidth, MinTouchTarget)
-            .background(if (warmup) champagneTint(0.16f) else FitnessThemeExtras.colors.surfaceRaised, MaterialTheme.shapes.medium)
-            .toggleable(value = warmup, role = Role.Checkbox, onValueChange = { onToggle() })
-            .semantics {
-                contentDescription = description
-                stateDescription = state
-            },
-    ) {
-        Text(
-            if (warmup) stringResource(R.string.editor_warmup_short) else "$number",
-            style = MaterialTheme.typography.titleMedium,
-            color = if (warmup) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
-        )
-    }
-}
-
-@Composable
-private fun EditorTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    label: String,
-    modifier: Modifier = Modifier,
-    error: String? = null,
-    singleLine: Boolean = true,
-    capitalization: KeyboardCapitalization = KeyboardCapitalization.None,
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text(label) },
-        singleLine = singleLine,
-        minLines = if (singleLine) 1 else 2,
-        isError = error != null,
-        supportingText = error?.let { { Text(it) } },
-        shape = MaterialTheme.shapes.medium,
-        keyboardOptions = KeyboardOptions(capitalization = capitalization),
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedContainerColor = FitnessThemeExtras.colors.surfaceRaised,
-            unfocusedContainerColor = FitnessThemeExtras.colors.surfaceRaised,
-            errorContainerColor = FitnessThemeExtras.colors.surfaceRaised,
-            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-        ),
-        modifier = modifier.fillMaxWidth(),
-    )
-}
-
-@Preview(name = "Fila de serie", showBackground = true, backgroundColor = 0xFF1D2023, widthDp = 360)
+@Preview(name = "Fila de serie", showBackground = true, backgroundColor = 0xFF121416, widthDp = 360)
 @Composable
 private fun SetRowPreview() {
     FitnessTheme {
         Column(Modifier.padding(Spacing.l), verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
             SetHeaderRow(UnitSystem.METRIC)
-            SetEditorRow(1, SetForm("a", "10", LoadText("20", 20.0, "20"), "90", true), UnitSystem.METRIC, false, true, false, false, false, {}, {}, {}, {}, {})
-            SetEditorRow(2, SetForm("b", "", LoadText("x", null, ""), "90", false), UnitSystem.METRIC, false, true, true, true, false, {}, {}, {}, {}, {})
+            SetEditorRow(
+                1, SetForm("a", "10", LoadText("20", 20.0, "20"), "90", true), UnitSystem.METRIC,
+                false, true, false, false, false, {}, {}, {}, {}, {},
+            )
+            SetEditorRow(
+                2, SetForm("b", "", LoadText("x", null, ""), "120", false), UnitSystem.METRIC,
+                false, true, true, true, false, {}, {}, {}, {}, {},
+            )
         }
     }
 }

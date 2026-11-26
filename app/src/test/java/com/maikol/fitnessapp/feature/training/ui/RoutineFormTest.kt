@@ -34,6 +34,27 @@ class RoutineFormTest {
         assertEquals(setOf("c"), errors.reps)
     }
 
+    /** V1: el descanso se guarda en segundos y solo se muestra «m:ss»; un borrador no válido no se formatea. */
+    @Test
+    fun rest_isShownAsClock_andKeptInSeconds() {
+        assertEquals("2:00", restClock("120"))
+        assertEquals("0:00", restClock("0"))
+        assertEquals("0:00", restClock(""))
+        assertEquals("60:00", restClock("3600"))
+        assertEquals(null, restClock("3601"))
+        val form = RoutineForm("r", "Prueba", "", listOf(ExerciseForm("e", "k", "Remo", "", listOf(set("a", rest = "120"), set("b", rest = "3600")))))
+        val sets = (form.validate(UnitSystem.METRIC) as FormResult.Valid).routine.exercises.single().sets
+        assertEquals(listOf(120, 3600), sets.map { it.restSeconds })
+    }
+
+    /** V1: una carga 0 escrita se conserva como 0 (p. ej. sin asistencia); vacía sigue siendo dato ausente. */
+    @Test
+    fun zeroLoad_isKept_emptyLoadStaysNull() {
+        val form = RoutineForm("r", "Prueba", "", listOf(ExerciseForm("e", "k", "Remo", "", listOf(set("a", load = "0"), set("b", load = "")))))
+        val sets = (form.validate(UnitSystem.METRIC) as FormResult.Valid).routine.exercises.single().sets
+        assertEquals(listOf(0.0, null), sets.map { it.loadKg })
+    }
+
     @Test
     fun noExercisesOrNoSets_areInvalid() {
         assertTrue((RoutineForm("r", "Prueba", "", emptyList()).validate(UnitSystem.METRIC) as FormResult.Invalid).errors.noExercises)

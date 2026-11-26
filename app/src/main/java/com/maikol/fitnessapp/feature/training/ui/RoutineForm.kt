@@ -73,7 +73,7 @@ fun RoutineForm.validate(unit: UnitSystem): FormResult {
                 if (kg is Parsed.Invalid) load += s.id
                 if (restSeconds == null) rest += s.id
                 if (r == null || kg is Parsed.Invalid || restSeconds == null) null
-                else PlannedSet(s.id, r, (kg as? Parsed.Value)?.value?.takeIf { it > 0.0 }, restSeconds, s.warmup)
+                else PlannedSet(s.id, r, (kg as? Parsed.Value)?.value, restSeconds, s.warmup)
             },
         )
     }
