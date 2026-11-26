@@ -1,13 +1,11 @@
-# Encargo vigente — G2: medios visuales, ficha y progreso por ejercicio
+# Encargo vigente V1 — editor de rutinas Liquid Glass sin contenedor
 
-El usuario aprobó el catálogo con miniatura a la izquierda y la ficha con Guía/Progreso/Historial, cabecera demostrativa y músculos implicados. Ha pedido generar/subir los recursos y darte la implementación siguiente.
+El usuario aprobó design/routine-editor-open-glass/approved-reference.png y quiere aplicarlo a su app. Lee docs/15_OPEN_GLASS_ROUTINE_EDITOR.md. Esta entrega publica la referencia y el encargo; app/ aún no cambia por este commit.
 
-Lee docs/14_EXERCISE_MEDIA_AND_PROGRESS.md, design/exercises-v1/README.md, manifest.json y VISUAL_REVIEW.md. Referencias visuales aprobadas en references/. G1 publicado en cb7aa08 conserva50 ejercicios y catalogId en rutinas/sesiones; no reconstruirlo.
+Sincroniza origin/fase/f1 conservando trabajo local y datos. Base revisada e065c51; G1/G2/G2.1 y corrección de volumen asistido se conservan. No reconstruir fases.
 
-Sincroniza origin/fase/f1 sin perder cambios locales. Esta entrega añade medios y especificaciones, no ha implementado G2 en app/. Conserva catálogo, datos, rutinas, sesiones, persistencia y últimos cambios visuales.
+Implementa el editor abierto: quitar tarjeta exterior de nombre/notas/ejercicio y contenedor por fila. Ejercicio, títulos y series sobre fondo #121416. Liquid Glass solo en campos y botones, con lente champagne y reflejos suaves coherentes con el menú existente. Miniaturas reales, notas plegables, campos alineados, tipo Trabajo/Calentamiento y descanso mm:ss conservando segundos internos. No añadir controles ficticios ni alterar valores.
 
-Integra las miniaturas por ID y la ficha Guía/Progreso/Historial. No interpretes tres frames como vídeo fluido: implementar secuencia de posiciones honesta con control manual/bucle y movimiento reducido; video=null. Atender incidencias de revisión visual y conservar guía textual en recursos no adecuados. No usar otra variante como sustituto. El vídeo continuo aprobado sigue como objetivo posterior cuando existan clips válidos.
+Mantén catálogo, personalizados, fichas, ayuda máquina/banda, orden, duplicado, borrador y guardado. No aplicar aún este rediseño a la sesión activa ni modificar el dock global. Adaptar a teclado y fuente grande sin meter nuevas tarjetas.
 
-Calcula progreso/historial solo con registros completados según doc14. Distinguir carga de asistencia, peso corporal, calentamiento y valores ausentes. Nada de números demo en producción ni estadísticas sobre objetivos no realizados. No reescribir historiales al agrupar por catalogId.
-
-Una pasada final de compilación, unitarias pertinentes, lint y recorrido funcional, con capturas e informe breve. No dependencias, capas ni pruebas repetitivas sin utilidad. No empacar originales/referencias en el APK. No hacer push posterior de implementación sin autorización del usuario.
+Usa componentes existentes y una solución local pequeña. Una verificación final proporcional V1-01 a V1-07; capturas reales antes/después e informe breve. No migraciones, dependencias ni infraestructura sin uso necesario. No hacer push del código integrado hasta que el usuario lo revise.

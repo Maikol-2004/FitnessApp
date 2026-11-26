@@ -1,5 +1,8 @@
 # Instrucciones para Claude Code
 
+## Encargo vigente V1 — editor abierto con Liquid Glass
+Prevalecen docs/15_OPEN_GLASS_ROUTINE_EDITOR.md y docs/CLAUDE_NEXT.md. Referencia aprobada en design/routine-editor-open-glass/approved-reference.png: sin tarjeta exterior ni fondo por fila, campos y botones glass sobre fondo. Conservar G1/G2/G2.1, datos y corrección de volumen asistido. Este lote es del editor, no de la sesión activa. No push posterior de implementación sin autorización.
+
 ## Encargo vigente G2 — imágenes y ficha de cada ejercicio
 Prevalecen docs/14_EXERCISE_MEDIA_AND_PROGRESS.md y docs/CLAUDE_NEXT.md. Medios por catalogId en design/exercises-v1/manifest.json; revisar VISUAL_REVIEW.md. G1 está completado: conservarlo junto a los datos. Los frames son posiciones estáticas, no vídeos fluidos. Implementar ficha y estadísticas reales sin rehacer fases previas. No push posterior del código integrado sin autorización.
 
