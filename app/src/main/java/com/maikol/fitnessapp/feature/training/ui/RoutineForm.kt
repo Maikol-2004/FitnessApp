@@ -2,6 +2,7 @@ package com.maikol.fitnessapp.feature.training.ui
 
 import android.os.Bundle
 import com.maikol.fitnessapp.core.preferences.UnitSystem
+import com.maikol.fitnessapp.feature.training.catalog.AssistMode
 import com.maikol.fitnessapp.feature.training.catalog.Equipment
 import com.maikol.fitnessapp.feature.training.catalog.MuscleGroup
 import com.maikol.fitnessapp.feature.training.data.LoadText
@@ -23,6 +24,8 @@ data class ExerciseForm(
     val notes: String,
     val sets: List<SetForm>,
     val catalogId: String? = null,
+    /** G2.1: máquina o banda en la dominada asistida; null = sin indicar. */
+    val assistMode: AssistMode? = null,
 )
 
 data class RoutineForm(val id: String, val name: String, val notes: String, val exercises: List<ExerciseForm>)
@@ -61,6 +64,7 @@ fun RoutineForm.validate(unit: UnitSystem): FormResult {
         if (e.sets.isEmpty()) noSets += e.id
         RoutineExercise(
             id = e.id, key = e.key, name = e.name.trim(), notes = e.notes.trim(), catalogId = e.catalogId,
+            assistMode = e.assistMode,
             sets = e.sets.mapNotNull { s ->
                 val r = parseReps(s.reps)
                 val kg = s.load.resolveKg(unit)
@@ -88,7 +92,7 @@ fun Routine.toForm(unit: UnitSystem) = RoutineForm(
     notes = notes,
     exercises = exercises.map { e ->
         ExerciseForm(
-            id = e.id, key = e.key, name = e.name, notes = e.notes, catalogId = e.catalogId,
+            id = e.id, key = e.key, name = e.name, notes = e.notes, catalogId = e.catalogId, assistMode = e.assistMode,
             sets = e.sets.map { s -> SetForm(s.id, s.reps.toString(), LoadText.of(s.loadKg, unit), s.restSeconds.toString(), s.warmup) },
         )
     },
@@ -110,6 +114,7 @@ fun RoutineForm.toBundle(): Bundle = Bundle().apply {
                     putString("name", e.name)
                     putString("notes", e.notes)
                     e.catalogId?.let { putString("catalogId", it) }
+                    e.assistMode?.let { putString("assistMode", it.name) }
                     putParcelableArrayList(
                         "sets",
                         ArrayList(
@@ -144,6 +149,7 @@ fun Bundle.toRoutineForm(): RoutineForm = RoutineForm(
             name = e.getString("name").orEmpty(),
             notes = e.getString("notes").orEmpty(),
             catalogId = e.getString("catalogId"),
+            assistMode = AssistMode.fromStored(e.getString("assistMode")),
             sets = e.getParcelableArrayList<Bundle>("sets").orEmpty().map { s ->
                 SetForm(
                     id = s.getString("id").orEmpty(),

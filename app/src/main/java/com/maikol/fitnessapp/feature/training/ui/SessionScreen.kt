@@ -83,6 +83,8 @@ import com.maikol.fitnessapp.core.designsystem.theme.MinTouchTarget
 import com.maikol.fitnessapp.core.designsystem.theme.Spacing
 import com.maikol.fitnessapp.core.preferences.UnitSystem
 import com.maikol.fitnessapp.feature.training.catalog.ExerciseCatalog
+import com.maikol.fitnessapp.feature.training.catalog.LoadSemantics
+import com.maikol.fitnessapp.feature.training.catalog.loadSemantics
 import com.maikol.fitnessapp.feature.training.data.ClockReading
 import com.maikol.fitnessapp.feature.training.data.PerformedSet
 import com.maikol.fitnessapp.feature.training.data.Session
@@ -225,7 +227,8 @@ private fun SessionScreen(
             )
         }
     }
-    ExerciseCatalog.byId(guideId)?.let { ExerciseGuideScreen(it, onClose = { guideId = null }, onOpenSession = onOpenPastSession) }
+    DetailSubject.resolve(guideId) { key -> session.exercises.firstOrNull { it.key == key && it.catalogId == null }?.let { it.name to it.notes } }
+        ?.let { ExerciseDetailScreen(it, onClose = { guideId = null }, onOpenSession = onOpenPastSession) }
     }
 }
 
@@ -321,19 +324,21 @@ private fun ExerciseSection(
         val guide = ExerciseCatalog.byId(exercise.catalogId)
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(exercise.name, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.weight(1f))
-            // La ficha es una capa local: no toca el temporizador ni el descanso del ViewModel.
-            if (guide != null) {
-                IconButton(onClick = { onOpenGuide(guide.id) }) {
-                    Icon(
-                        painterResource(R.drawable.ic_info),
-                        contentDescription = stringResource(R.string.session_open_guide, exercise.name),
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                }
+            // La ficha es una capa local: no toca el temporizador ni el descanso del ViewModel. Personalizados
+            // (G2.1): ficha sin imágenes, con su progreso por exerciseKey.
+            IconButton(onClick = { onOpenGuide(guide?.id ?: customGuideToken(exercise.key)) }) {
+                Icon(
+                    painterResource(R.drawable.ic_info),
+                    contentDescription = stringResource(R.string.session_open_guide, exercise.name),
+                    tint = MaterialTheme.colorScheme.primary,
+                )
             }
         }
         if (guide != null) {
             Text(guide.metaLine(), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            if (guide.loadSemantics == LoadSemantics.ASSISTANCE) {
+                AssistModeSelector(exercise.assistMode, onChange = { vm.setAssistMode(exercise.id, it) })
+            }
         }
         if (exercise.notes.isNotBlank()) {
             Text(exercise.notes, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)

@@ -15,6 +15,21 @@ enum class LoadSemantics {
     ASSISTANCE,
 }
 
+/**
+ * Modalidad de la ayuda en la dominada asistida. Los kg de máquina y la tensión de una banda no son comparables,
+ * así que cada modalidad tiene su propia evolución. En datos, null = sin indicar (registros anteriores a G2.1):
+ * nunca se reclasifica automáticamente.
+ */
+enum class AssistMode {
+    MACHINE,
+    BAND,
+    ;
+
+    companion object {
+        fun fromStored(value: String?): AssistMode? = entries.firstOrNull { it.name == value }
+    }
+}
+
 data class ExerciseMedia(
     val catalogId: String,
     val thumbnail: String,

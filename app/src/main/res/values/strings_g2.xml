@@ -12,9 +12,6 @@
     <string name="sequence_phase_3">Final</string>
     <string name="sequence_prev">Posición anterior</string>
     <string name="sequence_next">Posición siguiente</string>
-    <string name="sequence_play">Reproducir</string>
-    <string name="sequence_pause">Pausar</string>
-    <string name="sequence_replay">Repetir</string>
     <string name="sequence_reduced_motion">Movimiento reducido: avanza las posiciones a mano.</string>
     <string name="sequence_frame_description">%1$s, posición %2$d de 3: %3$s</string>
     <string name="media_disclaimer">Ilustraciones generadas y orientativas, sin validación profesional. No es un vídeo: son tres posiciones fijas.</string>
@@ -56,8 +53,13 @@
     </plurals>
     <string name="progress_chart_load">Evolución de carga</string>
     <string name="progress_chart_load_sub">Carga máxima de cada sesión</string>
-    <string name="progress_chart_assist">Evolución de la asistencia</string>
+    <string name="progress_chart_assist_machine">Asistencia en máquina</string>
+    <string name="progress_chart_assist_band">Asistencia con banda</string>
     <string name="progress_chart_assist_sub">Menor asistencia de cada sesión · menos ayuda puede indicar progreso</string>
+    <plurals name="progress_assist_unknown">
+        <item quantity="one">%d sesión sin tipo de asistencia indicado: aparece en Historial, pero no en las gráficas, porque máquina y banda no se comparan.</item>
+        <item quantity="other">%d sesiones sin tipo de asistencia indicado: aparecen en Historial, pero no en las gráficas, porque máquina y banda no se comparan.</item>
+    </plurals>
     <plurals name="progress_chart_description">
         <item quantity="one">%1$s: %2$d sesión, de %3$s a %4$s.</item>
         <item quantity="other">%1$s: %2$d sesiones, de %3$s a %4$s.</item>
@@ -70,15 +72,35 @@
     <string name="progress_rules">Solo series de trabajo completadas en entrenamientos terminados. No cuentan calentamientos, series pendientes ni objetivos planificados. La carga máxima es la mayor registrada, no un 1RM estimado.</string>
     <string name="progress_dumbbell_rule">Mancuernas: se compara la carga tal como la escribes en cada serie (sin multiplicar ni dividir). Anótala siempre igual, por ejemplo por mancuerna.</string>
     <string name="progress_bodyweight_rule">Sin carga externa no se estima tu peso corporal ni un volumen levantado.</string>
-    <string name="progress_assist_rule">En la dominada asistida la carga es ayuda (máquina o banda). Como no se guarda la modalidad, no se calcula récord ni volumen; solo su evolución.</string>
+    <string name="progress_assist_rule">En la dominada asistida la carga es ayuda: menos puede ser progreso y 0 significa sin ayuda. No se calcula récord ni volumen, y máquina y banda tienen gráficas separadas.</string>
 
     <string name="history_empty">Aún no has completado este ejercicio en ningún entrenamiento.</string>
     <string name="history_set">%1$s × %2$d</string>
-    <string name="history_set_assist">Asist. %1$s × %2$d</string>
+    <string name="history_set_assist_machine">Máquina · %1$s × %2$d</string>
+    <string name="history_set_assist_band">Banda · %1$s × %2$d</string>
+    <string name="history_set_assist_unknown">Sin indicar · %1$s × %2$d</string>
+    <string name="history_set_assist_missing">Sin asistencia anotada × %1$d</string>
     <string name="history_set_no_load">Sin carga × %1$d</string>
     <string name="history_warmup">C</string>
     <string name="history_volume">Volumen %1$s</string>
     <string name="history_best">Carga máxima</string>
     <string name="history_open_summary">Ver resumen</string>
     <string name="history_warmup_legend">C = calentamiento (no cuenta en las marcas).</string>
+
+    <!-- G2.1: personalizados, modalidad de asistencia y ficha compacta -->
+    <string name="sequence_position_short">%1$d/%2$d · %3$s</string>
+    <string name="sequence_replay_description">Repetir la secuencia desde la posición 1</string>
+    <string name="sequence_play_description">Reproducir las 3 posiciones en bucle</string>
+    <string name="sequence_pause_description">Pausar la secuencia</string>
+    <string name="custom_subtitle">Ejercicio personalizado</string>
+    <string name="custom_guide_title">Sin imágenes ni mapa muscular</string>
+    <string name="custom_guide_body">Este ejercicio lo creaste tú: no tiene ilustraciones, secuencia de posiciones ni mapa muscular, y no se le asignan las de otro ejercicio. En Progreso e Historial tienes tus series registradas con él.</string>
+    <string name="custom_notes_title">Tus notas</string>
+    <string name="custom_notes_empty">Sin notas. Puedes añadir indicaciones de técnica en el editor de la rutina.</string>
+    <string name="custom_open_detail">Ver progreso de %1$s</string>
+    <string name="assist_mode_title">Tipo de asistencia</string>
+    <string name="assist_mode_machine">Máquina</string>
+    <string name="assist_mode_band">Banda</string>
+    <string name="assist_mode_unknown_hint">Sin indicar: estas series se guardan, pero no entran en las gráficas.</string>
+    <string name="assist_mode_known_hint">La ayuda de máquina y la de banda se comparan por separado.</string>
 </resources>

@@ -12,6 +12,7 @@ import com.maikol.fitnessapp.core.database.SessionExerciseEntity
 import com.maikol.fitnessapp.core.database.SessionStatus
 import com.maikol.fitnessapp.core.database.SessionWithExercises
 import com.maikol.fitnessapp.core.database.WorkoutSessionEntity
+import com.maikol.fitnessapp.feature.training.catalog.AssistMode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -36,6 +37,8 @@ data class RoutineExercise(
     val notes: String,
     val sets: List<PlannedSet>,
     val catalogId: String? = null,
+    /** G2.1: solo en la dominada asistida; null = sin indicar. */
+    val assistMode: AssistMode? = null,
 )
 
 data class Routine(
@@ -67,6 +70,7 @@ data class SessionExercise(
     val notes: String,
     val sets: List<PerformedSet>,
     val catalogId: String? = null,
+    val assistMode: AssistMode? = null,
 )
 
 data class Session(
@@ -155,7 +159,7 @@ open class TrainingRepository(
             dao.deleteRoutineExercises(routine.id)
             dao.insertRoutineExercises(
                 routine.exercises.mapIndexed { i, e ->
-                    RoutineExerciseEntity(e.id, routine.id, e.key, i, e.name.trim(), e.notes.trim(), e.catalogId)
+                    RoutineExerciseEntity(e.id, routine.id, e.key, i, e.name.trim(), e.notes.trim(), e.catalogId, e.assistMode?.name)
                 },
             )
             dao.insertPlannedSets(
@@ -217,7 +221,7 @@ open class TrainingRepository(
                 currentExercise = 0,
             ),
         )
-        val exercises = routine.exercises.mapIndexed { i, e -> SessionExerciseEntity(newId(), sessionId, e.key, i, e.name, e.notes, e.catalogId) }
+        val exercises = routine.exercises.mapIndexed { i, e -> SessionExerciseEntity(newId(), sessionId, e.key, i, e.name, e.notes, e.catalogId, e.assistMode?.name) }
         dao.insertSessionExercises(exercises)
         dao.insertPerformedSets(
             routine.exercises.zip(exercises).flatMap { (planned, copy) ->
@@ -327,6 +331,10 @@ open class TrainingRepository(
     fun observeCustomExerciseSets(exerciseKey: String): Flow<List<ExerciseSetRow>> =
         dao.observeCompletedSetsByExerciseKey(exerciseKey).distinctUntilChanged()
 
+    /** G2.1: indicar máquina o banda durante la sesión (solo sesiones abiertas). */
+    open suspend fun setSessionAssistMode(sessionExerciseId: String, mode: AssistMode?): Boolean =
+        dao.setSessionAssistMode(sessionExerciseId, mode?.name) > 0
+
     fun now(): ClockReading = clock.now()
 
     private suspend fun mutateOpen(sessionId: String, transform: (WorkoutSessionEntity) -> WorkoutSessionEntity) {
@@ -358,6 +366,7 @@ private fun RoutineWithExercises.toDomain() = Routine(
         RoutineExercise(
             id = e.exercise.id, key = e.exercise.exerciseKey, name = e.exercise.name, notes = e.exercise.notes,
             catalogId = e.exercise.catalogId,
+            assistMode = AssistMode.fromStored(e.exercise.assistMode),
             sets = e.sets.sortedBy { it.position }.map { PlannedSet(it.id, it.reps, it.loadKg, it.restSeconds, it.warmup) },
         )
     },
@@ -376,6 +385,7 @@ private fun SessionWithExercises.toDomain() = Session(
         SessionExercise(
             id = e.exercise.id, key = e.exercise.exerciseKey, name = e.exercise.name, notes = e.exercise.notes,
             catalogId = e.exercise.catalogId,
+            assistMode = AssistMode.fromStored(e.exercise.assistMode),
             sets = e.sets.sortedBy { it.position }.map {
                 PerformedSet(it.id, it.position, it.targetReps, it.targetLoadKg, it.restSeconds, it.warmup, it.reps, it.loadKg, it.completedAt != null)
             },

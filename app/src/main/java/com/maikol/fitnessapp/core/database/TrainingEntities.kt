@@ -42,6 +42,8 @@ data class RoutineExerciseEntity(
     val notes: String,
     /** G1: definición del catálogo local (null = ejercicio personalizado o anterior a G1). No sustituye a exerciseKey. */
     @ColumnInfo(defaultValue = "NULL") val catalogId: String? = null,
+    /** G2.1: modalidad de asistencia (MACHINE/BAND) solo en la dominada asistida; null = sin indicar. */
+    @ColumnInfo(defaultValue = "NULL") val assistMode: String? = null,
 )
 
 @Entity(
@@ -112,6 +114,8 @@ data class SessionExerciseEntity(
     val notes: String,
     /** G1: definición del catálogo local (null = ejercicio personalizado o anterior a G1). No sustituye a exerciseKey. */
     @ColumnInfo(defaultValue = "NULL") val catalogId: String? = null,
+    /** G2.1: copia de la modalidad de asistencia; los registros anteriores quedan null (sin indicar). */
+    @ColumnInfo(defaultValue = "NULL") val assistMode: String? = null,
 )
 
 @Entity(
@@ -181,6 +185,8 @@ data class ExerciseSetRow(
     val reps: Int?,
     val loadKg: Double?,
     val warmup: Boolean,
+    /** G2.1: modalidad de asistencia del ejercicio en esa sesión (null = sin indicar o no aplica). */
+    val assistMode: String? = null,
 )
 
 /** Fila de historial: sesión completada con sus métricas calculadas en SQL. */

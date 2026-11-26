@@ -60,6 +60,8 @@ import com.maikol.fitnessapp.core.designsystem.theme.MinTouchTarget
 import com.maikol.fitnessapp.core.designsystem.theme.Spacing
 import com.maikol.fitnessapp.core.preferences.UnitSystem
 import com.maikol.fitnessapp.feature.training.catalog.ExerciseCatalog
+import com.maikol.fitnessapp.feature.training.catalog.LoadSemantics
+import com.maikol.fitnessapp.feature.training.catalog.loadSemantics
 import com.maikol.fitnessapp.feature.training.data.LoadText
 import com.maikol.fitnessapp.feature.training.data.loadUnit
 
@@ -156,19 +158,22 @@ fun RoutineEditorRoute(
             onConfirm = viewModel::confirmPicker,
         )
     }
-    ExerciseCatalog.byId(state.guideId)?.let { exercise ->
+    // Ficha: catálogo por catalogId; personalizado por su exerciseKey (G2.1), con el nombre y las notas del borrador.
+    val subject = DetailSubject.resolve(state.guideId) { key ->
+        state.form?.exercises?.firstOrNull { it.key == key && it.catalogId == null }?.let { it.name to it.notes }
+    }
+    subject?.let { detail ->
         val picker = state.picker
-        ExerciseGuideScreen(
-            exercise = exercise,
+        val catalogId = (detail as? DetailSubject.Catalog)?.exercise?.id
+        ExerciseDetailScreen(
+            subject = detail,
             onClose = viewModel::closeGuide,
             onOpenSession = onOpenSession,
-            selection = picker?.let {
-                GuideSelection(
-                    selected = exercise.id in it.selected,
-                    inRoutine = exercise.id in state.catalogIdsInForm,
-                    onToggle = { viewModel.togglePicked(exercise.id) },
-                )
-            },
+            selection = if (picker == null || catalogId == null) null else GuideSelection(
+                selected = catalogId in picker.selected,
+                inRoutine = catalogId in state.catalogIdsInForm,
+                onToggle = { viewModel.togglePicked(catalogId) },
+            ),
         )
     }
     }
@@ -296,14 +301,31 @@ private fun ExerciseEditorCard(
                     )
                 }
             }
+            if (catalog.loadSemantics == LoadSemantics.ASSISTANCE) {
+                Spacer(Modifier.height(Spacing.s))
+                AssistModeSelector(exercise.assistMode, onChange = { vm.onAssistModeChange(exercise.id, it) })
+            }
         } else {
-            EditorTextField(
-                value = exercise.name,
-                onValueChange = { vm.onExerciseNameChange(exercise.id, it) },
-                label = stringResource(R.string.editor_exercise_name_label),
-                error = if (exercise.id in errors.exerciseName) stringResource(R.string.editor_error_exercise_name) else null,
-                capitalization = KeyboardCapitalization.Sentences,
-            )
+            // Personalizado: nombre libre y, con nombre, acceso a su ficha (progreso e historial por exerciseKey).
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                EditorTextField(
+                    value = exercise.name,
+                    onValueChange = { vm.onExerciseNameChange(exercise.id, it) },
+                    label = stringResource(R.string.editor_exercise_name_label),
+                    error = if (exercise.id in errors.exerciseName) stringResource(R.string.editor_error_exercise_name) else null,
+                    capitalization = KeyboardCapitalization.Sentences,
+                    modifier = Modifier.weight(1f),
+                )
+                if (exercise.name.isNotBlank()) {
+                    IconButton(onClick = { vm.openCustomGuide(exercise.key) }) {
+                        Icon(
+                            painterResource(R.drawable.ic_info),
+                            contentDescription = stringResource(R.string.custom_open_detail, exercise.name),
+                            tint = MaterialTheme.colorScheme.primary,
+                        )
+                    }
+                }
+            }
         }
         Spacer(Modifier.height(Spacing.s))
         EditorTextField(
@@ -478,6 +500,7 @@ private fun EditorTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
+    modifier: Modifier = Modifier,
     error: String? = null,
     singleLine: Boolean = true,
     capitalization: KeyboardCapitalization = KeyboardCapitalization.None,
@@ -498,7 +521,7 @@ private fun EditorTextField(
             errorContainerColor = FitnessThemeExtras.colors.surfaceRaised,
             unfocusedBorderColor = MaterialTheme.colorScheme.outline,
         ),
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
     )
 }
 

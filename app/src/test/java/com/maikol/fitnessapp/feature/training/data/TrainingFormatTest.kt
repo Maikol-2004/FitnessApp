@@ -45,6 +45,15 @@ class TrainingFormatTest {
         assertEquals("20", back.text)
     }
 
+    /** G2.1: 0 registrado (p. ej. asistencia nula en la dominada asistida) se muestra y se conserva; null sigue vacío. */
+    @Test
+    fun zeroLoad_isShownAndKept_nullStaysEmpty() {
+        val zero = LoadText.of(0.0, UnitSystem.METRIC)
+        assertEquals("0", zero.text)
+        assertEquals(Parsed.Value(0.0), zero.resolveKg(UnitSystem.METRIC))
+        assertEquals(Parsed.Empty, LoadText.of(null, UnitSystem.METRIC).resolveKg(UnitSystem.METRIC))
+    }
+
     @Test
     fun editedPounds_convertToKilograms() {
         val kg = (LoadText.of(null, UnitSystem.IMPERIAL).edited("100").resolveKg(UnitSystem.IMPERIAL) as Parsed.Value).value

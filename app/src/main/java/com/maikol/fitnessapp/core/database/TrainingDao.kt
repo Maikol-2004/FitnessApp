@@ -116,7 +116,7 @@ interface TrainingDao {
         """
         SELECT s.id AS sessionId, s.routineNameSnapshot AS routineName, s.endedAt AS endedAt,
             e.position AS exercisePosition, p.position AS setPosition, p.reps AS reps, p.loadKg AS loadKg,
-            p.warmup AS warmup
+            p.warmup AS warmup, e.assistMode AS assistMode
         FROM performed_sets p
         JOIN session_exercises e ON p.sessionExerciseId = e.id
         JOIN workout_sessions s ON e.sessionId = s.id
@@ -131,7 +131,7 @@ interface TrainingDao {
         """
         SELECT s.id AS sessionId, s.routineNameSnapshot AS routineName, s.endedAt AS endedAt,
             e.position AS exercisePosition, p.position AS setPosition, p.reps AS reps, p.loadKg AS loadKg,
-            p.warmup AS warmup
+            p.warmup AS warmup, e.assistMode AS assistMode
         FROM performed_sets p
         JOIN session_exercises e ON p.sessionExerciseId = e.id
         JOIN workout_sessions s ON e.sessionId = s.id
@@ -140,4 +140,13 @@ interface TrainingDao {
         """,
     )
     fun observeCompletedSetsByExerciseKey(exerciseKey: String): Flow<List<ExerciseSetRow>>
+
+    /** G2.1: modalidad de asistencia indicada durante una sesión abierta (las terminadas no se reescriben). */
+    @Query(
+        """
+        UPDATE session_exercises SET assistMode = :mode
+        WHERE id = :sessionExerciseId AND sessionId IN (SELECT id FROM workout_sessions WHERE status IN ('ACTIVE', 'PAUSED'))
+        """,
+    )
+    suspend fun setSessionAssistMode(sessionExerciseId: String, mode: String?): Int
 }

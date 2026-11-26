@@ -4,6 +4,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
+import java.security.MessageDigest
 
 /**
  * G2-01: cada catalogId del catálogo está en design/exercises-v1/manifest.json, sus rutas coinciden con las que
@@ -46,6 +47,21 @@ class ExerciseMediaTest {
                 // Cabecera RIFF/WEBP: archivo de imagen real, no un marcador vacío.
                 assertEquals(path, "WEBP", String(packaged.readBytes().copyOfRange(8, 12)))
             }
+        }
+    }
+
+    /** audit.json registra tamaño y SHA-256 de cada medio; una corrección (p. ej. el mapa de G2.1) debe quedar reflejada. */
+    @Test
+    fun packagedMedia_matchAuditSizeAndHash() {
+        val audit = File(design, "audit.json").readText()
+        val entries = Regex(""""path":\s*"([^"]+\.webp)"[^}]*?"bytes":\s*(\d+),\s*"sha256":\s*"([0-9a-f]{64})"""")
+            .findAll(audit).associate { it.groupValues[1] to (it.groupValues[2].toLong() to it.groupValues[3]) }
+        val sha = MessageDigest.getInstance("SHA-256")
+        ExerciseCatalog.all.flatMap { e -> e.mediaAssets.let { listOf(it.thumbnail, it.anatomy) + it.frames } }.forEach { path ->
+            val bytes = File(assets, path).readBytes()
+            val (size, hash) = entries[path.removePrefix("exercises/")] ?: error("sin entrada en audit.json: $path")
+            assertEquals(path, size, bytes.size.toLong())
+            assertEquals(path, hash, sha.digest(bytes).joinToString("") { "%02x".format(it) })
         }
     }
 

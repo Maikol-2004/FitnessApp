@@ -63,7 +63,7 @@ class MigrationV4Test {
         try {
             val training = TrainingRepository(db, SystemTrainingClock)
             val old = training.getRoutine("r1")!!
-            assertEquals(4, db.openHelper.readableDatabase.version)
+            assertEquals(5, db.openHelper.readableDatabase.version)
             assertEquals("Prueba torso", old.name)
             val oldExercise = old.exercises.single()
             assertEquals("Remo Prueba", oldExercise.name)

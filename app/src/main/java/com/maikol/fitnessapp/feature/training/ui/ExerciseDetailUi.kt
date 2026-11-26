@@ -63,6 +63,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -88,21 +89,26 @@ import com.maikol.fitnessapp.core.designsystem.theme.MinTouchTarget
 import com.maikol.fitnessapp.core.designsystem.theme.Spacing
 import com.maikol.fitnessapp.core.preferences.UnitSystem
 import com.maikol.fitnessapp.core.preferences.UserPreferencesRepository
+import com.maikol.fitnessapp.feature.training.catalog.AssistMode
 import com.maikol.fitnessapp.feature.training.catalog.CatalogExercise
+import com.maikol.fitnessapp.feature.training.catalog.ExerciseCatalog
 import com.maikol.fitnessapp.feature.training.catalog.ExerciseMedia
 import com.maikol.fitnessapp.feature.training.catalog.LoadSemantics
 import com.maikol.fitnessapp.feature.training.catalog.loadSemantics
 import com.maikol.fitnessapp.feature.training.catalog.mediaAssets
 import com.maikol.fitnessapp.feature.training.catalog.usesDumbbells
+import com.maikol.fitnessapp.feature.training.data.ChartPoint
 import com.maikol.fitnessapp.feature.training.data.ExerciseProgress
 import com.maikol.fitnessapp.feature.training.data.ExerciseSessionEntry
 import com.maikol.fitnessapp.feature.training.data.ProgressPeriod
 import com.maikol.fitnessapp.feature.training.data.TrainingRepository
 import com.maikol.fitnessapp.feature.training.data.exerciseProgress
 import com.maikol.fitnessapp.feature.training.data.formatLoad
+import com.maikol.fitnessapp.feature.training.data.formatLoadInput
 import com.maikol.fitnessapp.feature.training.data.formatSessionDate
 import com.maikol.fitnessapp.feature.training.data.formatVolume
 import com.maikol.fitnessapp.feature.training.data.kgToDisplay
+import com.maikol.fitnessapp.feature.training.data.loadUnit
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -122,6 +128,46 @@ import java.util.Locale
  * ilustraciones fijas con avance manual y bucle opcional; nunca se presenta como vídeo.
  */
 
+/** G2.1: prefijo del identificador de ficha de un ejercicio personalizado (estado guardado del editor y la sesión). */
+internal const val CUSTOM_GUIDE_PREFIX = "custom:"
+
+internal fun customGuideToken(exerciseKey: String) = CUSTOM_GUIDE_PREFIX + exerciseKey
+
+/** Qué muestra la ficha: una definición del catálogo o un ejercicio personalizado, identificado por su exerciseKey. */
+internal sealed interface DetailSubject {
+    /** Clave estable para el estado de la ficha y su ViewModel. */
+    val key: String
+    val name: String
+    val semantics: LoadSemantics
+    val usesDumbbells: Boolean
+
+    data class Catalog(val exercise: CatalogExercise) : DetailSubject {
+        override val key: String get() = exercise.id
+        override val name: String get() = exercise.name
+        override val semantics: LoadSemantics get() = exercise.loadSemantics
+        override val usesDumbbells: Boolean get() = exercise.usesDumbbells
+    }
+
+    /** Sin imágenes ni mapa: nunca se le asignan los medios de otro ejercicio. */
+    data class Custom(val exerciseKey: String, override val name: String, val notes: String) : DetailSubject {
+        override val key: String get() = customGuideToken(exerciseKey)
+        override val semantics: LoadSemantics get() = LoadSemantics.EXTERNAL
+        override val usesDumbbells: Boolean get() = false
+    }
+
+    companion object {
+        /** Resuelve el identificador guardado: catalogId o «custom:<exerciseKey>» buscado en [customs] (clave → nombre, notas). */
+        fun resolve(token: String?, customs: (String) -> Pair<String, String>?): DetailSubject? {
+            if (token == null) return null
+            if (token.startsWith(CUSTOM_GUIDE_PREFIX)) {
+                val exerciseKey = token.removePrefix(CUSTOM_GUIDE_PREFIX)
+                return customs(exerciseKey)?.let { (name, notes) -> Custom(exerciseKey, name, notes) }
+            }
+            return ExerciseCatalog.byId(token)?.let { Catalog(it) }
+        }
+    }
+}
+
 /** Acción de la ficha cuando se abre desde el selector. */
 internal data class GuideSelection(val selected: Boolean, val inRoutine: Boolean, val onToggle: () -> Unit)
 
@@ -130,25 +176,41 @@ private enum class DetailTab(val label: Int) { GUIDE(R.string.detail_tab_guide),
 private val PrimaryMuscleColor = Color(0xFFD8C3A5)
 private val SecondaryMuscleColor = Color(0xFFA77B47)
 
-/** Ficha completa. Sin [selection] (editor, sesión) solo informa; [onOpenSession] enlaza al resumen de una sesión. */
+/** Ficha de una definición del catálogo (selector, editor y sesión). */
 @Composable
 internal fun ExerciseGuideScreen(
     exercise: CatalogExercise,
     onClose: () -> Unit,
     selection: GuideSelection? = null,
     onOpenSession: ((String) -> Unit)? = null,
+) = ExerciseDetailScreen(DetailSubject.Catalog(exercise), onClose, selection, onOpenSession)
+
+/** Ficha completa. Sin [selection] (editor, sesión) solo informa; [onOpenSession] enlaza al resumen de una sesión. */
+@Composable
+internal fun ExerciseDetailScreen(
+    subject: DetailSubject,
+    onClose: () -> Unit,
+    selection: GuideSelection? = null,
+    onOpenSession: ((String) -> Unit)? = null,
 ) {
     BackHandler(onBack = onClose)
-    var tab by rememberSaveable(exercise.id) { mutableStateOf(DetailTab.GUIDE) }
+    var tab by rememberSaveable(subject.key) { mutableStateOf(DetailTab.GUIDE) }
     Surface(color = MaterialTheme.colorScheme.background, modifier = Modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize()) {
-            TrainingTopBar(title = exercise.name, subtitle = exercise.metaLine(), onBack = onClose)
+            val subtitle = when (subject) {
+                is DetailSubject.Catalog -> subject.exercise.metaLine()
+                is DetailSubject.Custom -> stringResource(R.string.custom_subtitle)
+            }
+            TrainingTopBar(title = subject.name, subtitle = subtitle, onBack = onClose)
             DetailTabs(tab, onSelect = { tab = it }, modifier = Modifier.padding(horizontal = Spacing.l, vertical = Spacing.xs))
             Box(Modifier.weight(1f)) {
                 when (tab) {
-                    DetailTab.GUIDE -> GuideTab(exercise)
-                    DetailTab.PROGRESS -> ProgressTab(exercise)
-                    DetailTab.HISTORY -> HistoryTab(exercise, onOpenSession)
+                    DetailTab.GUIDE -> when (subject) {
+                        is DetailSubject.Catalog -> GuideTab(subject.exercise)
+                        is DetailSubject.Custom -> CustomGuideTab(subject)
+                    }
+                    DetailTab.PROGRESS -> ProgressTab(subject)
+                    DetailTab.HISTORY -> HistoryTab(subject, onOpenSession)
                 }
             }
             if (selection != null) {
@@ -261,19 +323,49 @@ private fun GuideTab(exercise: CatalogExercise) {
 }
 
 @Composable
+private fun CustomGuideTab(subject: DetailSubject.Custom) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(Spacing.cardGap),
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = Spacing.l)
+            .padding(top = Spacing.s, bottom = Spacing.xl),
+    ) {
+        FitnessCard {
+            Icon(painterResource(R.drawable.ic_edit), contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+            Spacer(Modifier.height(Spacing.s))
+            Text(stringResource(R.string.custom_guide_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+            Text(stringResource(R.string.custom_guide_body), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        GuideSection(stringResource(R.string.custom_notes_title)) {
+            if (subject.notes.isBlank()) {
+                Text(stringResource(R.string.custom_notes_empty), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            } else {
+                Text(subject.notes, style = MaterialTheme.typography.bodyLarge)
+            }
+        }
+    }
+}
+
+@Composable
 private fun equipmentText(exercise: CatalogExercise): String {
     val main = exercise.equipment.joinToString(" / ") { it.label }
     if (exercise.accessories.isEmpty()) return main
     return "$main · " + stringResource(R.string.guide_accessory, exercise.accessories.joinToString(", ") { it.label.lowercase() })
 }
 
-/** Alto de la secuencia: proporción 650×593 del fotograma, máximo 380 dp y 55 % del alto de la ventana. */
+/**
+ * Alto de la secuencia (G2.1, más compacta como la referencia aprobada): máximo 236 dp y 30 % del alto de la
+ * ventana, sin superar la proporción 650×593 del fotograma. La imagen se ajusta con Fit: la figura completa,
+ * sin recortes, con el fondo del recurso a los lados.
+ */
 @Composable
 private fun sequenceHeight(): Dp {
     val window = LocalWindowInfo.current.containerSize
     val (width, height) = with(LocalDensity.current) { window.width.toDp() to window.height.toDp() }
     val byWidth = (width - Spacing.l * 2) * (593f / 650f)
-    return minOf(byWidth, 380.dp, height * 0.55f)
+    return minOf(byWidth, 236.dp, height * 0.30f)
 }
 
 /**
@@ -342,34 +434,30 @@ private fun FrameSequence(exercise: CatalogExercise) {
                     .padding(horizontal = Spacing.s, vertical = Spacing.xs),
             )
         }
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(horizontal = Spacing.xs, vertical = Spacing.xs)) {
+        // Una sola fila de controles (48 dp): anterior, posición, siguiente y, con movimiento, bucle y repetir.
+        val positionDescription = stringResource(R.string.sequence_position, page + 1, media.frames.size) + ": " + phases[page]
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(horizontal = Spacing.xs)) {
             IconButton(onClick = { playing = false; scope.launch { pager.scrollToPage((page - 1).coerceAtLeast(0)) } }, enabled = page > 0) {
                 Icon(painterResource(R.drawable.ic_chevron_left), contentDescription = stringResource(R.string.sequence_prev))
             }
-            Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("${page + 1} · ${phases[page]}", style = MaterialTheme.typography.titleMedium)
-                Text(
-                    stringResource(R.string.sequence_position, page + 1, media.frames.size),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
+            Text(
+                stringResource(R.string.sequence_position_short, page + 1, media.frames.size, phases[page]),
+                style = MaterialTheme.typography.titleSmall,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.weight(1f).semantics { contentDescription = positionDescription },
+            )
             IconButton(onClick = { playing = false; scope.launch { pager.scrollToPage((page + 1).coerceAtMost(media.frames.size - 1)) } }, enabled = page < media.frames.size - 1) {
                 Icon(painterResource(R.drawable.ic_chevron_right), contentDescription = stringResource(R.string.sequence_next))
             }
-        }
-        if (motion) {
-            // Con fuente grande, un botón debajo de otro para que «Reproducir» no se parta.
-            val stacked = LocalDensity.current.fontScale >= 1.3f
-            val buttons: @Composable (Modifier) -> Unit = { buttonModifier ->
-                SecondaryButton(
-                    text = stringResource(if (playing) R.string.sequence_pause else R.string.sequence_play),
-                    onClick = { playing = !playing },
+            if (motion) {
+                SequenceIconButton(
                     iconRes = if (playing) R.drawable.ic_pause else R.drawable.ic_play,
-                    modifier = buttonModifier,
+                    description = stringResource(if (playing) R.string.sequence_pause_description else R.string.sequence_play_description),
+                    onClick = { playing = !playing },
                 )
-                SecondaryButton(
-                    text = stringResource(R.string.sequence_replay),
+                SequenceIconButton(
+                    iconRes = R.drawable.ic_replay,
+                    description = stringResource(R.string.sequence_replay_description),
                     onClick = {
                         scope.launch {
                             playing = false
@@ -377,30 +465,26 @@ private fun FrameSequence(exercise: CatalogExercise) {
                             playing = true
                         }
                     },
-                    iconRes = R.drawable.ic_replay,
-                    modifier = buttonModifier,
                 )
             }
-            val padding = Modifier.padding(start = Spacing.m, end = Spacing.m, bottom = Spacing.m)
-            if (stacked) {
-                Column(verticalArrangement = Arrangement.spacedBy(Spacing.s), modifier = padding) { buttons(Modifier.fillMaxWidth()) }
-            } else {
-                Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s), modifier = padding) { buttons(Modifier.weight(1f)) }
-            }
-        } else {
-            Text(
-                stringResource(R.string.sequence_reduced_motion),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(start = Spacing.m, end = Spacing.m, bottom = Spacing.m),
-            )
         }
         Text(
-            stringResource(R.string.media_disclaimer),
+            if (motion) stringResource(R.string.media_disclaimer)
+            else stringResource(R.string.sequence_reduced_motion) + " " + stringResource(R.string.media_disclaimer),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(start = Spacing.m, end = Spacing.m, bottom = Spacing.m),
+            modifier = Modifier.padding(start = Spacing.m, end = Spacing.m, bottom = Spacing.s),
         )
+    }
+}
+
+/** Botón redondo de la secuencia: 48 dp de área táctil, con fondo champán tenue para distinguirlo de las flechas. */
+@Composable
+private fun SequenceIconButton(iconRes: Int, description: String, onClick: () -> Unit) {
+    IconButton(onClick = onClick) {
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.size(36.dp).background(champagneTint(0.16f), CircleShape)) {
+            Icon(painterResource(iconRes), contentDescription = description, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
+        }
     }
 }
 
@@ -409,18 +493,8 @@ private fun MusclesCard(exercise: CatalogExercise) {
     val primary = exercise.primary.label
     val secondary = exercise.secondary.joinToString(", ") { it.label }
     val none = stringResource(R.string.muscles_none)
-    FitnessCard {
-        Text(stringResource(R.string.muscles_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() }.padding(bottom = Spacing.s))
-        ExerciseAssetImage(
-            path = exercise.mediaAssets.anatomy,
-            contentDescription = stringResource(R.string.muscles_map_description, primary, secondary.ifEmpty { none }),
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(max = 340.dp)
-                .aspectRatio(650f / 594f)
-                .clip(MaterialTheme.shapes.medium),
-        )
-        Spacer(Modifier.height(Spacing.m))
+    val description = stringResource(R.string.muscles_map_description, primary, secondary.ifEmpty { none })
+    val legend: @Composable () -> Unit = {
         LegendRow(PrimaryMuscleColor, stringResource(R.string.muscles_primary, primary))
         LegendRow(
             SecondaryMuscleColor,
@@ -428,14 +502,44 @@ private fun MusclesCard(exercise: CatalogExercise) {
         )
         Text(stringResource(R.string.muscles_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = Spacing.xs))
     }
+    FitnessCard {
+        Text(stringResource(R.string.muscles_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() }.padding(bottom = Spacing.s))
+        if (LocalDensity.current.fontScale >= 1.3f) {
+            // Fuente grande: mapa encima y leyenda a todo el ancho.
+            // Altura fija y ancho derivado: con fillMaxWidth el aspecto no se cumplía y la leyenda se solapaba.
+            Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                AnatomyImage(exercise, description, Modifier.height(240.dp))
+            }
+            Spacer(Modifier.height(Spacing.s))
+            legend()
+        } else {
+            // Como la referencia aprobada: mapa a la izquierda y leyenda a la derecha.
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                AnatomyImage(exercise, description, Modifier.weight(0.56f))
+                Spacer(Modifier.width(Spacing.m))
+                Column(Modifier.weight(0.44f)) { legend() }
+            }
+        }
+    }
+}
+
+@Composable
+private fun AnatomyImage(exercise: CatalogExercise, description: String, modifier: Modifier) {
+    ExerciseAssetImage(
+        path = exercise.mediaAssets.anatomy,
+        contentDescription = description,
+        modifier = modifier
+            .aspectRatio(617f / 626f)
+            .clip(MaterialTheme.shapes.medium),
+    )
 }
 
 @Composable
 private fun LegendRow(color: Color, text: String) {
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(vertical = Spacing.xs)) {
-        Box(Modifier.size(16.dp).background(color, RoundedCornerShape(4.dp)))
+    Row(modifier = Modifier.padding(vertical = Spacing.xs)) {
+        Box(Modifier.padding(top = 3.dp).size(14.dp).background(color, RoundedCornerShape(4.dp)))
         Spacer(Modifier.width(Spacing.s))
-        Text(text, style = MaterialTheme.typography.bodyLarge)
+        Text(text, style = MaterialTheme.typography.bodyMedium)
     }
 }
 
@@ -464,9 +568,13 @@ data class ExerciseProgressUiState(
     val progress: ExerciseProgress? = null,
 )
 
-/** Progreso de una definición del catálogo con los registros reales; se actualiza solo al cambiar la base. */
+/**
+ * Progreso con los registros reales; se actualiza solo al cambiar la base. Catálogo: por [catalogId] en cualquier
+ * rutina. Personalizado o anterior a G1 ([catalogId] null): por su [exerciseKey], sin mezclar con el catálogo.
+ */
 class ExerciseProgressViewModel(
-    catalogId: String,
+    catalogId: String?,
+    exerciseKey: String?,
     semantics: LoadSemantics,
     repository: TrainingRepository,
     preferences: UserPreferencesRepository,
@@ -475,7 +583,7 @@ class ExerciseProgressViewModel(
     private val period = MutableStateFlow(ProgressPeriod.ALL)
 
     val state: StateFlow<ExerciseProgressUiState> = combine(
-        repository.observeCatalogExerciseSets(catalogId),
+        if (catalogId != null) repository.observeCatalogExerciseSets(catalogId) else repository.observeCustomExerciseSets(requireNotNull(exerciseKey)),
         period,
         preferences.userPreferences.map { it.unitSystem },
     ) { rows, p, unit ->
@@ -487,18 +595,27 @@ class ExerciseProgressViewModel(
     }
 
     companion object {
-        fun factory(exercise: CatalogExercise) = viewModelFactory {
+        internal fun factory(subject: DetailSubject) = viewModelFactory {
             initializer {
                 val container = (this[APPLICATION_KEY] as FitnessApplication).container
-                ExerciseProgressViewModel(exercise.id, exercise.loadSemantics, container.trainingRepository, container.userPreferencesRepository)
+                ExerciseProgressViewModel(
+                    catalogId = (subject as? DetailSubject.Catalog)?.exercise?.id,
+                    exerciseKey = (subject as? DetailSubject.Custom)?.exerciseKey,
+                    semantics = subject.semantics,
+                    repository = container.trainingRepository,
+                    preferences = container.userPreferencesRepository,
+                )
             }
         }
     }
 }
 
 @Composable
-private fun progressViewModel(exercise: CatalogExercise): ExerciseProgressViewModel =
-    viewModel(key = "exercise-progress-${exercise.id}", factory = ExerciseProgressViewModel.factory(exercise))
+private fun progressViewModel(subject: DetailSubject): ExerciseProgressViewModel =
+    viewModel(key = "exercise-progress-${subject.key}", factory = ExerciseProgressViewModel.factory(subject))
+
+/** Asistencia para lectura: a diferencia de [formatLoad], 0 es un dato («0 kg» = sin ayuda), no una ausencia. */
+private fun formatAssist(kg: Double, unit: UnitSystem): String = "${formatLoadInput(kg, unit)} ${unit.loadUnit()}"
 
 private val ShortDate = DateTimeFormatter.ofPattern("d MMM", Locale.forLanguageTag("es-ES"))
 private val ShortDateYear = DateTimeFormatter.ofPattern("d MMM yyyy", Locale.forLanguageTag("es-ES"))
@@ -511,8 +628,8 @@ internal fun formatShortDate(epochMs: Long, zone: ZoneId = ZoneId.systemDefault(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun ProgressTab(exercise: CatalogExercise) {
-    val vm = progressViewModel(exercise)
+private fun ProgressTab(subject: DetailSubject) {
+    val vm = progressViewModel(subject)
     val state by vm.state.collectAsStateWithLifecycle()
     val progress = state.progress ?: return
     val unit = state.unit
@@ -582,11 +699,16 @@ private fun ProgressTab(exercise: CatalogExercise) {
                 )
             }
             if (progress.chart.isNotEmpty()) {
-                ChartCard(stringResource(R.string.progress_chart_load), stringResource(R.string.progress_chart_load_sub), progress, unit)
+                ChartCard(stringResource(R.string.progress_chart_load), stringResource(R.string.progress_chart_load_sub), progress.chart) { formatLoad(it, unit).orEmpty() }
             }
         } else {
-            if (progress.chart.isNotEmpty()) {
-                ChartCard(stringResource(R.string.progress_chart_assist), stringResource(R.string.progress_chart_assist_sub), progress, unit)
+            // Una gráfica por modalidad: los kg de máquina y la ayuda de una banda no se comparan entre sí.
+            progress.assistSeries.forEach { series ->
+                val title = stringResource(if (series.mode == AssistMode.MACHINE) R.string.progress_chart_assist_machine else R.string.progress_chart_assist_band)
+                ChartCard(title, stringResource(R.string.progress_chart_assist_sub), series.points) { formatAssist(it, unit) }
+            }
+            if (progress.unknownAssistSessions > 0) {
+                RuleNote(pluralStringResource(R.plurals.progress_assist_unknown, progress.unknownAssistSessions, progress.unknownAssistSessions))
             }
         }
         FitnessCard {
@@ -598,7 +720,7 @@ private fun ProgressTab(exercise: CatalogExercise) {
         RuleNote(stringResource(R.string.progress_rules))
         when {
             progress.semantics == LoadSemantics.ASSISTANCE -> RuleNote(stringResource(R.string.progress_assist_rule))
-            exercise.usesDumbbells -> RuleNote(stringResource(R.string.progress_dumbbell_rule))
+            subject.usesDumbbells -> RuleNote(stringResource(R.string.progress_dumbbell_rule))
             progress.maxLoad == null -> RuleNote(stringResource(R.string.progress_bodyweight_rule))
         }
     }
@@ -664,15 +786,15 @@ private fun RuleNote(text: String) {
 
 /** Puntos reales por sesión en orden de fecha; sin días inventados. Un único punto se dibuja solo. */
 @Composable
-private fun ChartCard(title: String, subtitle: String, progress: ExerciseProgress, unit: UnitSystem) {
-    val points = progress.chart
-    val values = points.map { kgToDisplay(it.valueKg, unit) }
+private fun ChartCard(title: String, subtitle: String, points: List<ChartPoint>, format: (Double) -> String) {
+    // El orden del eje sale de los kg guardados; la unidad solo cambia el texto (la escala es proporcional).
+    val values = points.map { it.valueKg }
     val minV = values.min()
     val maxV = values.max()
     val description = if (points.size == 1) {
-        stringResource(R.string.progress_chart_single, formatLoad(points.first().valueKg, unit).orEmpty())
+        stringResource(R.string.progress_chart_single, format(points.first().valueKg))
     } else {
-        pluralStringResource(R.plurals.progress_chart_description, points.size, title, points.size, formatLoad(points.first().valueKg, unit).orEmpty(), formatLoad(points.last().valueKg, unit).orEmpty())
+        pluralStringResource(R.plurals.progress_chart_description, points.size, title, points.size, format(points.first().valueKg), format(points.last().valueKg))
     }
     val line = MaterialTheme.colorScheme.primary
     val grid = FitnessThemeExtras.colors.surfaceRaised
@@ -681,8 +803,8 @@ private fun ChartCard(title: String, subtitle: String, progress: ExerciseProgres
         Text(subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(Modifier.height(Spacing.m))
         Row(Modifier.clearAndSetSemantics { contentDescription = description }) {
-            val top = formatLoad(points.maxBy { it.valueKg }.valueKg, unit).orEmpty()
-            val bottom = formatLoad(points.minBy { it.valueKg }.valueKg, unit).orEmpty()
+            val top = format(maxV)
+            val bottom = format(minV)
             // Un único valor: una sola etiqueta, centrada como el punto.
             Column(Modifier.height(160.dp), verticalArrangement = if (top == bottom) Arrangement.Center else Arrangement.SpaceBetween) {
                 Text(top, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -725,8 +847,8 @@ private fun ChartCard(title: String, subtitle: String, progress: ExerciseProgres
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun HistoryTab(exercise: CatalogExercise, onOpenSession: ((String) -> Unit)?) {
-    val vm = progressViewModel(exercise)
+private fun HistoryTab(subject: DetailSubject, onOpenSession: ((String) -> Unit)?) {
+    val vm = progressViewModel(subject)
     val state by vm.state.collectAsStateWithLifecycle()
     val progress = state.progress ?: return
     Column(
@@ -778,11 +900,18 @@ private fun HistoryCard(
         FlowRow(horizontalArrangement = Arrangement.spacedBy(Spacing.s), verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
             entry.sets.forEach { set ->
                 val reps = set.reps ?: 0
-                val load = formatLoad(set.loadKg, unit)
-                val text = when {
-                    load == null -> stringResource(R.string.history_set_no_load, reps)
-                    semantics == LoadSemantics.ASSISTANCE -> stringResource(R.string.history_set_assist, load, reps)
-                    else -> stringResource(R.string.history_set, load, reps)
+                val text = if (semantics == LoadSemantics.ASSISTANCE) {
+                    // 0 kg de ayuda es un dato; solo null es «sin anotar». Cada serie dice su modalidad.
+                    val kg = set.loadKg
+                    when {
+                        kg == null -> stringResource(R.string.history_set_assist_missing, reps)
+                        set.assistMode == AssistMode.MACHINE -> stringResource(R.string.history_set_assist_machine, formatAssist(kg, unit), reps)
+                        set.assistMode == AssistMode.BAND -> stringResource(R.string.history_set_assist_band, formatAssist(kg, unit), reps)
+                        else -> stringResource(R.string.history_set_assist_unknown, formatAssist(kg, unit), reps)
+                    }
+                } else {
+                    formatLoad(set.loadKg, unit)?.let { stringResource(R.string.history_set, it, reps) }
+                        ?: stringResource(R.string.history_set_no_load, reps)
                 }
                 Text(
                     if (set.warmup) "${stringResource(R.string.history_warmup)} · $text" else text,
@@ -804,5 +933,38 @@ private fun HistoryCard(
                 Icon(painterResource(R.drawable.ic_chevron_right), contentDescription = null, modifier = Modifier.size(18.dp))
             }
         }
+    }
+}
+
+// ---------------------------------------------------------------- Modalidad de asistencia (G2.1)
+
+/**
+ * Máquina o banda para la dominada asistida (editor y sesión). Tocar la opción marcada la desmarca: «sin
+ * indicar» solo lo decide la persona; la app nunca adivina la modalidad de registros anteriores.
+ */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+internal fun AssistModeSelector(mode: AssistMode?, onChange: (AssistMode?) -> Unit, modifier: Modifier = Modifier) {
+    Column(modifier) {
+        Text(stringResource(R.string.assist_mode_title), style = MaterialTheme.typography.labelLarge, modifier = Modifier.semantics { heading() })
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(Spacing.s), modifier = Modifier.selectableGroup()) {
+            listOf(AssistMode.MACHINE to R.string.assist_mode_machine, AssistMode.BAND to R.string.assist_mode_band).forEach { (m, label) ->
+                FilterChip(
+                    selected = mode == m,
+                    onClick = { onChange(if (mode == m) null else m) },
+                    label = { Text(stringResource(label)) },
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = MaterialTheme.colorScheme.primary,
+                        selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                    ),
+                    modifier = Modifier.heightIn(min = MinTouchTarget).semantics { role = Role.RadioButton },
+                )
+            }
+        }
+        Text(
+            stringResource(if (mode == null) R.string.assist_mode_unknown_hint else R.string.assist_mode_known_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }

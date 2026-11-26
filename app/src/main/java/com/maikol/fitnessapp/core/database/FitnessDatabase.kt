@@ -32,7 +32,8 @@ interface AppMetadataDao {
 
 /**
  * v1 (H0): app_metadata. v2 (H2): rutinas y sesiones. v3 (F1): registros manuales de actividad, comidas,
- * agua, sueño y peso. v4 (G1): columna opcional catalogId en ejercicios de rutina y de sesión.
+ * agua, sueño y peso. v4 (G1): columna opcional catalogId en ejercicios de rutina y de sesión. v5 (G2.1):
+ * columna opcional assistMode (máquina/banda) en los mismos ejercicios; lo anterior queda null (sin indicar).
  * Cada migración es aditiva (AutoMigration desde los esquemas exportados) y conserva todo lo anterior.
  */
 @Database(
@@ -50,9 +51,14 @@ interface AppMetadataDao {
         SleepEntryEntity::class,
         BodyWeightEntity::class,
     ],
-    version = 4,
+    version = 5,
     exportSchema = true,
-    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3), AutoMigration(from = 3, to = 4)],
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2),
+        AutoMigration(from = 2, to = 3),
+        AutoMigration(from = 3, to = 4),
+        AutoMigration(from = 4, to = 5),
+    ],
 )
 abstract class FitnessDatabase : RoomDatabase() {
     abstract fun appMetadataDao(): AppMetadataDao

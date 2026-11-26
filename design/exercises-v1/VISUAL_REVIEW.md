@@ -7,6 +7,7 @@ Revisión por hojas de contacto de los diez grupos, más detalle de incidencias.
 - Se regeneró el pushdown con barra para especificar agarre prono.
 - Se sustituyeron los mapas del curl femoral sentado/tumbado para destacar isquiotibiales y gemelos sin colorear glúteos como agonista; ambos comparten el mismo mapa anatómico porque la función muscular coincide.
 - Se sustituyó el mapa de abducción por uno específico de la zona superior/lateral de la cadera (glúteo medio). Los overrides se identifican con anatomySource: prevalecen frente al mapa incluido en la plancha de generación original.
+- G2.1 (26-11-2026): en el mapa del press sentado con mancuernas se retiró el resaltado ocre del trapecio y la espalda alta de la vista posterior (pasados a gris con la luminancia de la piel), que no figuran en el catálogo. Quedan deltoides en champagne (principal) y tríceps en ocre (secundario). Edición local de píxeles sobre el mismo archivo, no regeneración; audit.json recoge el nuevo tamaño y hash.
 - Los mapas son esquemáticos: músculos principales champagne y secundarios ocre. Los límites e intensidad visual no equivalen a medición de activación.
 - Algunas posiciones intermedias y finales son próximas entre sí. Usar guía por posiciones, no interpolación que finja una filmación continua. Revisión en dispositivo antes de activar un bucle por defecto; autoplayDefault=false.
 - No hay audio, vídeo ni GIF fluido generado. No implementar controles de tiempo de vídeo sobre estos archivos.

@@ -121,9 +121,13 @@ data class LoadText(val text: String, val baseKg: Double?, val baseText: String)
     fun edited(newText: String) = copy(text = newText)
 
     companion object {
+        /**
+         * null = sin carga (campo vacío). 0 registrado se muestra como «0» y se conserva (G2.1: en la dominada
+         * asistida 0 kg de ayuda es un dato, no una ausencia; editar las repeticiones no debe borrarlo).
+         */
         fun of(kg: Double?, unit: UnitSystem): LoadText {
-            val text = kg?.takeIf { it > 0.0 }?.let { formatLoadInput(it, unit) } ?: ""
-            return LoadText(text, kg?.takeIf { it > 0.0 }, text)
+            val text = kg?.let { formatLoadInput(it, unit) } ?: ""
+            return LoadText(text, kg, text)
         }
     }
 }

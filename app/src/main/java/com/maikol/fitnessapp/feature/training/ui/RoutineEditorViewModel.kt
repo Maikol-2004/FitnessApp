@@ -11,6 +11,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.maikol.fitnessapp.FitnessApplication
 import com.maikol.fitnessapp.core.preferences.UnitSystem
 import com.maikol.fitnessapp.core.preferences.UserPreferencesRepository
+import com.maikol.fitnessapp.feature.training.catalog.AssistMode
 import com.maikol.fitnessapp.feature.training.catalog.CatalogExercise
 import com.maikol.fitnessapp.feature.training.catalog.Equipment
 import com.maikol.fitnessapp.feature.training.catalog.ExerciseCatalog
@@ -132,6 +133,14 @@ class RoutineEditorViewModel(
         _state.update { it.copy(guideId = catalogId) }
     }
 
+    /** G2.1: ficha de un ejercicio personalizado, identificado por su exerciseKey (sin imágenes del catálogo). */
+    fun openCustomGuide(exerciseKey: String) {
+        if (_state.value.form?.exercises?.none { it.key == exerciseKey && it.catalogId == null } != false) return
+        val token = customGuideToken(exerciseKey)
+        savedState[KEY_GUIDE] = token
+        _state.update { it.copy(guideId = token) }
+    }
+
     fun closeGuide() {
         savedState[KEY_GUIDE] = null
         _state.update { it.copy(guideId = null) }
@@ -175,6 +184,9 @@ class RoutineEditorViewModel(
 
     fun onExerciseNameChange(id: String, value: String) = editExercise(id) { it.copy(name = value.take(80)) }
     fun onExerciseNotesChange(id: String, value: String) = editExercise(id) { it.copy(notes = value.take(300)) }
+
+    /** G2.1: máquina o banda (o volver a «sin indicar») en la dominada asistida. */
+    fun onAssistModeChange(id: String, mode: AssistMode?) = editExercise(id) { it.copy(assistMode = mode) }
 
     /** Nueva serie con los valores de la anterior (lo habitual al planificar varias series iguales). */
     fun addSet(exerciseId: String) = editExercise(exerciseId) { e ->

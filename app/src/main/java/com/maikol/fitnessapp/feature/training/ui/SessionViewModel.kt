@@ -11,6 +11,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.maikol.fitnessapp.FitnessApplication
 import com.maikol.fitnessapp.core.preferences.UnitSystem
 import com.maikol.fitnessapp.core.preferences.UserPreferencesRepository
+import com.maikol.fitnessapp.feature.training.catalog.AssistMode
 import com.maikol.fitnessapp.feature.training.data.ClockReading
 import com.maikol.fitnessapp.feature.training.data.FinishResult
 import com.maikol.fitnessapp.feature.training.data.LoadText
@@ -197,6 +198,22 @@ class SessionViewModel(
                 throw e
             } catch (_: Exception) {
                 local.update { it.copy(finishFailed = true) }
+            }
+        }
+    }
+
+    /**
+     * G2.1: máquina o banda en la dominada asistida. La sesión se observa desde Room, así que si la escritura
+     * falla el selector sigue mostrando lo guardado (no se finge el cambio).
+     */
+    fun setAssistMode(sessionExerciseId: String, mode: AssistMode?) {
+        viewModelScope.launch {
+            try {
+                repository.setSessionAssistMode(sessionExerciseId, mode)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                // Sin cambio visible: el estado mostrado es el de la base.
             }
         }
     }

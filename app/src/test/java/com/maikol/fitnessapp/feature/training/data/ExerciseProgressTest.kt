@@ -1,6 +1,7 @@
 package com.maikol.fitnessapp.feature.training.data
 
 import com.maikol.fitnessapp.core.database.ExerciseSetRow
+import com.maikol.fitnessapp.feature.training.catalog.AssistMode
 import com.maikol.fitnessapp.feature.training.catalog.LoadSemantics
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -13,8 +14,17 @@ class ExerciseProgressTest {
     private val day = 86_400_000L
     private val now = 100 * day
 
-    private fun set(session: String, endedAt: Long, reps: Int?, load: Double?, warmup: Boolean = false, pos: Int = 0, exercisePos: Int = 0, routine: String = "Prueba A") =
-        ExerciseSetRow(session, routine, endedAt, exercisePos, pos, reps, load, warmup)
+    private fun set(
+        session: String,
+        endedAt: Long,
+        reps: Int?,
+        load: Double?,
+        warmup: Boolean = false,
+        pos: Int = 0,
+        exercisePos: Int = 0,
+        routine: String = "Prueba A",
+        mode: AssistMode? = null,
+    ) = ExerciseSetRow(session, routine, endedAt, exercisePos, pos, reps, load, warmup, mode?.name)
 
     @Test
     fun docFixture_40x10_50x8_gives50_800_45_andWarmupDoesNotChangeIt() {
@@ -85,17 +95,50 @@ class ExerciseProgressTest {
     @Test
     fun assistance_hasNoRecordOrVolume_butShowsEvolution() {
         val rows = listOf(
-            set("s1", now - 5 * day, 8, 30.0),
-            set("s1", now - 5 * day, 8, 25.0, pos = 1),
-            set("s2", now - day, 8, 20.0),
+            set("s1", now - 5 * day, 8, 30.0, mode = AssistMode.MACHINE),
+            set("s1", now - 5 * day, 8, 25.0, pos = 1, mode = AssistMode.MACHINE),
+            set("s2", now - day, 8, 20.0, mode = AssistMode.MACHINE),
         )
         val p = exerciseProgress(rows, LoadSemantics.ASSISTANCE, nowMs = now)
         assertNull(p.maxLoad)
         assertNull(p.bestVolume)
         assertNull(p.averageLoad)
         assertTrue(p.history.all { it.volumeKg == null })
-        assertEquals(listOf(25.0, 20.0), p.chart.map { it.valueKg })
+        assertTrue(p.chart.isEmpty())
+        assertEquals(listOf(AssistMode.MACHINE), p.assistSeries.map { it.mode })
+        assertEquals(listOf(25.0, 20.0), p.assistSeries.single().points.map { it.valueKg })
         assertEquals(3, p.workSetsInPeriod)
+    }
+
+    @Test
+    fun assistance_machineAndBand_areSeparateSeries_unknownIsNotCharted() {
+        val rows = listOf(
+            set("old", now - 9 * day, 8, 40.0), // anterior a G2.1: sin indicar
+            set("m", now - 5 * day, 8, 30.0, mode = AssistMode.MACHINE),
+            set("b", now - 3 * day, 8, 15.0, mode = AssistMode.BAND),
+            set("m2", now - day, 8, 25.0, mode = AssistMode.MACHINE),
+        )
+        val p = exerciseProgress(rows, LoadSemantics.ASSISTANCE, nowMs = now)
+        assertEquals(listOf(AssistMode.MACHINE, AssistMode.BAND), p.assistSeries.map { it.mode })
+        assertEquals(listOf(30.0, 25.0), p.assistSeries[0].points.map { it.valueKg })
+        assertEquals(listOf(15.0), p.assistSeries[1].points.map { it.valueKg })
+        assertEquals(1, p.unknownAssistSessions)
+        // El registro sin modalidad se conserva tal cual en el historial: no se reclasifica.
+        assertEquals(listOf<AssistMode?>(null), p.history.last().sets.map { it.assistMode })
+        assertEquals(4, p.sessionsInPeriod)
+    }
+
+    @Test
+    fun assistance_zeroIsAValue_nullIsNot() {
+        val rows = listOf(
+            set("a", now - 3 * day, 8, 10.0, mode = AssistMode.BAND),
+            set("b", now - day, 6, 0.0, mode = AssistMode.BAND),
+            set("b", now - day, 6, null, pos = 1, mode = AssistMode.BAND),
+        )
+        val p = exerciseProgress(rows, LoadSemantics.ASSISTANCE, nowMs = now)
+        assertEquals(listOf(10.0, 0.0), p.assistSeries.single().points.map { it.valueKg })
+        assertEquals(listOf(0.0, null), p.history.first().sets.map { it.loadKg })
+        assertEquals(2, p.history.first().workSets)
     }
 
     @Test

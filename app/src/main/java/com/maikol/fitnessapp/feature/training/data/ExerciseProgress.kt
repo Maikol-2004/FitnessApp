@@ -1,6 +1,7 @@
 package com.maikol.fitnessapp.feature.training.data
 
 import com.maikol.fitnessapp.core.database.ExerciseSetRow
+import com.maikol.fitnessapp.feature.training.catalog.AssistMode
 import com.maikol.fitnessapp.feature.training.catalog.LoadSemantics
 
 /*
@@ -9,6 +10,8 @@ import com.maikol.fitnessapp.feature.training.catalog.LoadSemantics
  * - Serie de trabajo: no calentamiento y repeticiones ≥ 1.
  * - Serie con carga: serie de trabajo con loadKg > 0. Nunca se usa el objetivo planificado como realizado.
  * - null no es 0: sin series con carga no hay «0 kg» de récord.
+ * - G2.1, dominada asistida: la ayuda registrada (incluido 0 = sin ayuda) es un dato; null es ausencia. Máquina y
+ *   banda tienen series separadas (no son comparables) y lo «sin indicar» no se grafica ni se reclasifica.
  */
 
 enum class ProgressPeriod(val days: Long?) { ALL(null), DAYS_90(90), DAYS_30(30) }
@@ -18,7 +21,10 @@ data class VolumeMark(val volumeKg: Double, val sets: Int, val endedAt: Long)
 data class AverageLoad(val loadKg: Double, val sets: Int)
 data class ChartPoint(val endedAt: Long, val valueKg: Double)
 data class PracticeRef(val sessionId: String, val endedAt: Long)
-data class DoneSet(val reps: Int?, val loadKg: Double?, val warmup: Boolean)
+data class DoneSet(val reps: Int?, val loadKg: Double?, val warmup: Boolean, val assistMode: AssistMode? = null)
+
+/** Evolución de la asistencia mínima por sesión dentro de UNA modalidad. */
+data class AssistSeries(val mode: AssistMode, val points: List<ChartPoint>)
 
 /** Una sesión en la que aparece el ejercicio (una vez aunque esté dos veces en la rutina). */
 data class ExerciseSessionEntry(
@@ -44,8 +50,12 @@ data class ExerciseProgress(
     val maxLoad: LoadMark?,
     val bestVolume: VolumeMark?,
     val averageLoad: AverageLoad?,
-    /** Carga máx. por sesión (externa) o asistencia mínima por sesión (asistida), en orden de fecha. */
+    /** Carga máx. por sesión (solo carga externa), en orden de fecha. */
     val chart: List<ChartPoint>,
+    /** Asistida: una serie por modalidad indicada (máquina, banda), nunca mezcladas. */
+    val assistSeries: List<AssistSeries> = emptyList(),
+    /** Asistida: sesiones del periodo con series de trabajo sin modalidad indicada (no se grafican). */
+    val unknownAssistSessions: Int = 0,
     /** Todas las sesiones, la más reciente primero (sin filtro de periodo). */
     val history: List<ExerciseSessionEntry>,
 ) {
@@ -54,6 +64,8 @@ data class ExerciseProgress(
 
 private fun ExerciseSetRow.isWork() = !warmup && (reps ?: 0) >= 1
 private fun ExerciseSetRow.hasLoad() = isWork() && (loadKg ?: 0.0) > 0.0
+private fun ExerciseSetRow.hasAssistValue() = isWork() && loadKg != null && loadKg >= 0.0
+private val ExerciseSetRow.mode: AssistMode? get() = AssistMode.fromStored(assistMode)
 
 fun exerciseProgress(
     rows: List<ExerciseSetRow>,
@@ -70,7 +82,7 @@ fun exerciseProgress(
             sessionId = sets.first().sessionId,
             routineName = sets.first().routineName,
             endedAt = sets.first().endedAt,
-            sets = sets.map { DoneSet(it.reps, it.loadKg, it.warmup) },
+            sets = sets.map { DoneSet(it.reps, it.loadKg, it.warmup, it.mode) },
             volumeKg = if (semantics == LoadSemantics.EXTERNAL && loaded.isNotEmpty()) loaded.sumOf { it.loadKg!! * it.reps!! } else null,
             maxLoadKg = loaded.maxOfOrNull { it.loadKg!! },
             workSets = sets.count { it.isWork() },
@@ -97,11 +109,17 @@ fun exerciseProgress(
             ?.let { e -> VolumeMark(e.volumeKg!!, e.sets.count { it.hasLoad() }, e.endedAt) },
         averageLoad = if (!external || loadedRows.isEmpty()) null
         else AverageLoad(loadedRows.sumOf { it.loadKg!! } / loadedRows.size, loadedRows.size),
-        chart = inPeriod.mapNotNull { e ->
-            val loaded = e.sets.filter { it.hasLoad() }.mapNotNull { it.loadKg }
-            val value = if (external) loaded.maxOrNull() else loaded.minOrNull()
-            value?.let { ChartPoint(e.endedAt, it) }
+        chart = if (!external) emptyList() else inPeriod.mapNotNull { e ->
+            e.sets.filter { it.hasLoad() }.mapNotNull { it.loadKg }.maxOrNull()?.let { ChartPoint(e.endedAt, it) }
         },
+        assistSeries = if (external) emptyList() else AssistMode.entries.mapNotNull { mode ->
+            val points = periodRows.filter { it.hasAssistValue() && it.mode == mode }
+                .groupBy { it.sessionId }.values
+                .map { sets -> ChartPoint(sets.first().endedAt, sets.minOf { it.loadKg!! }) }
+                .sortedBy { it.endedAt }
+            points.takeIf { it.isNotEmpty() }?.let { AssistSeries(mode, it) }
+        },
+        unknownAssistSessions = if (external) 0 else periodRows.filter { it.isWork() && it.mode == null }.map { it.sessionId }.distinct().size,
         history = history.reversed(),
     )
 }
