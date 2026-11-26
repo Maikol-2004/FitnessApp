@@ -13,6 +13,8 @@ import com.maikol.fitnessapp.core.database.SessionStatus
 import com.maikol.fitnessapp.core.database.SessionWithExercises
 import com.maikol.fitnessapp.core.database.WorkoutSessionEntity
 import com.maikol.fitnessapp.feature.training.catalog.AssistMode
+import com.maikol.fitnessapp.feature.training.catalog.LoadSemantics
+import com.maikol.fitnessapp.feature.training.catalog.loadSemanticsOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -89,7 +91,12 @@ data class Session(
     val totalSets: Int get() = exercises.sumOf { it.sets.size }
     val completedSets: Int get() = exercises.sumOf { e -> e.sets.count { it.completed } }
     val volumeKg: Double
-        get() = volumeKg(exercises.flatMap { e -> e.sets.map { SetValues(it.reps, it.loadKg, it.warmup, it.completed) } })
+        get() = volumeKg(
+            exercises.flatMap { e ->
+                val external = loadSemanticsOf(e.catalogId) == LoadSemantics.EXTERNAL
+                e.sets.map { SetValues(it.reps, it.loadKg, it.warmup, it.completed, external) }
+            },
+        )
 }
 
 data class OpenSession(val id: String, val routineId: String?, val routineName: String, val paused: Boolean)

@@ -78,6 +78,19 @@ class TrainingFormatTest {
         assertEquals(250.0, volumeKg(sets), 0.0)
     }
 
+    /** Ejemplo de aceptación: press 40 × 10 + dominada asistida 30 × 8 = 400 kg; la asistencia (también 0) no suma. */
+    @Test
+    fun volume_mixedSession_assistanceIsNotExternalLoad() {
+        val sets = listOf(
+            SetValues(10, 40.0, warmup = false, completed = true),
+            SetValues(10, 20.0, warmup = true, completed = true),
+            SetValues(10, 40.0, warmup = false, completed = false),
+            SetValues(8, 30.0, warmup = false, completed = true, external = false),
+            SetValues(8, 0.0, warmup = false, completed = true, external = false),
+        )
+        assertEquals(400.0, volumeKg(sets), 0.0)
+    }
+
     @Test
     fun formats_useSpanishConventions() {
         assertEquals("22,5 kg", formatLoad(22.5, UnitSystem.METRIC))

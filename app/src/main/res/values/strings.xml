@@ -192,7 +192,7 @@
     <string name="summary_warmup">Calentamiento</string>
     <string name="summary_view_history">Ver historial</string>
     <string name="summary_back_home">Volver a Inicio</string>
-    <string name="summary_volume_note">Volumen: carga × repeticiones de las series completadas, sin calentamiento ni peso corporal.</string>
+    <string name="summary_volume_note">Volumen: carga externa × repeticiones de las series completadas, sin calentamiento, peso corporal ni asistencia de la dominada asistida.</string>
     <string name="history_title">Historial</string>
     <string name="history_line">%1$s · %2$s · %3$s</string>
 

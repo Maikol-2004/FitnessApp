@@ -61,8 +61,16 @@ data class ExerciseMedia(
 val CatalogExercise.mediaAssets: ExerciseMedia get() = ExerciseMedia.of(id)
 
 /** Única excepción del manifiesto (loadSemantics = assistance_context_required). */
-val CatalogExercise.loadSemantics: LoadSemantics
-    get() = if (id == "back_assisted_pull_up") LoadSemantics.ASSISTANCE else LoadSemantics.EXTERNAL
+const val ASSISTED_PULL_UP_ID = "back_assisted_pull_up"
+
+/**
+ * Semántica de carga a partir del catalogId guardado en rutina o sesión. Los personalizados (null) son carga
+ * externa. Es la misma regla que excluye la asistencia del volumen en TrainingDao.observeHistory.
+ */
+fun loadSemanticsOf(catalogId: String?): LoadSemantics =
+    if (catalogId == ASSISTED_PULL_UP_ID) LoadSemantics.ASSISTANCE else LoadSemantics.EXTERNAL
+
+val CatalogExercise.loadSemantics: LoadSemantics get() = loadSemanticsOf(id)
 
 /** Con mancuernas la app compara la carga tal como se escribió en la serie, sin duplicarla ni dividirla. */
 val CatalogExercise.usesDumbbells: Boolean get() = Equipment.DUMBBELL in equipment

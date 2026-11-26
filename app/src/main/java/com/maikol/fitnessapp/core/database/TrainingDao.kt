@@ -6,6 +6,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import androidx.room.Upsert
+import com.maikol.fitnessapp.feature.training.catalog.ASSISTED_PULL_UP_ID
 import kotlinx.coroutines.flow.Flow
 
 /** Acceso a rutinas y sesiones. Las operaciones compuestas se agrupan en transacciones en TrainingRepository. */
@@ -102,7 +103,8 @@ interface TrainingDao {
             (SELECT COALESCE(SUM(p.loadKg * p.reps), 0) FROM performed_sets p
                 JOIN session_exercises e ON p.sessionExerciseId = e.id
                 WHERE e.sessionId = s.id AND p.completedAt IS NOT NULL AND p.warmup = 0
-                    AND p.loadKg IS NOT NULL AND p.reps IS NOT NULL) AS volumeKg
+                    AND p.loadKg IS NOT NULL AND p.reps IS NOT NULL
+                    AND (e.catalogId IS NULL OR e.catalogId <> '$ASSISTED_PULL_UP_ID')) AS volumeKg
         FROM workout_sessions s
         WHERE s.status = 'COMPLETED' AND s.endedAt IS NOT NULL
         ORDER BY s.endedAt DESC

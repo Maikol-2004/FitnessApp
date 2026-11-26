@@ -40,6 +40,23 @@ Capturas en `quality/evidence/g21/`: `antes_*`, `despues_*` y `comparativa_*.png
 
 ## Pendiente
 
-- El resumen de la sesión y el volumen de la rutina siguen sumando la asistencia como carga. Es un comportamiento anterior a G2.1 y no se tocó en este encargo.
 - El mapa corregido es un retoque manual. Conviene regenerar el recurso si se exige revisión profesional.
 - No se ejecutaron TalkBack, API 28 ni el móvil físico.
+
+## Seguimiento: volumen sin asistencia (26-11-2026)
+
+Corregido el pendiente anterior. La asistencia de la dominada asistida (máquina, banda o sin indicar) es ayuda y no suma al volumen de carga externa.
+
+- **Una sola regla**, `loadSemanticsOf(catalogId)`, aplicada en dos sitios:
+  - `Session.volumeKg`, usado en la sesión activa y en el resumen.
+  - La consulta `observeHistory`, que alimenta el historial y el total semanal de Progreso.
+- **Datos intactos.** No se modifican los valores registrados. Las series completadas, las repeticiones, el historial por ejercicio y la evolución de la asistencia, incluido el 0, se conservan.
+- **Inicio y la sesión activa** no muestran ninguna cifra de volumen.
+- **Pruebas nuevas:**
+  - Unitaria `volume_mixedSession_assistanceIsNotExternalLoad`.
+  - Instrumentada con Room real `ExerciseProgressDbTest.volume_excludesAssistance_consistentEverywhere`. Cubre el ejemplo de aceptación: press 40 kg × 10 y dominada asistida 30 kg × 8 dan 400 kg. Incluye un calentamiento, una serie pendiente, una asistencia de 0 y un registro antiguo sin modalidad. Sesión activa, resumen, historial, total semanal y progreso por ejercicio coinciden.
+- **Resultados:**
+  - 79/79 unitarias.
+  - 29/29 instrumentadas en el emulador.
+  - Lint con los avisos previos.
+- **No ejecutado:** recorrido manual de la interfaz para este seguimiento.

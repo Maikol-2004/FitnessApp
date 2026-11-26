@@ -140,8 +140,11 @@ fun parseRestSeconds(text: String): Int? = when (val p = parseInt(text)) {
     Parsed.Invalid -> null
 }
 
-/** Volumen = Σ kg externos × reps de series completadas que no son calentamiento. */
+/**
+ * Volumen = Σ kg externos × reps de series completadas que no son calentamiento. La asistencia (dominada
+ * asistida, en máquina, banda o sin indicar) es ayuda, no carga levantada: no suma ([SetValues.external] = false).
+ */
 fun volumeKg(sets: Iterable<SetValues>): Double =
-    sets.filter { it.completed && !it.warmup }.sumOf { (it.loadKg ?: 0.0) * (it.reps ?: 0) }
+    sets.filter { it.completed && !it.warmup && it.external }.sumOf { (it.loadKg ?: 0.0) * (it.reps ?: 0) }
 
-data class SetValues(val reps: Int?, val loadKg: Double?, val warmup: Boolean, val completed: Boolean)
+data class SetValues(val reps: Int?, val loadKg: Double?, val warmup: Boolean, val completed: Boolean, val external: Boolean = true)

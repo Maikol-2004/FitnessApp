@@ -5,6 +5,9 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.maikol.fitnessapp.core.database.FitnessDatabase
+import com.maikol.fitnessapp.core.tracking.weekTraining
+import com.maikol.fitnessapp.feature.training.catalog.ASSISTED_PULL_UP_ID
+import com.maikol.fitnessapp.feature.training.catalog.AssistMode
 import com.maikol.fitnessapp.feature.training.catalog.LoadSemantics
 import com.maikol.fitnessapp.feature.training.data.PlannedSet
 import com.maikol.fitnessapp.feature.training.data.Routine
@@ -18,9 +21,12 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.time.LocalDate
+import java.time.ZoneId
 
 /**
  * G2-04/05 con la consulta real de Room: dos rutinas con el mismo catalogId, un personalizado con el mismo
@@ -87,5 +93,66 @@ class ExerciseProgressDbTest {
         val custom = exerciseProgress(repo.observeCustomExerciseSets("r3-k").first(), LoadSemantics.EXTERNAL)
         assertEquals(200.0, custom.maxLoad!!.loadKg, 0.0)
         assertEquals(1, custom.history.size)
+    }
+
+    /**
+     * Volumen tras G2.1: la asistencia no es carga levantada. Sesión mixta (press 40 × 10 + dominada asistida
+     * 30 × 8 en máquina y 0 × 8) con calentamiento y serie pendiente, y otra con un registro asistido antiguo
+     * (sin modalidad). Sesión activa, resumen, historial, total semanal y progreso por ejercicio deben coincidir.
+     */
+    @Test
+    fun volume_excludesAssistance_consistentEverywhere() = runBlocking {
+        val pullUp = ASSISTED_PULL_UP_ID
+        repo.saveRoutine(
+            Routine(
+                "mix", "Prueba mixta", "", archived = false,
+                exercises = listOf(
+                    RoutineExercise("mix-b", "mix-bk", "Press banca con barra", "", listOf(planned("w", 10, 20.0, warmup = true), planned("b1", 10, 40.0), planned("b2", 10, 40.0)), bench),
+                    RoutineExercise("mix-p", "mix-pk", "Dominada asistida", "", listOf(planned("p1", 8, 30.0), planned("p2", 8, 0.0)), pullUp, AssistMode.MACHINE),
+                ),
+            ),
+        )
+        repo.saveRoutine(
+            Routine("old", "Prueba antigua", "", archived = false, exercises = listOf(RoutineExercise("old-p", "old-pk", "Dominada asistida", "", listOf(planned("o1", 8, 20.0)), pullUp))),
+        )
+
+        val id = (repo.startSession("mix") as StartResult.Started).sessionId
+        val (press, assisted) = repo.observeSession(id).first()!!.exercises
+        assertTrue(repo.completeSet(id, press.sets[0].id, 10, 20.0)) // calentamiento
+        assertTrue(repo.completeSet(id, press.sets[1].id, 10, 40.0)) // press.sets[2] queda pendiente
+        assertTrue(repo.completeSet(id, assisted.sets[0].id, 8, 30.0))
+        assertTrue(repo.completeSet(id, assisted.sets[1].id, 8, 0.0))
+        val active = withTimeout(5_000) { repo.observeSession(id).first { it!!.completedSets == 4 } }!!
+        assertEquals("sesión activa", 400.0, active.volumeKg, 0.0)
+        repo.finish(id)
+        val summary = withTimeout(5_000) { repo.observeSession(id).first { it?.isOpen == false } }!!
+        assertEquals("resumen", 400.0, summary.volumeKg, 0.0)
+        assertEquals(4, summary.completedSets)
+
+        // Registro asistido antiguo, sin modalidad: no se reclasifica ni suma volumen.
+        val oldId = (repo.startSession("old") as StartResult.Started).sessionId
+        assertTrue(repo.completeSet(oldId, repo.observeSession(oldId).first()!!.exercises.single().sets.single().id, 8, 20.0))
+        repo.finish(oldId)
+
+        val history = withTimeout(5_000) { repo.observeHistory().first { it.size == 2 } }
+        val byId = history.associateBy { it.id }
+        assertEquals("historial", 400.0, byId.getValue(id).volumeKg, 0.0)
+        assertEquals(4, byId.getValue(id).completedSets)
+        assertEquals(2, byId.getValue(id).exerciseCount)
+        assertEquals(0.0, byId.getValue(oldId).volumeKg, 0.0)
+        assertEquals(1, byId.getValue(oldId).completedSets)
+        val zone = ZoneId.systemDefault()
+        assertEquals("total semanal (Progreso)", 400.0, weekTraining(history, LocalDate.now(zone), zone).volumeKg, 0.0)
+
+        // Progreso por ejercicio: mismo volumen del press; la asistencia conserva series, 0 y evolución.
+        val pressProgress = exerciseProgress(repo.observeCatalogExerciseSets(bench).first(), LoadSemantics.EXTERNAL)
+        assertEquals(400.0, pressProgress.bestVolume!!.volumeKg, 0.0)
+        val assist = exerciseProgress(repo.observeCatalogExerciseSets(pullUp).first(), LoadSemantics.ASSISTANCE)
+        assertNull(assist.bestVolume)
+        assertEquals(listOf(AssistMode.MACHINE), assist.assistSeries.map { it.mode })
+        assertEquals(listOf(0.0), assist.assistSeries.single().points.map { it.valueKg })
+        assertEquals(1, assist.unknownAssistSessions)
+        assertEquals(listOf(30.0, 0.0), assist.history.first { it.sessionId == id }.sets.map { it.loadKg })
+        assertEquals(listOf(20.0), assist.history.first { it.sessionId == oldId }.sets.map { it.loadKg })
     }
 }
