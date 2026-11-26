@@ -35,6 +35,10 @@ fun formatLoadInput(kg: Double, unit: UnitSystem): String {
 fun formatLoad(kg: Double?, unit: UnitSystem): String? =
     kg?.takeIf { it > 0.0 }?.let { "${formatLoadInput(it, unit)} ${unit.loadUnit()}" }
 
+/** V2: carga escrita tal cual, 0 incluido («0 kg»); solo la ausente (null) devuelve null. Para objetivos y referencias. */
+fun formatExplicitLoad(kg: Double?, unit: UnitSystem): String? =
+    kg?.takeIf { it >= 0.0 }?.let { "${formatLoadInput(it, unit)} ${unit.loadUnit()}" }
+
 /** Volumen agregado: entero con separador de miles («2.400 kg»). */
 fun formatVolume(kg: Double, unit: UnitSystem): String {
     val nf = NumberFormat.getIntegerInstance(AppLocale)

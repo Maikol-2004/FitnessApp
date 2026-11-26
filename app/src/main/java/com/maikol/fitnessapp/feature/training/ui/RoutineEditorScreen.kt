@@ -571,7 +571,7 @@ private fun SetEditorRow(
 }
 
 @Composable
-private fun LabeledCell(label: String, modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+internal fun LabeledCell(label: String, modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     Column(modifier) {
         Text(label.uppercase(), style = OverlineStyle, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
         Spacer(Modifier.height(Spacing.xs))

@@ -39,7 +39,7 @@ import com.maikol.fitnessapp.core.preferences.UnitSystem
 import com.maikol.fitnessapp.feature.training.data.PlannedSet
 import com.maikol.fitnessapp.feature.training.data.Routine
 import com.maikol.fitnessapp.feature.training.data.RoutineExercise
-import com.maikol.fitnessapp.feature.training.data.formatLoad
+import com.maikol.fitnessapp.feature.training.data.formatExplicitLoad
 
 @Composable
 fun RoutineDetailRoute(
@@ -195,7 +195,8 @@ private fun SetGroupLine(group: SetGroup, unit: UnitSystem) {
             color = if (group.warmup) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
         )
         Text(
-            " · " + (formatLoad(group.loadKg, unit) ?: stringResource(R.string.bodyweight)),
+            // V2: 0 escrito se muestra «0 kg»; solo la carga ausente es «Sin carga».
+            " · " + (formatExplicitLoad(group.loadKg, unit) ?: stringResource(R.string.bodyweight)),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )

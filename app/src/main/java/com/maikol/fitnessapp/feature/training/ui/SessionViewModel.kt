@@ -12,19 +12,25 @@ import com.maikol.fitnessapp.FitnessApplication
 import com.maikol.fitnessapp.core.preferences.UnitSystem
 import com.maikol.fitnessapp.core.preferences.UserPreferencesRepository
 import com.maikol.fitnessapp.feature.training.catalog.AssistMode
+import com.maikol.fitnessapp.feature.training.catalog.loadSemanticsOf
 import com.maikol.fitnessapp.feature.training.data.ClockReading
 import com.maikol.fitnessapp.feature.training.data.FinishResult
 import com.maikol.fitnessapp.feature.training.data.LoadText
 import com.maikol.fitnessapp.feature.training.data.Parsed
 import com.maikol.fitnessapp.feature.training.data.PerformedSet
+import com.maikol.fitnessapp.feature.training.data.PreviousRef
 import com.maikol.fitnessapp.feature.training.data.Session
+import com.maikol.fitnessapp.feature.training.data.SessionExercise
 import com.maikol.fitnessapp.feature.training.data.TrainingRepository
 import com.maikol.fitnessapp.feature.training.data.parseReps
+import com.maikol.fitnessapp.feature.training.data.previousSession
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -114,15 +120,31 @@ class SessionViewModel(
         local.update { it.copy(pending = it.pending + set.id, failed = it.failed - set.id, attempted = it.attempted - set.id) }
         viewModelScope.launch {
             try {
-                repository.completeSet(sessionId, set.id, reps, kg)
-                local.update { it.copy(pending = it.pending - set.id, drafts = it.drafts - set.id) }
-                persistDrafts()
+                if (repository.completeSet(sessionId, set.id, reps, kg)) {
+                    local.update { it.copy(pending = it.pending - set.id, drafts = it.drafts - set.id) }
+                    persistDrafts()
+                } else {
+                    // V2: sin cambio en Room (sesión cerrada, serie ausente o ya hecha): ni éxito ni descanso,
+                    // y lo escrito se conserva.
+                    local.update { it.copy(pending = it.pending - set.id, failed = it.failed + set.id) }
+                }
             } catch (e: CancellationException) {
                 throw e
             } catch (_: Exception) {
                 local.update { it.copy(pending = it.pending - set.id, failed = it.failed + set.id) }
             }
         }
+    }
+
+    /**
+     * V2: referencia «Anterior» del ejercicio, desde la última sesión terminada con series comparables.
+     * Emite cuando la consulta termina (el llamador usa null como «cargando»).
+     */
+    fun previous(exercise: SessionExercise): Flow<PreviousRef> {
+        val rows = exercise.catalogId?.let { repository.observeCatalogExerciseSets(it) }
+            ?: repository.observeCustomExerciseSets(exercise.key)
+        val semantics = loadSemanticsOf(exercise.catalogId)
+        return rows.map { PreviousRef(previousSession(it, semantics, exercise.assistMode)) }
     }
 
     fun uncomplete(set: PerformedSet) {

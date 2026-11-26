@@ -43,10 +43,12 @@ import androidx.compose.material3.ButtonDefaults
 import com.maikol.fitnessapp.core.designsystem.component.PrimaryButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
@@ -65,10 +67,12 @@ import androidx.compose.ui.semantics.error
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -381,14 +385,28 @@ internal fun NumberCell(
     shape: Shape = MaterialTheme.shapes.medium,
 ) {
     var focused by remember { mutableStateOf(false) }
+    // V2: al enfocar se selecciona todo el valor: escribir lo sustituye (antes el cursor caía donde se tocaba
+    // y «8» + «10» daba «108»). La selección se aplica un frame después, tras colocar el cursor el toque.
+    var field by remember { mutableStateOf(TextFieldValue(value, TextRange(value.length))) }
+    val shown = if (field.text == value) field else TextFieldValue(value, TextRange(value.length))
+    LaunchedEffect(focused) {
+        if (focused) {
+            withFrameNanos { }
+            field = TextFieldValue(value, TextRange(0, value.length))
+        }
+    }
     val borderColor = when {
         isError -> MaterialTheme.colorScheme.error
         focused -> MaterialTheme.colorScheme.primary
         else -> Color.Transparent
     }
     BasicTextField(
-        value = value,
-        onValueChange = { new -> onValueChange(new.filter { it.isDigit() || (decimal && (it == ',' || it == '.')) }.take(8)) },
+        value = shown,
+        onValueChange = { new ->
+            val text = new.text.filter { it.isDigit() || (decimal && (it == ',' || it == '.')) }.take(8)
+            field = if (text == new.text) new else TextFieldValue(text, TextRange(text.length))
+            if (text != value) onValueChange(text)
+        },
         singleLine = true,
         textStyle = NumberStyleCell.copy(color = MaterialTheme.colorScheme.onSurface),
         cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),

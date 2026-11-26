@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- V2: sesión activa abierta con Liquid Glass -->
+    <plurals name="v2_sets_progress">
+        <item quantity="one">%1$d de %2$d serie</item>
+        <item quantity="other">%1$d de %2$d series</item>
+    </plurals>
+    <string name="v2_state_current">Serie actual</string>
+    <string name="v2_state_pending">Pendiente</string>
+    <string name="v2_state_done">Hecha</string>
+    <string name="v2_state_warmup">Calentamiento</string>
+    <string name="v2_previous">Anterior %1$s</string>
+    <string name="v2_previous_load_reps">%1$s × %2$d</string>
+    <plurals name="v2_previous_reps">
+        <item quantity="one">%1$d rep</item>
+        <item quantity="other">%1$d reps</item>
+    </plurals>
+    <string name="v2_previous_session">Anterior: sesión del %1$s</string>
+    <string name="v2_previous_none">Sin registro anterior</string>
+    <string name="v2_previous_no_counterpart">Anterior: sin serie equivalente</string>
+    <string name="v2_previous_assist_hint">Indica máquina o banda para comparar con la misma modalidad.</string>
+</resources>

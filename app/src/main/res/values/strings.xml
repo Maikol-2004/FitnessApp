@@ -125,7 +125,6 @@
     <!-- Sesión activa -->
     <string name="session_title">Sesión activa</string>
     <string name="session_elapsed">Tiempo efectivo</string>
-    <string name="session_progress">Series %1$d de %2$d</string>
     <string name="session_progress_description">Progreso: %1$d de %2$d series completadas</string>
     <string name="session_exercise_position">Ejercicio %1$d de %2$d</string>
     <string name="session_prev_exercise">Ejercicio anterior</string>

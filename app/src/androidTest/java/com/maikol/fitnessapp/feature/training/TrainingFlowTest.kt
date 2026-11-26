@@ -38,6 +38,10 @@ class TrainingFlowTest {
         runCatching { rule.onNodeWithText(text, substring = true).assertExists() }.isSuccess
     }
 
+    private fun waitForDescription(text: String, timeout: Long = 5_000) = rule.waitUntil(timeout) {
+        runCatching { rule.onNodeWithContentDescription(text).assertExists() }.isSuccess
+    }
+
     // Prueba destructiva: parte de una base vacía y la deja vacía (solo en emulador de pruebas).
     @Before
     @After
@@ -84,9 +88,9 @@ class TrainingFlowTest {
         waitForText("Sesión activa", timeout = 15_000)
 
         rule.onNodeWithContentDescription("Completar serie 1").performScrollTo().performClick()
-        waitForText("Series 1 de 2")
+        waitForDescription("Progreso: 1 de 2 series completadas") // V2: progreso compacto
         rule.onNodeWithContentDescription("Completar serie 2").performScrollTo().performClick()
-        waitForText("Series 2 de 2")
+        waitForDescription("Progreso: 2 de 2 series completadas")
 
         rule.onNodeWithText("Finalizar").performClick()
         waitForText("Finalizar con lo registrado")

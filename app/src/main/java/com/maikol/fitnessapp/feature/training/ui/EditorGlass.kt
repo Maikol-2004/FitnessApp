@@ -167,15 +167,24 @@ internal fun GlassTextField(
     }
 }
 
-/** Botón secundario de cristal ahumado (añadir serie/ejercicio). */
+/** Botón secundario de cristal ahumado (añadir serie/ejercicio; V2: también los controles de la sesión). */
 @Composable
-internal fun GlassButton(text: String, @DrawableRes iconRes: Int?, onClick: () -> Unit, modifier: Modifier = Modifier) {
+internal fun GlassButton(
+    text: String,
+    @DrawableRes iconRes: Int?,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    centered: Boolean = false,
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = if (centered) Arrangement.Center else Arrangement.Start,
         modifier = modifier
             .heightIn(min = MinTouchTarget)
+            .alpha(if (enabled) 1f else 0.38f)
             .editorGlass()
-            .clickable(role = Role.Button, onClick = onClick)
+            .clickable(enabled = enabled, role = Role.Button, onClick = onClick)
             .padding(horizontal = Spacing.l, vertical = Spacing.s),
     ) {
         if (iconRes != null) {
