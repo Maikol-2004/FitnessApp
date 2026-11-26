@@ -1,6 +1,5 @@
 package com.maikol.fitnessapp.core.tracking
 
-import com.maikol.fitnessapp.core.database.MealEntryEntity
 import com.maikol.fitnessapp.core.database.SleepEntryEntity
 import com.maikol.fitnessapp.core.database.WaterEntryEntity
 import com.maikol.fitnessapp.core.preferences.Goal
@@ -34,9 +33,6 @@ class TrackingCalcTest {
 
     private fun water(id: String, ml: Int) = WaterEntryEntity(id, ml, 0, "UTC", "2026-11-25", 0)
 
-    private fun meal(kcal: Double?, protein: Double?, carbs: Double? = null) =
-        MealEntryEntity("m$kcal$protein", "Prueba", 0, "UTC", "2026-11-25", kcal, protein, carbs, null, 0, 0)
-
     @Test
     fun water_add_edit_delete() {
         val entries = listOf(water("a", 250), water("b", 500))
@@ -44,18 +40,6 @@ class TrackingCalcTest {
         val edited = listOf(water("a", 150), water("b", 500))
         assertEquals(650, waterTotalMl(edited))
         assertEquals(150, waterTotalMl(edited.filterNot { it.id == "b" }))
-    }
-
-    @Test
-    fun nutrition_sumsKnown_andFlagsOnlyPartialFields() {
-        val totals = nutritionTotals(listOf(meal(450.0, 30.0), meal(700.0, null)))
-        assertEquals(1_150.0, totals.kcal!!, 0.0)
-        assertFalse(totals.kcalIncomplete)
-        assertEquals(30.0, totals.proteinG!!, 0.0)
-        assertTrue(totals.proteinIncomplete)
-        assertNull(totals.carbsG)
-        assertFalse("sin ningún valor no es «incompleto», es «—»", totals.carbsIncomplete)
-        assertTrue(totals.anyIncomplete)
     }
 
     @Test

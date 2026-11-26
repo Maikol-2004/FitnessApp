@@ -12,6 +12,13 @@ import com.maikol.fitnessapp.core.preferences.Goal
 import com.maikol.fitnessapp.core.preferences.UnitSystem
 import com.maikol.fitnessapp.core.preferences.UserPreferences
 import com.maikol.fitnessapp.core.preferences.UserPreferencesRepository
+import com.maikol.fitnessapp.feature.nutrition.data.GoalValues
+import com.maikol.fitnessapp.feature.nutrition.data.NutritionRepository
+import com.maikol.fitnessapp.feature.nutrition.data.goalFor
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import java.time.LocalDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -41,6 +48,7 @@ sealed interface ProfileUiState {
         val goalDrafts: Map<Goal, String> = emptyMap(),
         val goalErrors: Set<Goal> = emptySet(),
         val goalStatus: NameSaveStatus = NameSaveStatus.IDLE,
+        val savedGoals: Map<Goal, Int> = emptyMap(),
     ) : ProfileUiState {
         val canSave: Boolean
             get() = nameStatus != NameSaveStatus.SAVING && nameDraft.trim() != (savedName ?: "")
@@ -54,7 +62,13 @@ sealed interface ProfileUiState {
 class ProfileViewModel(
     private val repository: UserPreferencesRepository,
     private val savedStateHandle: SavedStateHandle,
+    /** N3: los objetivos nutricionales viven en Room con su historial; Perfil y Nutrición comparten este escritor. */
+    private val nutrition: NutritionRepository? = null,
 ) : ViewModel() {
+
+    /** Objetivo nutricional vigente hoy (null si aún no hay historial ni metas previas). */
+    private val nutritionGoals = nutrition?.observeGoalHistory()?.map { h -> goalFor(LocalDate.now(nutrition.zone()), h)?.values }
+        ?: flowOf(null)
 
     private val nameStatus = MutableStateFlow(NameSaveStatus.IDLE)
     private val failedSetting = MutableStateFlow<FailedSetting?>(null)
@@ -64,7 +78,7 @@ class ProfileViewModel(
     private val goalEdit = MutableStateFlow<GoalEdit?>(null)
 
     val uiState: StateFlow<ProfileUiState> = combine(
-        repository.userPreferences,
+        combine(repository.userPreferences, nutritionGoals) { prefs, n -> prefs.withNutritionGoals(n) },
         draft,
         nameStatus,
         failedSetting,
@@ -78,6 +92,7 @@ class ProfileViewModel(
             reduceMotion = prefs.reduceMotion,
             failedSetting = failed,
             goalDrafts = goals?.drafts ?: savedGoalTexts(prefs.goals),
+            savedGoals = prefs.goals,
             goalErrors = goals?.errors.orEmpty(),
             goalStatus = goals?.status ?: NameSaveStatus.IDLE,
         )
@@ -134,12 +149,29 @@ class ProfileViewModel(
         goalEdit.value = edit.copy(status = NameSaveStatus.SAVING)
         viewModelScope.launch {
             goalEdit.value = try {
-                repository.setGoals(parsed)
+                val n = nutrition
+                if (n == null) {
+                    repository.setGoals(parsed)
+                } else {
+                    // Pasos y agua siguen en preferencias; energía y macros se guardan como un cambio con fecha.
+                    repository.setGoals(parsed.filterKeys { it !in NutritionGoals })
+                    val values = GoalValues(parsed[Goal.KCAL], parsed[Goal.PROTEIN], parsed[Goal.CARBS], parsed[Goal.FAT])
+                    val current = (uiState.value as? ProfileUiState.Ready)?.let { r -> NutritionGoals.associateWith { r.savedGoals[it] } }
+                    if (current != NutritionGoals.associateWith { parsed[it] }) n.setGoals(values, source = NutritionRepository.SOURCE_PROFILE)
+                }
                 edit.copy(status = NameSaveStatus.SAVED)
-            } catch (e: IOException) {
+            } catch (c: CancellationException) {
+                throw c
+            } catch (e: Exception) {
                 edit.copy(status = NameSaveStatus.FAILED)
             }
         }
+    }
+
+    private fun UserPreferences.withNutritionGoals(n: GoalValues?): UserPreferences {
+        if (nutrition == null) return this
+        val room = mapOf(Goal.KCAL to n?.kcal, Goal.PROTEIN to n?.proteinG, Goal.CARBS to n?.carbsG, Goal.FAT to n?.fatG)
+        return copy(goals = goals.filterKeys { it !in NutritionGoals } + room.mapNotNull { (k, v) -> v?.let { k to it } })
     }
 
     private fun savedGoalTexts(goals: Map<Goal, Int>) = Goal.entries.associateWith { goals[it]?.toString().orEmpty() }
@@ -156,12 +188,13 @@ class ProfileViewModel(
     }
 
     companion object {
+        private val NutritionGoals = setOf(Goal.KCAL, Goal.PROTEIN, Goal.CARBS, Goal.FAT)
         private const val KEY_DRAFT = "name_draft"
 
         val Factory = viewModelFactory {
             initializer {
                 val container = (this[APPLICATION_KEY] as FitnessApplication).container
-                ProfileViewModel(container.userPreferencesRepository, createSavedStateHandle())
+                ProfileViewModel(container.userPreferencesRepository, createSavedStateHandle(), container.nutritionRepository)
             }
         }
     }

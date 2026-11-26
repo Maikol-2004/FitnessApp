@@ -6,7 +6,7 @@ import androidx.room.Query
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
-/** Registros manuales de Salud, Nutrición, Hidratación, Sueño y Peso. */
+/** Registros manuales de Salud, Hidratación, Sueño y Peso (las comidas viven en NutritionDao). */
 @Dao
 interface TrackingDao {
 
@@ -20,17 +20,6 @@ interface TrackingDao {
 
     @Query("DELETE FROM daily_activity WHERE date = :date")
     suspend fun deleteActivity(date: String): Int
-
-    // ---- Comidas ----
-
-    @Query("SELECT * FROM meal_entries WHERE localDate = :date ORDER BY occurredAt, createdAt")
-    fun observeMeals(date: String): Flow<List<MealEntryEntity>>
-
-    @Upsert
-    suspend fun upsertMeal(entity: MealEntryEntity)
-
-    @Query("DELETE FROM meal_entries WHERE id = :id")
-    suspend fun deleteMeal(id: String): Int
 
     // ---- Agua ----
 

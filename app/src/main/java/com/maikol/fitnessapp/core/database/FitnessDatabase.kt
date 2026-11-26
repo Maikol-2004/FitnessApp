@@ -34,6 +34,8 @@ interface AppMetadataDao {
  * v1 (H0): app_metadata. v2 (H2): rutinas y sesiones. v3 (F1): registros manuales de actividad, comidas,
  * agua, sueño y peso. v4 (G1): columna opcional catalogId en ejercicios de rutina y de sesión. v5 (G2.1):
  * columna opcional assistMode (máquina/banda) en los mismos ejercicios; lo anterior queda null (sin indicar).
+ * v6 (N1–N3): grupo y modo en meal_entries (lo anterior: «Sin clasificar», totales antiguos) y tablas de
+ * alimentos, ingredientes de comidas, recetas y objetivos nutricionales.
  * Cada migración es aditiva (AutoMigration desde los esquemas exportados) y conserva todo lo anterior.
  */
 @Database(
@@ -50,20 +52,27 @@ interface AppMetadataDao {
         WaterEntryEntity::class,
         SleepEntryEntity::class,
         BodyWeightEntity::class,
+        MealItemEntity::class,
+        FoodEntity::class,
+        RecipeEntity::class,
+        RecipeIngredientEntity::class,
+        NutritionGoalEntity::class,
     ],
-    version = 5,
+    version = 6,
     exportSchema = true,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3),
         AutoMigration(from = 3, to = 4),
         AutoMigration(from = 4, to = 5),
+        AutoMigration(from = 5, to = 6),
     ],
 )
 abstract class FitnessDatabase : RoomDatabase() {
     abstract fun appMetadataDao(): AppMetadataDao
     abstract fun trainingDao(): TrainingDao
     abstract fun trackingDao(): TrackingDao
+    abstract fun nutritionDao(): NutritionDao
 
     companion object {
         const val FILE_NAME = "fitness.db"

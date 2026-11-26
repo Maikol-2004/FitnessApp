@@ -4,7 +4,6 @@ import androidx.room.withTransaction
 import com.maikol.fitnessapp.core.database.BodyWeightEntity
 import com.maikol.fitnessapp.core.database.DailyActivityEntity
 import com.maikol.fitnessapp.core.database.FitnessDatabase
-import com.maikol.fitnessapp.core.database.MealEntryEntity
 import com.maikol.fitnessapp.core.database.RecordSource
 import com.maikol.fitnessapp.core.database.SleepEntryEntity
 import com.maikol.fitnessapp.core.database.WaterEntryEntity
@@ -74,45 +73,6 @@ open class TrackingRepository(
 
     suspend fun deleteActivity(date: LocalDate) {
         dao.deleteActivity(date.toString())
-    }
-
-    // ---- Comidas ----
-
-    fun observeMeals(date: LocalDate): Flow<List<MealEntryEntity>> = dao.observeMeals(date.toString())
-
-    open suspend fun saveMeal(
-        existing: MealEntryEntity?,
-        name: String,
-        date: LocalDate,
-        time: LocalTime,
-        kcal: Double?,
-        proteinG: Double?,
-        carbsG: Double?,
-        fatG: Double?,
-    ) {
-        require(name.isNotBlank() && (kcal != null || proteinG != null || carbsG != null || fatG != null))
-        val zoneId = zone()
-        val occurredAt = date.atTime(time).atZone(zoneId).toInstant().toEpochMilli()
-        val t = now()
-        dao.upsertMeal(
-            MealEntryEntity(
-                id = existing?.id ?: newId(),
-                name = name.trim(),
-                occurredAt = occurredAt,
-                zoneId = zoneId.id,
-                localDate = date.toString(),
-                kcal = kcal,
-                proteinG = proteinG,
-                carbsG = carbsG,
-                fatG = fatG,
-                createdAt = existing?.createdAt ?: t,
-                updatedAt = t,
-            ),
-        )
-    }
-
-    suspend fun deleteMeal(id: String) {
-        dao.deleteMeal(id)
     }
 
     // ---- Agua ----

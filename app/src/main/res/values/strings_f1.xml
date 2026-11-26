@@ -68,24 +68,7 @@
     <string name="health_record_name">la actividad de %1$s</string>
 
     <!-- Nutrición -->
-    <string name="nutrition_subtitle">Comidas, calorías y macros de cada día</string>
-    <string name="nutrition_totals">Total · %1$s</string>
-    <string name="nutrition_protein">Proteínas</string>
-    <string name="nutrition_carbs">Hidratos de carbono</string>
-    <string name="nutrition_carbs_short">Hidratos</string>
-    <string name="nutrition_fat">Grasas</string>
     <string name="nutrition_incomplete_field">Incompleto: alguna comida no lo indica.</string>
-    <string name="nutrition_kcal_incomplete">Energía incompleta: alguna comida no indica sus kcal.</string>
-    <string name="nutrition_goal_missing">Sin meta de energía.</string>
-    <string name="nutrition_empty_title">Sin comidas este día</string>
-    <string name="nutrition_empty_body">Añade lo que has comido con sus calorías y, si los conoces, sus macros.</string>
-    <string name="nutrition_add">Añadir comida</string>
-    <string name="nutrition_meals">Comidas</string>
-    <string name="nutrition_source_detail">Valores introducidos por ti</string>
-    <string name="nutrition_kcal_unknown">— kcal</string>
-    <string name="nutrition_form_new">Nueva comida</string>
-    <string name="nutrition_form_edit">Editar comida</string>
-    <string name="nutrition_form_note">%1$s · Valores de esta comida</string>
     <string name="nutrition_name">Nombre de la comida</string>
     <string name="nutrition_name_error">Escribe un nombre (máximo 60 caracteres).</string>
     <string name="nutrition_time">Hora</string>

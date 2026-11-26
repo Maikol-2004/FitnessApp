@@ -1,6 +1,5 @@
 package com.maikol.fitnessapp.core.tracking
 
-import com.maikol.fitnessapp.core.database.MealEntryEntity
 import com.maikol.fitnessapp.core.database.SleepEntryEntity
 import com.maikol.fitnessapp.core.database.WaterEntryEntity
 import com.maikol.fitnessapp.core.preferences.UnitSystem
@@ -31,40 +30,6 @@ const val MAX_NAME_LENGTH = 60
 const val MAX_NOTE_LENGTH = 200
 
 fun waterTotalMl(entries: List<WaterEntryEntity>): Int = entries.sumOf { it.ml }
-
-/**
- * Totales del día: suma de lo conocido. [incomplete] marca un campo cuando unas comidas lo indican y otras
- * no (desconocido no es cero). Un campo sin ningún valor conocido es null y se muestra «—».
- */
-data class NutritionTotals(
-    val kcal: Double?,
-    val proteinG: Double?,
-    val carbsG: Double?,
-    val fatG: Double?,
-    val kcalIncomplete: Boolean,
-    val proteinIncomplete: Boolean,
-    val carbsIncomplete: Boolean,
-    val fatIncomplete: Boolean,
-) {
-    val anyIncomplete get() = kcalIncomplete || proteinIncomplete || carbsIncomplete || fatIncomplete
-}
-
-fun nutritionTotals(meals: List<MealEntryEntity>): NutritionTotals {
-    fun total(pick: (MealEntryEntity) -> Double?): Double? =
-        meals.mapNotNull(pick).takeIf { it.isNotEmpty() }?.sum()
-    // Parcial: hay valores conocidos y otros desconocidos. Si ninguna comida lo indica, el total es null (—).
-    fun incomplete(pick: (MealEntryEntity) -> Double?) = meals.any { pick(it) == null } && meals.any { pick(it) != null }
-    return NutritionTotals(
-        kcal = total { it.kcal },
-        proteinG = total { it.proteinG },
-        carbsG = total { it.carbsG },
-        fatG = total { it.fatG },
-        kcalIncomplete = incomplete { it.kcal },
-        proteinIncomplete = incomplete { it.proteinG },
-        carbsIncomplete = incomplete { it.carbsG },
-        fatIncomplete = incomplete { it.fatG },
-    )
-}
 
 /** Fracción visual 0..1 del aro o barra; null si falta el valor o la meta (no se inventa un porcentaje). */
 fun goalFraction(value: Double?, goal: Double?): Float? {

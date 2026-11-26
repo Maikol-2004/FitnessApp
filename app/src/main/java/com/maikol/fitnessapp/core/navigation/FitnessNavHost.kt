@@ -37,7 +37,8 @@ import com.maikol.fitnessapp.feature.health.HealthRoute
 import com.maikol.fitnessapp.feature.home.CategoryTarget
 import com.maikol.fitnessapp.feature.home.HomeRoute
 import com.maikol.fitnessapp.feature.hydration.HydrationRoute
-import com.maikol.fitnessapp.feature.nutrition.NutritionRoute
+import com.maikol.fitnessapp.feature.nutrition.ui.NutritionRoutes
+import com.maikol.fitnessapp.feature.nutrition.ui.nutritionGraph
 import com.maikol.fitnessapp.feature.profile.ProfileRoute
 import com.maikol.fitnessapp.feature.progress.ProgressRoute
 import com.maikol.fitnessapp.feature.sleep.SleepRoute
@@ -66,7 +67,7 @@ fun FitnessApp() {
     val route = backStackEntry?.destination?.route
     val selected = tabOf(route)
     // Editor, detalle, sesión y resumen ocupan la pantalla: su acción principal va abajo.
-    val showDock = !TrainingRoutes.isImmersive(route)
+    val showDock = !TrainingRoutes.isImmersive(route) && !NutritionRoutes.isImmersive(route)
 
     // Surface aporta el color de contenido (texto claro) que antes ponía Scaffold.
     Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
@@ -191,12 +192,7 @@ private fun FitnessNavHost(navController: NavHostController, modifier: Modifier 
             HealthRoute(onOpenGoals = { navController.navigateToTopLevel(TopLevelDestination.PROFILE) })
         }
         composable(TopLevelDestination.PROFILE.route) { ProfileRoute() }
-        composable(SecondaryDestination.NUTRITION.route) {
-            NutritionRoute(
-                onBack = { navController.popSecondary(SecondaryDestination.NUTRITION) },
-                onOpenGoals = { navController.navigateToTopLevel(TopLevelDestination.PROFILE) },
-            )
-        }
+        nutritionGraph(navController, onExit = { navController.popSecondary(SecondaryDestination.NUTRITION) })
         composable(SecondaryDestination.HYDRATION.route) {
             HydrationRoute(
                 onBack = { navController.popSecondary(SecondaryDestination.HYDRATION) },

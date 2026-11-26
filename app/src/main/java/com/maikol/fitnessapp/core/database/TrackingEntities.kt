@@ -1,5 +1,6 @@
 package com.maikol.fitnessapp.core.database
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
@@ -29,7 +30,11 @@ data class DailyActivityEntity(
     val updatedAt: Long,
 )
 
-/** Valores totales de esta comida (no por 100 g). Macros null = desconocido, no cero. */
+/**
+ * Registro del diario. En LEGACY_TOTALS/QUICK_TOTALS los nutrientes son los totales de este registro (no por
+ * 100 g; null = desconocido). En FOOD_ITEMS cuentan solo sus meal_items y estos campos quedan null.
+ * v6: [mealGroup] (UNSPECIFIED para lo anterior, sin deducirlo de la hora) y [mode].
+ */
 @Entity(tableName = "meal_entries", indices = [Index("localDate")])
 data class MealEntryEntity(
     @PrimaryKey val id: String,
@@ -43,6 +48,8 @@ data class MealEntryEntity(
     val fatG: Double?,
     val createdAt: Long,
     val updatedAt: Long,
+    @ColumnInfo(defaultValue = "UNSPECIFIED") val mealGroup: String = "UNSPECIFIED",
+    @ColumnInfo(defaultValue = "LEGACY_TOTALS") val mode: String = "LEGACY_TOTALS",
 )
 
 @Entity(tableName = "water_entries", indices = [Index("localDate")])

@@ -6,6 +6,8 @@ import androidx.datastore.preferences.preferencesDataStoreFile
 import com.maikol.fitnessapp.core.database.FitnessDatabase
 import com.maikol.fitnessapp.core.preferences.UserPreferencesRepository
 import com.maikol.fitnessapp.core.tracking.TrackingRepository
+import com.maikol.fitnessapp.feature.nutrition.data.NutritionRepository
+import com.maikol.fitnessapp.feature.nutrition.data.OpenFoodFactsClient
 import com.maikol.fitnessapp.feature.training.data.SystemTrainingClock
 import com.maikol.fitnessapp.feature.training.data.TrainingRepository
 
@@ -24,6 +26,16 @@ class AppContainer(context: Context) {
 
     val trackingRepository: TrackingRepository by lazy {
         TrackingRepository(database)
+    }
+
+    /** Diario por comidas, alimentos, recetas y objetivos (Room es la autoridad de los objetivos nutricionales). */
+    val nutritionRepository: NutritionRepository by lazy {
+        NutritionRepository(database, userPreferencesRepository)
+    }
+
+    /** N2: lectura de Open Food Facts (sin cuenta ni escrituras). */
+    val openFoodFacts: OpenFoodFactsClient by lazy {
+        OpenFoodFactsClient(userAgent = OpenFoodFactsClient.USER_AGENT)
     }
 
     val userPreferencesRepository: UserPreferencesRepository by lazy {
