@@ -1,5 +1,8 @@
 # Instrucciones para Claude Code
 
+## Encargo vigente N — Nutrición; Entrenar se conserva
+Prevalecen docs/16_NUTRITION_MASTER.md, docs/nutrition/ y docs/CLAUDE_NEXT.md. El usuario ha cambiado la prioridad a Nutrición: lote N1–N3 y diseño abierto Liquid Glass en design/nutrition-v1. Preservar V2, datos e históricos; no continuar rutinas guiadas ni rehacer entrenamiento. Imágenes y fixtures son ejemplos, nunca datos nutricionales de producción. No push posterior de implementación sin autorización.
+
 ## Encargo vigente V1 — editor abierto con Liquid Glass
 Prevalecen docs/15_OPEN_GLASS_ROUTINE_EDITOR.md y docs/CLAUDE_NEXT.md. Referencia aprobada en design/routine-editor-open-glass/approved-reference.png: sin tarjeta exterior ni fondo por fila, campos y botones glass sobre fondo. Conservar G1/G2/G2.1, datos y corrección de volumen asistido. Este lote es del editor, no de la sesión activa. No push posterior de implementación sin autorización.
 

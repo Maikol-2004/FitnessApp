@@ -1,0 +1,26 @@
+{
+  "purpose": "SYNTHETIC_MATH_FIXTURES_ONLY_DO_NOT_SHIP_AS_FOOD_DATA",
+  "foods": [
+    {"id":"FIXTURE_A","basisAmount":100,"basisUnit":"g","kcal":165,"proteinG":10,"carbsG":20,"fatG":5},
+    {"id":"FIXTURE_B","basisAmount":100,"basisUnit":"g","kcal":250,"proteinG":5,"carbsG":35,"fatG":10}
+  ],
+  "scaling": {
+    "foodId":"FIXTURE_A","quantity":150,"unit":"g",
+    "expected":{"kcal":247.5,"proteinG":15,"carbsG":30,"fatG":7.5}
+  },
+  "recipe": {
+    "ingredients":[{"foodId":"FIXTURE_A","quantity":100,"unit":"g"},{"foodId":"FIXTURE_B","quantity":80,"unit":"g"}],
+    "servings":2,"finalWeightG":200,
+    "expectedTotal":{"kcal":365,"proteinG":14,"carbsG":48,"fatG":13},
+    "expectedPerServing":{"kcal":182.5,"proteinG":7,"carbsG":24,"fatG":6.5},
+    "expectedPer100g":{"kcal":182.5,"proteinG":7,"carbsG":24,"fatG":6.5}
+  },
+  "coverage": [
+    {"values":[null,null],"expectedValue":null,"expectedState":"UNKNOWN"},
+    {"values":[0,0],"expectedValue":0,"expectedState":"KNOWN"},
+    {"values":[0,null],"expectedValue":0,"expectedState":"PARTIAL"},
+    {"values":[10,null,5],"expectedValue":15,"expectedState":"PARTIAL"},
+    {"values":[],"expectedValue":null,"expectedState":"EMPTY"}
+  ],
+  "trend": {"days":[1000,null,2000,null,null,null,null],"recordedDays":2,"periodDays":7,"expectedMeanRecordedDaysKcal":1500}
+}

@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "baseCommit": "cae2db1c00d16de5123d2b4f9859b4562dd30432",
+  "generatedWith": "OpenAI built-in image generation",
+  "references": [
+    {
+      "path": "references/01_diary_and_meal.png",
+      "role": "design_reference_not_runtime",
+      "screens": [
+        "Diario",
+        "Detalle de comida"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "bytes": 1697302,
+      "sha256": "5aa7526beb20b7c3db38fa05444b4ac3491823c9e217bde8b22e29064bb1924f"
+    },
+    {
+      "path": "references/02_search_and_portion.png",
+      "role": "design_reference_not_runtime",
+      "screens": [
+        "Búsqueda de alimentos",
+        "Cantidad y ración"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "bytes": 1679261,
+      "sha256": "644a0e0407796254de928b65322ed459c29a53a64ed0750243d5284735792595"
+    },
+    {
+      "path": "references/03_recipes_and_trends.png",
+      "role": "design_reference_not_runtime",
+      "screens": [
+        "Receta propia",
+        "Tendencias"
+      ],
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "bytes": 1708047,
+      "sha256": "88ba63ebe9c218cc06f507e52e1fa1daaaab75281f7dc711fa4ee119fec64ea9"
+    }
+  ],
+  "runtimeAssets": [],
+  "notes": [
+    "Conceptos originales, no capturas implementadas.",
+    "Cifras, objetivos, fuentes y fotos de alimentos son ejemplos; no datos de producción.",
+    "No hay catálogo nutricional real precargado en esta entrega.",
+    "UI con Compose; iconos nativos y fotos opcionales con procedencia, no se usa el mockup como fondo."
+  ]
+}
