@@ -52,7 +52,7 @@ class MigrationTest {
         try {
             assertEquals("1700000000000", db.appMetadataDao().observeValue(FitnessDatabase.KEY_CREATED_AT).first())
             assertEquals("conservado", db.appMetadataDao().observeValue("prueba").first())
-            assertEquals(5, db.openHelper.readableDatabase.version)
+            assertEquals(6, db.openHelper.readableDatabase.version)
 
             val repo = TrainingRepository(db, SystemTrainingClock)
             val routine = Routine("r", "Prueba", "", false, listOf(RoutineExercise("e", "k", "Remo", "", listOf(PlannedSet("s", 10, 20.0, 90, false)))))

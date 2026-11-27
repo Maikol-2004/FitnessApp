@@ -46,7 +46,7 @@ class NavigationTest {
     fun secondaryCategories_openTheirScreenAndBackReturnsHome() {
         waitForText(homeMarker)
         val secondaries = mapOf(
-            "Comidas, calorías y macros." to "macros de cada día",
+            "Comidas, calorías y macros." to "Tu diario por comidas",
             "Agua y objetivo diario." to "Agua que bebes",
             "Tu descanso y su evolución." to "Tus horas de descanso",
         )

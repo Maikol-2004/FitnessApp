@@ -68,7 +68,7 @@ class MigrationV5Test {
         try {
             val training = TrainingRepository(db, SystemTrainingClock)
             val old = training.getRoutine("r1")!!
-            assertEquals(5, db.openHelper.readableDatabase.version)
+            assertEquals(6, db.openHelper.readableDatabase.version)
             assertEquals(assisted, old.exercises.single().catalogId)
             assertNull(old.exercises.single().assistMode)
 

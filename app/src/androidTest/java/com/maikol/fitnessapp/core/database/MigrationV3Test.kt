@@ -67,7 +67,7 @@ class MigrationV3Test {
             val history = training.observeHistory().first()
             assertEquals(1, history.size)
             assertEquals(400.0, history.single().volumeKg, 0.0)
-            assertEquals(5, db.openHelper.readableDatabase.version)
+            assertEquals(6, db.openHelper.readableDatabase.version)
 
             val zone = ZoneId.of("Europe/Madrid")
             val tracking = TrackingRepository(db, zone = { zone })
