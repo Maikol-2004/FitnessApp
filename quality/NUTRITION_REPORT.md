@@ -1,7 +1,7 @@
 # Nutrición N1–N3 — informe de verificación (27-11-2026)
 
-Rama `fase/f1`, commits locales sin push: `a0d9937` (implementación), `8df985d` (pruebas instrumentadas al día con v6) y el commit
-de cierre de este informe. Entrenar no se ha modificado.
+Rama `fase/f1`, publicada en origin (sin merge a `main`): `a0d9937` (implementación), `8df985d` (pruebas instrumentadas al día
+con v6), `994543c` (verificación, capturas e informe) y la actualización de documentación posterior. Entrenar no se ha modificado.
 
 ## Comandos y resultados reales
 | Comando | Resultado |
@@ -28,7 +28,7 @@ Peticiones reales a Open Food Facts en esta sesión: 2 (una búsqueda «yogur» 
 | ID | Estado | Evidencia |
 |---|---|---|
 | N-01 | PASS | Capturas 03→04→07: alimento desde etiqueta, 150 g a Comida; el resumen cambia solo al guardar |
-| N-02 | PASS (emulador) | `MigrationV6Test`: base v5 real con 0 y null → «Sin asignar», LEGACY_TOTALS, sin ingredientes, editable; entreno y agua intactos. En el móvil real: NO EJECUTADO (no estaba conectado) |
+| N-02 | PASS | `MigrationV6Test` (emulador): base v5 con 0 y null → «Sin asignar», LEGACY_TOTALS, sin ingredientes, editable; entreno y agua intactos. Móvil real: migración v5→v6 hecha; la copia previa no tenía comidas (0), así que no hay comidas antiguas que mostrar; 2 rutinas y 2 sesiones conservadas |
 | N-03 | PASS | Unit `scaling_fixtureA_150g`, `serving_30g_roundTrip_andNoMassVolumeConversion`; captura 04 (248 kcal, 15/30/7,5 g) |
 | N-04 | PASS | Unit `kcalWithoutMacros_isPartial…`, `quantity_rejectsZeroNegativeNonFinite`, `coverage_fixtures`; captura 07 «Parcial» |
 | N-05 | PASS | Instrumentado: idempotencia, borrar/deshacer, copiar con reintento, mover. Fallo de Room con borrador: cubierto por código, NO EJECUTADO como prueba |
@@ -50,7 +50,7 @@ Peticiones reales a Open Food Facts en esta sesión: 2 (una búsqueda «yogur» 
 ## Pendiente / requisitos externos
 - **Correo de contacto en el User-Agent de Open Food Facts**: OFF lo pide; no se ha puesto ninguno. Decide qué contacto usar.
 - **NOTICES / licencias** (N-13): falta pantalla o archivo global de atribución.
-- Comprobar en el móvil real que las comidas antiguas aparecen en «Sin asignar» (la migración ya corrió al instalar).
+- Pruebas manuales en el móvil real (lista entregada al usuario el 27-11-2026): resultado pendiente de que las haga.
 - Escáner con cámara física, TalkBack, orientación, API 28, medianoche/cambio de zona: NO EJECUTADO.
 - Detalles menores vistos: el nombre de ración («Bol») no se muestra, aparece «Ración de 30 g»; en la ficha OFF «Ración 125 g · 125 g» repite el dato.
 - El emulador con GPU por hardware daba capturas corruptas; se usó `-gpu swiftshader_indirect` (lento, la System UI dejó de responder dos veces).
