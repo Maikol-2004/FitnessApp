@@ -31,6 +31,7 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -63,8 +64,8 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.maikol.fitnessapp.R
 import com.maikol.fitnessapp.core.designsystem.motion.LocalMotionEnabled
 import com.maikol.fitnessapp.core.designsystem.motion.MotionTokens
@@ -245,8 +246,10 @@ fun GlassSegmented(options: List<String>, selected: Int, onSelect: (Int) -> Unit
                     label,
                     style = MaterialTheme.typography.labelLarge,
                     color = if (isSelected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
+                    // Una línea que se reduce solo si no cabe: con fuente grande no se parte una palabra («Tendenci/as»).
+                    maxLines = 1,
+                    softWrap = false,
+                    autoSize = TextAutoSize.StepBased(minFontSize = 8.sp, maxFontSize = MaterialTheme.typography.labelLarge.fontSize),
                 )
             }
         }
