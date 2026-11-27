@@ -203,8 +203,7 @@ class PortionViewModel(private val handle: SavedStateHandle, private val reposit
         viewModelScope.launch {
             try {
                 if (mode == PortionMode.EDIT_ITEM) {
-                    repository.updateItemQuantity(itemId!!, q, s.unit)
-                    repository.moveItem(itemId, s.group)
+                    repository.updateItem(itemId!!, q, s.unit, s.group)
                 } else {
                     repository.logPortion(draftId, s.date, s.group, LocalTime.now(repository.zone()), src, q, s.unit)
                 }

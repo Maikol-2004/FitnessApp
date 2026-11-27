@@ -324,6 +324,7 @@ internal fun remoteErrorText(r: RemoteResult<Nothing>): String = when (r) {
     is RemoteResult.Throttled -> stringResource(R.string.n_err_throttled, r.waitSeconds)
     RemoteResult.NotFound -> stringResource(R.string.n_code_not_found)
     RemoteResult.NoNutrition -> stringResource(R.string.n_code_no_nutrition)
+    RemoteResult.InvalidResponse -> stringResource(R.string.n_err_invalid)
     else -> stringResource(R.string.n_err_generic)
 }
 
@@ -367,7 +368,7 @@ internal fun ManualCodeDialog(onDismiss: () -> Unit, onConfirm: (String) -> Unit
         Surface(shape = MaterialTheme.shapes.large, color = FitnessThemeExtras.colors.card) {
             Column(Modifier.padding(Spacing.xl), verticalArrangement = Arrangement.spacedBy(Spacing.m)) {
                 Text(stringResource(R.string.n_enter_code), style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
-                GlassNumberField(code, { code = it.take(14) }, stringResource(R.string.n_code_label), integer = true, imeAction = ImeAction.Done)
+                GlassNumberField(code, { code = it.take(14) }, stringResource(R.string.n_code_label), integer = true, imeAction = ImeAction.Done, maxLength = 14)
                 Text(stringResource(R.string.n_code_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 PrimaryButton(stringResource(R.string.n_code_search), { onConfirm(code) }, Modifier.fillMaxWidth(), enabled = code.length >= 8)
                 TextButton(onClick = onDismiss, modifier = Modifier.fillMaxWidth().heightIn(min = MinTouchTarget)) {

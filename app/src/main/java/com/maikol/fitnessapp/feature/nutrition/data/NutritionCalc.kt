@@ -244,8 +244,29 @@ data class GoalChange(val effectiveDate: LocalDate, val createdAt: Long, val val
 fun goalFor(date: LocalDate, history: List<GoalChange>): GoalChange? =
     history.filter { it.effectiveDate <= date }.maxWithOrNull(compareBy<GoalChange> { it.effectiveDate }.thenBy { it.createdAt })
 
-/** Diferencia con el objetivo: positiva = falta; negativa = por encima. Sin objetivo o sin dato: null. */
-fun goalDifference(value: Double?, goal: Int?): Double? = if (value == null || goal == null) null else goal - value
+/** Kcal tal como se muestran (enteras, mitades hacia arriba). Es el único redondeo de kcal en pantalla. */
+fun roundKcal(v: Double): Long = Math.round(v)
+
+/**
+ * Diferencia con el objetivo: positiva = falta; negativa = por encima. Sin objetivo o sin dato: null.
+ * Se calcula sobre las kcal ya redondeadas, para que «registradas» + «hasta tu objetivo» sumen exactamente el objetivo.
+ */
+fun goalDifference(value: Double?, goal: Int?): Double? = if (value == null || goal == null) null else (goal - roundKcal(value)).toDouble()
+
+private val QuantityOnly = Regex("^\\(?\\s*(\\d+(?:[.,]\\d+)?)\\s*(g|gr|grs|gramos|ml)\\.?\\s*\\)?$", RegexOption.IGNORE_CASE)
+
+/**
+ * Nombre propio de una ración («Bol», «1 yogur»), o null si está vacío o solo repite su cantidad
+ * («125 g» para una ración de 125 g), para no mostrar «125 g · 125 g».
+ */
+fun servingDisplayName(name: String?, amount: Double?, unit: QtyUnit?): String? {
+    val n = name?.trim()?.takeIf { it.isNotEmpty() } ?: return null
+    if (amount == null || unit == null) return n
+    val m = QuantityOnly.find(n) ?: return n
+    val v = m.groupValues[1].replace(',', '.').toDoubleOrNull() ?: return n
+    val u = if (m.groupValues[2].lowercase().startsWith("g")) QtyUnit.G else QtyUnit.ML
+    return if (u == unit && Math.abs(v - amount) < 1e-6) null else n
+}
 
 /** Búsqueda local sin tildes ni mayúsculas. */
 fun searchKey(text: String): String =

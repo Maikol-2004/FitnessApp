@@ -115,7 +115,7 @@ open class NutritionRepository(
     }
 
     /** Cambia la cantidad desde el snapshot guardado (no desde la definición actual del alimento). */
-    suspend fun updateItemQuantity(itemId: String, quantity: Double, unit: QtyUnit) {
+    open suspend fun updateItemQuantity(itemId: String, quantity: Double, unit: QtyUnit) {
         require(validQuantity(quantity, unit))
         db.withTransaction {
             val old = requireNotNull(dao.getItem(itemId))
@@ -124,7 +124,7 @@ open class NutritionRepository(
     }
 
     /** Mueve un alimento a otro grupo del mismo día. Un contenedor que queda vacío se elimina. */
-    suspend fun moveItem(itemId: String, group: MealGroup) {
+    open suspend fun moveItem(itemId: String, group: MealGroup) {
         db.withTransaction {
             val old = requireNotNull(dao.getItem(itemId))
             val from = requireNotNull(dao.getMeal(old.mealId)).meal
@@ -132,6 +132,18 @@ open class NutritionRepository(
             val target = foodItemsMeal(LocalDate.parse(from.localDate), group, LocalTime.now(zone()))
             dao.upsertItems(listOf(old.copy(mealId = target.id, position = dao.maxItemPosition(target.id) + 1, updatedAt = now())))
             if (dao.countItems(from.id) == 0) dao.deleteMeal(from.id)
+        }
+    }
+
+    /**
+     * Edición de un alimento registrado: cantidad y comida en una única transacción. Si cualquiera de los dos pasos
+     * falla, no queda nada a medias (ni la cantidad cambiada en la comida de antes).
+     */
+    open suspend fun updateItem(itemId: String, quantity: Double, unit: QtyUnit, group: MealGroup) {
+        require(validQuantity(quantity, unit))
+        db.withTransaction {
+            updateItemQuantity(itemId, quantity, unit)
+            moveItem(itemId, group)
         }
     }
 
@@ -143,7 +155,7 @@ open class NutritionRepository(
         DeletedItem(old, removedHeader)
     }
 
-    suspend fun restore(deleted: DeletedItem) {
+    open suspend fun restore(deleted: DeletedItem) {
         db.withTransaction {
             deleted.header?.let { if (dao.getMeal(it.id) == null) dao.upsertMeal(it) }
             dao.upsertItems(listOf(deleted.item))

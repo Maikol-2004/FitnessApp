@@ -213,5 +213,12 @@
     <string name="profile_motion_body">Quita desplazamientos y animaciones en bucle. La escala de animación de Android también se respeta.</string>
     <string name="profile_theme_title">Apariencia</string>
     <string name="profile_theme_current">Titanium Champagne</string>
+    <string name="profile_licenses_title">Fuentes y licencias</string>
+    <string name="profile_licenses_off_title">Open Food Facts</string>
+    <string name="profile_licenses_off_body">Datos de productos de openfoodfacts.org, aportados por usuarios. La base de datos está bajo Open Database License (ODbL) y sus contenidos bajo Database Contents License (DbCL). Las imágenes de productos (CC BY-SA) no se descargan. Cada producto guardado conserva su enlace de origen.</string>
+    <string name="profile_licenses_mlkit_title">Google ML Kit · lectura de códigos</string>
+    <string name="profile_licenses_mlkit_body">Biblioteca de Google para leer códigos de barras, sujeta a las condiciones de ML Kit. La imagen de la cámara se analiza en el móvil.</string>
+    <string name="profile_licenses_oss_title">Android Jetpack y Kotlin</string>
+    <string name="profile_licenses_oss_body">AndroidX (Compose, Room, CameraX, DataStore, Navigation, Lifecycle) y Kotlin, bajo Apache License 2.0.</string>
     <string name="profile_theme_body">Tema oscuro activo. Otras paletas llegarán más adelante.</string>
 </resources>

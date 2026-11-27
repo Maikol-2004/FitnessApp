@@ -39,6 +39,7 @@
     <string name="n_move_title">Mover a otra comida</string>
     <string name="n_copy">Copiar</string>
     <string name="n_deleted">Registro eliminado</string>
+    <string name="n_undo_failed">No se pudo deshacer. Lo borrado sigue guardado para reintentar.</string>
     <string name="n_undo">Deshacer</string>
     <string name="n_log_food">Registrar alimento</string>
     <string name="n_add_food">Añadir alimento</string>
@@ -91,6 +92,7 @@
     <string name="n_err_503">Open Food Facts no está disponible ahora mismo.</string>
     <string name="n_err_throttled">Para respetar el límite de Open Food Facts, espera %1$d s.</string>
     <string name="n_err_generic">No se pudo leer la respuesta de Open Food Facts.</string>
+    <string name="n_err_invalid">Open Food Facts devolvió una respuesta que no se puede leer. Reintenta o crea el alimento a mano.</string>
     <string name="n_code_label">Código de barras</string>
     <string name="n_code_hint">8, 12, 13 o 14 dígitos. Se conservan los ceros iniciales.</string>
     <string name="n_code_search">Buscar código</string>
@@ -109,6 +111,7 @@
     <string name="n_quantity_of">Cantidad de %1$s</string>
     <string name="n_unit_serving">ración</string>
     <string name="n_serving_of">Ración de %1$s</string>
+    <string name="n_serving_named">%1$s (%2$s)</string>
     <string name="n_equivalence">%1$s = %2$s</string>
     <string name="n_no_density">Sin densidad conocida no se convierten ml en g.</string>
     <string name="n_recipe_no_grams">Sin peso final, la receta se registra por raciones.</string>

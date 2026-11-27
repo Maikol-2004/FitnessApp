@@ -39,6 +39,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -85,6 +88,7 @@ import com.maikol.fitnessapp.feature.nutrition.data.SOURCE_RECIPE
 import com.maikol.fitnessapp.core.database.FoodSource
 import com.maikol.fitnessapp.feature.training.data.AppLocale
 import com.maikol.fitnessapp.feature.training.ui.editorGlass
+import com.maikol.fitnessapp.feature.nutrition.data.roundKcal
 import java.text.NumberFormat
 
 /*
@@ -92,14 +96,30 @@ import java.text.NumberFormat
  * Reutiliza el material editorGlass del editor V1; sin tarjetas por comida ni desenfoque por fila.
  */
 
+/**
+ * Oferta de deshacer un borrado. Mientras se restaura no se muestra nada; si restaurar falla, se ofrece reintentar
+ * con lo borrado aún guardado. Descartar el aviso renuncia a deshacer.
+ */
+@Composable
+fun UndoSnackbar(host: SnackbarHostState, pending: Boolean, restoring: Boolean, failed: Boolean, onUndo: () -> Unit, onDismiss: () -> Unit) {
+    val text = stringResource(if (failed) R.string.n_undo_failed else R.string.n_deleted)
+    val action = stringResource(if (failed) R.string.n_retry else R.string.n_undo)
+    LaunchedEffect(pending, restoring, failed) {
+        if (pending && !restoring) {
+            val r = host.showSnackbar(text, actionLabel = action, duration = SnackbarDuration.Long)
+            if (r == SnackbarResult.ActionPerformed) onUndo() else onDismiss()
+        }
+    }
+}
+
 // ---- Formatos ----
 
 private val Kcal0 = NumberFormat.getIntegerInstance(AppLocale)
 private val G1 = NumberFormat.getNumberInstance(AppLocale).apply { maximumFractionDigits = 1; minimumFractionDigits = 0 }
 
-fun kcalText(v: Double): String = "${Kcal0.format(Math.round(v))} kcal"
+fun kcalText(v: Double): String = "${Kcal0.format(roundKcal(v))} kcal"
 fun gramsText(v: Double): String = "${G1.format(v)} g"
-fun kcalNumber(v: Double): String = Kcal0.format(Math.round(v))
+fun kcalNumber(v: Double): String = Kcal0.format(roundKcal(v))
 fun gramsNumber(v: Double): String = G1.format(v)
 
 /** Valor de un nutriente con unidad o «—» si es desconocido. */
@@ -295,6 +315,8 @@ fun GlassNumberField(
     error: String? = null,
     imeAction: ImeAction = ImeAction.Next,
     integer: Boolean = false,
+    /** Cifras máximas: 9 para cantidades; 14 para códigos de barras (GTIN). */
+    maxLength: Int = 9,
 ) {
     var focused by remember { mutableStateOf(false) }
     var field by remember { mutableStateOf(TextFieldValue(value, TextRange(value.length))) }
@@ -311,7 +333,7 @@ fun GlassNumberField(
         BasicTextField(
             value = shown,
             onValueChange = { new ->
-                val text = new.text.filter { it.isDigit() || (!integer && (it == ',' || it == '.')) }.take(9)
+                val text = new.text.filter { it.isDigit() || (!integer && (it == ',' || it == '.')) }.take(maxLength)
                 field = if (text == new.text) new else TextFieldValue(text, TextRange(text.length))
                 if (text != value) onValueChange(text)
             },

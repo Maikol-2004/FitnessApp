@@ -90,10 +90,11 @@ class OpenFoodFactsParseTest {
 
     @Test
     fun search_hitsNormalized_invalidSkipped() {
-        val hits = OpenFoodFactsClient.parseSearch(
+        val hits = (OpenFoodFactsClient.parseSearchResponse(
+            200,
             """{"hits":[{"code":"04963406","product_name":"Prueba uno","brands":["Marca Prueba"],"quantity":"500 g"},
                         {"code":"abc","product_name":"Inválido"},{"code":"0012345678905"}]}""",
-        )
+        ) as RemoteResult.Ok).value
         assertEquals(1, hits.size)
         assertEquals("04963406", hits.single().code)
         assertEquals("Marca Prueba", hits.single().brand)

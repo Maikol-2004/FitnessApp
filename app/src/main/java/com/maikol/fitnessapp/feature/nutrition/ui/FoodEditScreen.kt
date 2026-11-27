@@ -279,7 +279,7 @@ fun FoodEditRoute(
         }
         GlassNumberField(f.servingAmount, { v -> viewModel.update { it.copy(servingAmount = v) } }, stringResource(R.string.n_serving_amount),
             suffix = if (f.basisUnit == QtyUnit.SERVING) f.servingUnit.code else f.basisUnit.code, error = invalid.takeIf { FoodField.SERVING in e })
-        GlassNumberField(f.barcode, { v -> viewModel.update { it.copy(barcode = v.take(14)) } }, stringResource(R.string.n_code_optional), integer = true,
+        GlassNumberField(f.barcode, { v -> viewModel.update { it.copy(barcode = v.take(14)) } }, stringResource(R.string.n_code_optional), integer = true, maxLength = 14,
             error = stringResource(R.string.n_code_invalid).takeIf { FoodField.CODE in e })
     }
 }

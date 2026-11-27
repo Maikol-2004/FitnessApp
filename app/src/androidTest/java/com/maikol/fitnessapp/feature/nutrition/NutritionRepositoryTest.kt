@@ -11,6 +11,8 @@ import com.maikol.fitnessapp.core.preferences.Goal
 import com.maikol.fitnessapp.core.preferences.UserPreferencesRepository
 import com.maikol.fitnessapp.feature.nutrition.data.Basis
 import com.maikol.fitnessapp.feature.nutrition.data.CopyRequest
+import com.maikol.fitnessapp.feature.nutrition.data.DeletedItem
+import com.maikol.fitnessapp.feature.nutrition.ui.UndoSlot
 import com.maikol.fitnessapp.feature.nutrition.data.FoodDraft
 import com.maikol.fitnessapp.feature.nutrition.data.GoalValues
 import com.maikol.fitnessapp.feature.nutrition.data.IngredientDraft
@@ -29,6 +31,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -37,6 +40,7 @@ import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
+import org.junit.Assert.assertSame
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -233,6 +237,68 @@ class NutritionRepositoryTest {
         } finally {
             scope.cancel()
             file.delete()
+        }
+    }
+
+    /** N1.1-2: si mover falla, la cantidad tampoco cambia (una sola transacción); al reintentar se aplica todo. */
+    @Test
+    fun updateItem_moveFails_rollsBackQuantity_thenRetrySucceeds() = runBlocking {
+        val failing = object : NutritionRepository(db, now = { clock++ }, zone = { ZoneOffset.UTC }) {
+            override suspend fun moveItem(itemId: String, group: MealGroup) {
+                super.moveItem(itemId, group)
+                error("fallo simulado al mover")
+            }
+        }
+        val food = failing.getFood(failing.saveFood("fa", a))!!.portionable()
+        failing.logPortion("i1", day, MealGroup.SNACK, noon, food, 100.0, QtyUnit.G)
+
+        assertTrue(runCatching { failing.updateItem("i1", 200.0, QtyUnit.G, MealGroup.DINNER) }.isFailure)
+        val unchanged = repo.observeDay(day).first()
+        assertEquals(listOf(MealGroup.SNACK), unchanged.map { it.group })
+        val item = unchanged.single().items.single().entity
+        assertEquals(100.0, item.quantity, 0.0)
+        assertEquals(165.0, item.kcal!!, 1e-9)
+
+        repo.updateItem("i1", 200.0, QtyUnit.G, MealGroup.DINNER)
+        val moved = repo.observeDay(day).first()
+        assertEquals(listOf(MealGroup.DINNER), moved.map { it.group })
+        assertEquals(listOf("i1"), moved.single().items.map { it.entity.id })
+        assertEquals(330.0, moved.totals().kcal.value!!, 1e-9)
+    }
+
+    /** N1.1-3: si restaurar falla, lo borrado sigue disponible; el reintento lo recupera una sola vez. */
+    @Test
+    fun undo_restoreFails_keepsReference_retryRestoresOnce() = runBlocking {
+        var failNext = true
+        val flaky = object : NutritionRepository(db, now = { clock++ }, zone = { ZoneOffset.UTC }) {
+            override suspend fun restore(deleted: DeletedItem) {
+                if (failNext) {
+                    failNext = false
+                    error("fallo simulado al restaurar")
+                }
+                super.restore(deleted)
+            }
+        }
+        val food = flaky.getFood(flaky.saveFood("fa", a))!!.portionable()
+        flaky.logPortion("i1", day, MealGroup.LUNCH, noon, food, 150.0, QtyUnit.G)
+        val deleted = flaky.deleteItem("i1")!!
+        val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+        try {
+            val slot = UndoSlot<DeletedItem>(scope) { flaky.restore(it) }
+            slot.offer(deleted)
+            slot.undo()
+            val failed = withTimeout(5_000) { slot.state.first { !it.restoring && (it.failed || it.deleted == null) } }
+            assertTrue(failed.failed)
+            assertSame(deleted, failed.deleted)
+            assertTrue("nada restaurado a medias", repo.observeDay(day).first().isEmpty())
+
+            slot.undo()
+            withTimeout(5_000) { slot.state.first { it.deleted == null } }
+            val after = repo.observeDay(day).first()
+            assertEquals(listOf("i1"), after.single().items.map { it.entity.id })
+            assertEquals(247.5, after.totals().kcal.value!!, 1e-9)
+        } finally {
+            scope.cancel()
         }
     }
 }

@@ -14,6 +14,8 @@ import com.maikol.fitnessapp.feature.nutrition.data.Nutrients
 import com.maikol.fitnessapp.feature.nutrition.data.QtyUnit
 import com.maikol.fitnessapp.feature.nutrition.data.Totals
 import com.maikol.fitnessapp.feature.nutrition.data.goalDifference
+import com.maikol.fitnessapp.feature.nutrition.data.roundKcal
+import com.maikol.fitnessapp.feature.nutrition.data.servingDisplayName
 import com.maikol.fitnessapp.feature.nutrition.data.goalFor
 import com.maikol.fitnessapp.feature.nutrition.data.kjToKcal
 import com.maikol.fitnessapp.feature.nutrition.data.matchesQuery
@@ -233,5 +235,32 @@ class NutritionCalcTest {
         assertEquals(Basis(100.0, QtyUnit.G, 30.0, QtyUnit.G), serving.draft.basis)
         val bad = validateFood(FoodForm(name = "Prueba", kcal = "-1", basisAmount = "0", barcode = "123")) as FoodValidation.Invalid
         assertEquals(setOf(FoodField.KCAL, FoodField.BASIS, FoodField.CODE), bad.errors)
+    }
+
+    /** N1.1-4: registradas + restantes suman exactamente el objetivo, con el mismo redondeo que se muestra. */
+    @Test
+    fun goalRemaining_usesDisplayedRounding() {
+        assertEquals(548L, roundKcal(547.5))
+        assertEquals(1452.0, goalDifference(547.5, 2000)!!, 0.0)
+        for (v in listOf(0.4, 0.5, 547.5, 1999.5, 2000.4, 2100.6)) {
+            assertEquals("consumo $v", 2000.0, roundKcal(v) + goalDifference(v, 2000)!!, 0.0)
+        }
+        assertEquals(-1.0, goalDifference(2000.5, 2000)!!, 0.0)
+    }
+
+    /** N1.1-4: nombre propio de la ración; si solo repite la cantidad («125 g · 125 g») no se muestra. */
+    @Test
+    fun servingDisplayName_hidesQuantityOnlyLabels() {
+        assertEquals("Bol", servingDisplayName("Bol", 30.0, QtyUnit.G))
+        assertEquals("1 yogur", servingDisplayName(" 1 yogur ", 125.0, QtyUnit.G))
+        assertNull(servingDisplayName("125 g", 125.0, QtyUnit.G))
+        assertNull(servingDisplayName("125g", 125.0, QtyUnit.G))
+        assertNull(servingDisplayName("(250 ml)", 250.0, QtyUnit.ML))
+        assertNull(servingDisplayName("12,5 g", 12.5, QtyUnit.G))
+        assertNull(servingDisplayName("  ", 30.0, QtyUnit.G))
+        assertNull(servingDisplayName(null, 30.0, QtyUnit.G))
+        assertEquals("distinta cantidad", "30 g", servingDisplayName("30 g", 25.0, QtyUnit.G))
+        assertEquals("distinta unidad", "250 ml", servingDisplayName("250 ml", 250.0, QtyUnit.G))
+        assertEquals("Bol", servingDisplayName("Bol", null, null))
     }
 }

@@ -21,10 +21,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -111,14 +109,7 @@ fun NutritionRoute(
             snackbar.showSnackbar(it)
         }
     }
-    val undoLabel = stringResource(R.string.n_undo)
-    val deletedText = stringResource(R.string.n_deleted)
-    LaunchedEffect(state.undo) {
-        if (state.undo != null) {
-            val r = snackbar.showSnackbar(deletedText, actionLabel = undoLabel, duration = SnackbarDuration.Long)
-            if (r == SnackbarResult.ActionPerformed) viewModel.undo() else viewModel.dismissUndo()
-        }
-    }
+    UndoSnackbar(snackbar, state.undo != null, state.undoRestoring, state.undoFailed, viewModel::undo, viewModel::dismissUndo)
     var copying by remember { mutableStateOf<RowTarget?>(null) }
     var moving by remember { mutableStateOf<RowTarget?>(null) }
     var deleting by remember { mutableStateOf<DiaryEntry?>(null) }

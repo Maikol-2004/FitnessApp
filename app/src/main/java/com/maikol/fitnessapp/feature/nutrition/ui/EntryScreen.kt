@@ -7,10 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -65,6 +63,8 @@ data class EntryUiState(
     val today: LocalDate = LocalDate.now(),
     val entry: DiaryEntry? = null,
     val undo: DeletedItem? = null,
+    val undoRestoring: Boolean = false,
+    val undoFailed: Boolean = false,
     val failed: Boolean = false,
 )
 
@@ -72,9 +72,10 @@ data class EntryUiState(
 class EntryViewModel(handle: SavedStateHandle, private val repository: NutritionRepository, tracking: TrackingRepository) : ViewModel() {
     private val id: String = checkNotNull(handle["entryId"])
     private val ui = MutableStateFlow(EntryUiState())
+    private val undoSlot = UndoSlot<DeletedItem>(viewModelScope) { repository.restore(it) }
 
-    val state: StateFlow<EntryUiState> = combine(repository.observeEntry(id), tracking.observeToday(), ui) { e, t, u ->
-        u.copy(loading = false, entry = e, today = t)
+    val state: StateFlow<EntryUiState> = combine(repository.observeEntry(id), tracking.observeToday(), ui, undoSlot.state) { e, t, u, un ->
+        u.copy(loading = false, entry = e, today = t, undo = un.deleted, undoRestoring = un.restoring, undoFailed = un.failed)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), EntryUiState())
 
     private fun write(block: suspend () -> Unit) {
@@ -90,15 +91,12 @@ class EntryViewModel(handle: SavedStateHandle, private val repository: Nutrition
         }
     }
 
-    fun deleteItem(itemId: String) = write { ui.update { it.copy(undo = repository.deleteItem(itemId)) } }
+    fun deleteItem(itemId: String) = write { undoSlot.offer(repository.deleteItem(itemId)) }
 
-    fun undo() {
-        val d = ui.value.undo ?: return
-        ui.update { it.copy(undo = null) }
-        write { repository.restore(d) }
-    }
+    /** Restaurar conserva lo borrado hasta terminar bien; si falla, se puede reintentar. */
+    fun undo() = undoSlot.undo()
 
-    fun dismissUndo() = ui.update { it.copy(undo = null) }
+    fun dismissUndo() = undoSlot.dismiss()
 
     fun moveItem(itemId: String, group: MealGroup) = write { repository.moveItem(itemId, group) }
 
@@ -146,14 +144,7 @@ fun EntryRoute(
             snackbar.showSnackbar(it)
         }
     }
-    val undoLabel = stringResource(R.string.n_undo)
-    val deletedText = stringResource(R.string.n_deleted)
-    LaunchedEffect(state.undo) {
-        if (state.undo != null) {
-            val r = snackbar.showSnackbar(deletedText, actionLabel = undoLabel, duration = SnackbarDuration.Long)
-            if (r == SnackbarResult.ActionPerformed) viewModel.undo() else viewModel.dismissUndo()
-        }
-    }
+    UndoSnackbar(snackbar, state.undo != null, state.undoRestoring, state.undoFailed, viewModel::undo, viewModel::dismissUndo)
     val entry = state.entry
     // La comida se quedó sin alimentos (y no hay nada que deshacer): se vuelve al diario.
     LaunchedEffect(state.loading, entry == null, state.undo) {

@@ -131,6 +131,7 @@ fun ProfileScreen(
         UnitsCard(state.unitSystem, state.failedSetting == FailedSetting.UNITS, onUnitSystemSelected)
         MotionCard(state.reduceMotion, state.failedSetting == FailedSetting.MOTION, onReduceMotionChange)
         AppearanceCard()
+        LicensesCard()
     }
 }
 
@@ -354,6 +355,25 @@ private fun AppearanceCard() {
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+    }
+}
+
+/** Atribución de las fuentes de datos y bibliotecas de terceros que usa la app (detalle y enlaces en NOTICES.md). */
+@Composable
+private fun LicensesCard() {
+    FitnessCard {
+        CardTitle(stringResource(R.string.profile_licenses_title), R.drawable.ic_info)
+        listOf(
+            R.string.profile_licenses_off_title to R.string.profile_licenses_off_body,
+            R.string.profile_licenses_mlkit_title to R.string.profile_licenses_mlkit_body,
+            R.string.profile_licenses_oss_title to R.string.profile_licenses_oss_body,
+        ).forEachIndexed { i, (title, body) ->
+            if (i > 0) Spacer(Modifier.height(Spacing.m))
+            Column(Modifier.semantics(mergeDescendants = true) {}) {
+                Text(stringResource(title), style = MaterialTheme.typography.titleSmall)
+                Text(stringResource(body), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        }
     }
 }
 

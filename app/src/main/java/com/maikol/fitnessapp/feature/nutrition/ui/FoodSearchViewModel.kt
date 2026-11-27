@@ -132,7 +132,7 @@ class FoodSearchViewModel(
         remoteJob?.cancel()
         remoteState.value = RemoteState.Loading(q)
         remoteJob = viewModelScope.launch {
-            val r = remote.search(q)
+            val r = safeRemote { remote.search(q) }
             if (query.value.trim() != q) return@launch
             remoteState.value = when (r) {
                 is RemoteResult.Ok -> RemoteState.Results(q, r.value)
@@ -151,7 +151,7 @@ class FoodSearchViewModel(
         if (opening.value.first != null) return
         opening.value = hit.code to null
         viewModelScope.launch {
-            when (val r = remote.product(hit.code)) {
+            when (val r = safeRemote { remote.product(hit.code) }) {
                 is RemoteResult.Ok -> {
                     val id = cacheSafely { repository.cacheProduct(r.value) }
                     opening.value = null to (if (id == null) RemoteResult.Failed(0) else null)
@@ -187,8 +187,8 @@ class FoodSearchViewModel(
                 return@launch
             }
             // UPC-A (12 dígitos) y EAN-13 con cero inicial son el mismo GTIN.
-            var r = remote.product(code)
-            if (r == RemoteResult.NotFound && code.length == 12) r = remote.product("0$code")
+            var r = safeRemote { remote.product(code) }
+            if (r == RemoteResult.NotFound && code.length == 12) r = safeRemote { remote.product("0$code") }
             codeState.value = when (r) {
                 is RemoteResult.Ok -> {
                     val id = cacheSafely { repository.cacheProduct(r.value) }
@@ -209,6 +209,15 @@ class FoodSearchViewModel(
     fun clearCode() {
         codeJob?.cancel()
         codeState.value = CodeState.Idle
+    }
+
+    /** Red de seguridad: cualquier fallo inesperado del proveedor llega a la UI como error recuperable, no como cierre. */
+    private suspend fun <T> safeRemote(block: suspend () -> RemoteResult<T>): RemoteResult<T> = try {
+        block()
+    } catch (c: CancellationException) {
+        throw c
+    } catch (_: Exception) {
+        RemoteResult.InvalidResponse
     }
 
     private suspend fun cacheSafely(block: suspend () -> String): String? = try {

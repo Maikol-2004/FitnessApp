@@ -53,6 +53,8 @@ sealed interface RemoteResult<out T> {
     /** Límite local de peticiones por minuto: espera sin llamar al servidor. */
     data class Throttled(val waitSeconds: Int) : RemoteResult<Nothing>
     data class Failed(val code: Int) : RemoteResult<Nothing>
+    /** 200 con cuerpo que no es el JSON esperado (HTML de un proxy, JSON truncado o sin «hits»): se puede reintentar. */
+    data object InvalidResponse : RemoteResult<Nothing>
 }
 
 /** Ventana deslizante de 60 s: respeta los límites por minuto antes de enviar nada. */
@@ -93,18 +95,18 @@ open class OpenFoodFactsClient(
         val q = URLEncoder.encode(query.trim(), "UTF-8")
         val url = "$searchBase/search?q=$q&langs=es&page_size=25&fields=code,product_name,product_name_es,brands,quantity"
         return when (val r = get(url)) {
-            is HttpOutcome.Body -> if (r.code == 200) RemoteResult.Ok(parseSearch(r.text)) else statusResult(r.code)
+            is HttpOutcome.Body -> parseSearchResponse(r.code, r.text)
             is HttpOutcome.Error -> r.result
         }
     }
 
-    private sealed interface HttpOutcome {
+    sealed interface HttpOutcome {
         data class Body(val code: Int, val text: String) : HttpOutcome
         data class Error(val result: RemoteResult<Nothing>) : HttpOutcome
     }
 
     /** Una sola petición, con tiempo límite; la cancelación interrumpe la espera. Sin reintentos automáticos. */
-    private suspend fun get(url: String): HttpOutcome = runInterruptible(Dispatchers.IO) {
+    protected open suspend fun get(url: String): HttpOutcome = runInterruptible(Dispatchers.IO) {
         val c = URL(url).openConnection() as HttpURLConnection
         try {
             c.connectTimeout = 8_000
@@ -144,8 +146,18 @@ open class OpenFoodFactsClient(
             else -> RemoteResult.Failed(code)
         }
 
-        fun parseSearch(text: String): List<RemoteHit> {
-            val hits = JSONObject(text).optJSONArray("hits") ?: return emptyList()
+        /**
+         * Respuesta de búsqueda. Un 200 que no es un objeto JSON con la lista «hits» es una respuesta inválida
+         * (recuperable), nunca «sin resultados»: solo una lista «hits» real, aunque esté vacía, significa cero coincidencias.
+         */
+        fun parseSearchResponse(status: Int, text: String): RemoteResult<List<RemoteHit>> {
+            if (status != 200) return statusResult(status)
+            val hits = runCatching { JSONObject(text) }.getOrNull()?.let { it.opt("hits") as? JSONArray }
+                ?: return RemoteResult.InvalidResponse
+            return RemoteResult.Ok(parseHits(hits))
+        }
+
+        private fun parseHits(hits: JSONArray): List<RemoteHit> {
             return (0 until hits.length()).mapNotNull { i ->
                 val h = hits.optJSONObject(i) ?: return@mapNotNull null
                 val code = normalizeBarcode(h.optString("code")) ?: return@mapNotNull null
@@ -158,9 +170,11 @@ open class OpenFoodFactsClient(
         fun parseProductResponse(status: Int, text: String, requested: String): RemoteResult<RemoteProduct> {
             if (status == 404) return RemoteResult.NotFound
             if (status != 200) return statusResult(status)
-            val root = runCatching { JSONObject(text) }.getOrNull() ?: return RemoteResult.Failed(status)
+            val root = runCatching { JSONObject(text) }.getOrNull() ?: return RemoteResult.InvalidResponse
             val product = root.optJSONObject("product") ?: return RemoteResult.NotFound
-            return normalizeProduct(product, requested)?.let { RemoteResult.Ok(it) } ?: RemoteResult.NoNutrition
+            // Un campo con tipo inesperado no debe romper la pantalla: se trata como respuesta inválida.
+            val normalized = runCatching { normalizeProduct(product, requested) }.getOrElse { return RemoteResult.InvalidResponse }
+            return normalized?.let { RemoteResult.Ok(it) } ?: RemoteResult.NoNutrition
         }
 
         /**

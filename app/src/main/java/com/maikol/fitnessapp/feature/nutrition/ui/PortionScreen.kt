@@ -31,6 +31,7 @@ import com.maikol.fitnessapp.core.database.FoodSource
 import com.maikol.fitnessapp.core.designsystem.component.PrimaryButton
 import com.maikol.fitnessapp.core.designsystem.theme.FitnessThemeExtras
 import com.maikol.fitnessapp.core.tracking.formatInput
+import com.maikol.fitnessapp.feature.nutrition.data.servingDisplayName
 import com.maikol.fitnessapp.feature.nutrition.data.MealGroup
 import com.maikol.fitnessapp.feature.nutrition.data.Nutrient
 import com.maikol.fitnessapp.feature.nutrition.data.NutrientSum
@@ -200,7 +201,12 @@ private fun unitChoiceLabel(u: QtyUnit, src: Portionable): String = when (u) {
     QtyUnit.SERVING -> {
         val a = src.basis.servingAmount
         val su = src.basis.servingUnit
-        if (src.basis.unit != QtyUnit.SERVING && a != null && su != null) stringResource(R.string.n_serving_of, "${formatInput(a)} ${su.code}") else stringResource(R.string.n_unit_serving)
+        val name = servingDisplayName(src.servingName, a, su)
+        when {
+            src.basis.unit == QtyUnit.SERVING || a == null || su == null -> name ?: stringResource(R.string.n_unit_serving)
+            name != null -> stringResource(R.string.n_serving_named, name, "${formatInput(a)} ${su.code}")
+            else -> stringResource(R.string.n_serving_of, "${formatInput(a)} ${su.code}")
+        }
     }
     else -> u.code
 }
@@ -235,7 +241,7 @@ private fun InfoSection(src: Portionable, state: PortionUiState) {
     }
     src.basis.servingAmount?.let { a ->
         val su = src.basis.servingUnit
-        if (su != null) InfoRow(stringResource(R.string.n_serving_def), (src.servingName?.let { "$it · " } ?: "") + "${formatInput(a)} ${su.code}")
+        if (su != null) InfoRow(stringResource(R.string.n_serving_def), (servingDisplayName(src.servingName, a, su)?.let { "$it · " } ?: "") + "${formatInput(a)} ${su.code}")
     }
     InfoRow(stringResource(R.string.n_preparation), stringResource(src.preparation.label()))
     InfoRow(stringResource(R.string.n_source), sourceLabel(src.source))

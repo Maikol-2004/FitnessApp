@@ -58,10 +58,12 @@ data class NutritionUiState(
     val recipes: List<RecipeRow> = emptyList(),
     val trends: TrendsState? = null,
     val undo: DeletedItem? = null,
+    val undoRestoring: Boolean = false,
+    val undoFailed: Boolean = false,
     val failed: Boolean = false,
 )
 
-private data class Ui(val undo: DeletedItem? = null, val failed: Boolean = false)
+private data class Ui(val failed: Boolean = false)
 
 /** Diario del día desde Room (recalculado, nunca acumulado), recetas y tendencias 7/30 días. */
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -74,6 +76,7 @@ class NutritionViewModel(
     private val tab = handle.getStateFlow(KEY_TAB, NutritionTab.DIARY.name)
     private val period = handle.getStateFlow(KEY_PERIOD, 7)
     private val ui = MutableStateFlow(Ui())
+    private val undoSlot = UndoSlot<DeletedItem>(viewModelScope) { repository.restore(it) }
 
     private val today = tracking.observeToday()
     private val goals = repository.observeGoalHistory()
@@ -92,7 +95,7 @@ class NutritionViewModel(
 
     private val recipes = repository.observeRecipes().map { l -> l.map { RecipeRow(it, it.totals()) } }
 
-    val state: StateFlow<NutritionUiState> = combine(diary, goals, tab, recipes, combine(trends, ui) { t, u -> t to u }) { (t, d, entries), g, tb, r, (tr, u) ->
+    val state: StateFlow<NutritionUiState> = combine(diary, goals, tab, recipes, combine(trends, ui, undoSlot.state) { t, u, un -> Triple(t, u, un) }) { (t, d, entries), g, tb, r, (tr, u, un) ->
         NutritionUiState(
             loading = false,
             today = t,
@@ -104,7 +107,9 @@ class NutritionViewModel(
             anyGoal = g.isNotEmpty(),
             recipes = r,
             trends = tr,
-            undo = u.undo,
+            undo = un.deleted,
+            undoRestoring = un.restoring,
+            undoFailed = un.failed,
             failed = u.failed,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), tracking.today().let { NutritionUiState(today = it, date = it) })
@@ -143,17 +148,13 @@ class NutritionViewModel(
 
     /** Borrar un alimento ofrece deshacer exactamente esa fila (misma ID: restaurar no duplica). */
     fun deleteItem(itemId: String) = write {
-        val deleted = repository.deleteItem(itemId)
-        ui.update { it.copy(undo = deleted) }
+        undoSlot.offer(repository.deleteItem(itemId))
     }
 
-    fun undo() {
-        val d = ui.value.undo ?: return
-        ui.update { it.copy(undo = null) }
-        write { repository.restore(d) }
-    }
+    /** Restaurar conserva lo borrado hasta terminar bien; si falla, se puede reintentar. */
+    fun undo() = undoSlot.undo()
 
-    fun dismissUndo() = ui.update { it.copy(undo = null) }
+    fun dismissUndo() = undoSlot.dismiss()
 
     fun deleteEntry(id: String) = write { repository.deleteEntry(id) }
 
